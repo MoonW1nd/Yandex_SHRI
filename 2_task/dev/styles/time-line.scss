@@ -1,0 +1,52 @@
+@import "pallete";
+$size-round: 24px;
+
+.wrapper-time-line {
+	display: flex;
+	justify-content: space-between;
+	height: 45px;
+	border-bottom: 1px solid $outer-shadow-color;
+
+	.day-switcher {
+		min-width: 202px;
+	}
+}
+
+.wrapper-date {
+	font-family: $ff-medium;
+	line-height: $size-round;
+	margin: 0 13px;
+}
+
+.arrow {
+	width: $size-round;
+ 	height: $size-round;
+	border-radius: 50%;
+	background: $outer-shadow-color no-repeat;
+	background-position: center;
+
+	&.arrow-left {
+		background-image: url("/assets/arrow-left.svg");
+	}
+	&.arrow-right {
+		background-image: url("/assets/arrow-right.svg");
+	}
+}
+.time-line {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex: 1;
+	min-width: 955px;
+	padding-left: 3px;
+	div {
+		text-align: center;
+		font-size: $fs-small;
+		height: 13px;
+		line-height: 13px;
+		width: 49px;
+	}
+	&:last-child {
+		margin-right: -11px;
+	}
+}

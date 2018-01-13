@@ -1,0 +1,31 @@
+@import "pallete";
+
+header {
+	display: flex;
+	justify-content: space-between;
+	height: 70px;
+	border-bottom: 1px solid $outer-shadow-color;
+}
+
+.wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0 24px;
+}
+
+.add-meeting__button {
+	width: 140px;
+	height: 36px;
+	font-family: $ff-medium;
+	font-size: $fs-medium;
+	color: $text-color-white;
+	background-color: $button-color-normal;
+	border-radius: 4px;
+	transition: background-color 100ms linear;
+
+	&:hover {
+		cursor: pointer;
+		background-color: $button-color-hover;
+}
+}

@@ -2,3 +2,8 @@ node_modules
 ../node_modules
 /.idea
 /.vscode
+/.gitignore
+/2_task/node_modules/
+/1_task/node_modules/
+/1_task/package-lock.json
+/2_task/package-lock.json

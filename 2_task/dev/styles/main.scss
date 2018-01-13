@@ -1,0 +1,17 @@
+@import "reset";
+@import "pallete";
+body {
+	letter-spacing: 0.3px;
+	font-family: $ff-main;
+	font-size: $fs-main;
+	margin: 0;
+}
+
+@import "header";
+@import "time-line";
+
+@media (max-width: 1200px) {
+	main {
+		overflow-y: hidden;
+	}
+}
