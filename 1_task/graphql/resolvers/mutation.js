@@ -1,4 +1,4 @@
-const { models } = require('../../models');
+const { models } = require('../../models/index');
 
 module.exports = {
   // User
@@ -52,6 +52,14 @@ module.exports = {
               return event.update(input);
             });
   },
+  
+  addUserToEvent (root, {id, userId }, context) {
+    return models.Event.findById(id)
+      .then(event => {
+        return event.addUser(userId)
+          .then(() => event);
+      })
+  },
 
   removeUserFromEvent (root, { id, userId }, context) {
     return models.Event.findById(id)
@@ -64,7 +72,8 @@ module.exports = {
   changeEventRoom (root, { id, roomId }, context) {
     return models.Event.findById(id)
             .then(event => {
-              event.setRoom(id);
+              return event.setRoom(roomId)
+                .then(() => event);
             });
   },
 
