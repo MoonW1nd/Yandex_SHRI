@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-module.exports = function (sequelize) {
+module.exports = function(sequelize) {
   const User = sequelize.define('User', {
     login: Sequelize.STRING,
     homeFloor: Sequelize.TINYINT,
@@ -24,6 +24,8 @@ module.exports = function (sequelize) {
   Event.belongsTo(Room);
 
   return {
-    Room, Event, User
+    Room,
+    Event,
+    User
   };
 };
