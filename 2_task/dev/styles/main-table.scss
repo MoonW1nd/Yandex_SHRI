@@ -1,28 +1,109 @@
 @import "pallete";
 
+tr:hover {
+
+}
 .meeting-rooms {
 	position: relative;
-	min-height: calc(100vh - 117px)
+	min-height: calc(100vh - 117px);
+}
+
+tr:hover {
+	.table-meeting-room__wrapper:not(.disabled) {
+		.table-meeting-room__name{
+			color: $text-color-hover;
+		}
+	}
 }
 
 .table-meeting-room {
 	width: 100vw;
 	min-width: $min-width-time-line + $min-width-name-table + 13;
+	border-spacing: 0 16px;
+
+	&__wrapper.disabled {
+		color: $text-color-disabled;
+		pointer-events: none;
+	}
 
 	&__first-column {
-		width: calc(18vw - 5px);
-		min-width: $min-width-name-table - 5px;
+		width: calc(18vw - 1px);
+		min-width: $min-width-name-table - 1px;
+		font-size: $fs-small;
+		font-family: $ff-bold;
+		color: $text-color-disabled;
+		text-align: left;
+		padding-left: 24px;
+		box-sizing: border-box;
+		position: relative;
+		top: 10px;
 	}
 
 	&__second-column {
 		width: 82vw;
-		min-width: $min-width-time-line;
+		min-width: $min-width-time-line + 10px;
 	}
 
 	&__time-line {
 		background-color: $meeting-room-color-normal;
 		height: 28px;
-		margin-left: -2px;
+		position: relative;
+		display: flex;
+		padding-left: 27px;
+		padding-right: 12px;
+	}
+
+	&__name {
+		font-family: $ff-medium;
+		padding-left: 24px;
+	}
+
+	&__count {
+		font-size: $fs-small;
+		padding-left: 24px;
+	}
+
+	&__free-room {
+		position: absolute;
+		background-color: $text-color-white;
+		//TODO:[A.Ivankov] set from js
+		min-width: 199px;
+		width: calc(199px + (100vw - 1220px) / 15);
+
+		top: 0;
+		bottom: 0;
+		left: 350px;
+	}
+}
+
+.time-piece {
+	flex: 1;
+
+	&.active {
+		background-color: $text-color-white;
+		cursor: pointer;
+
+		//&:hover {
+		//	background-color: $text-color-hover;
+		//	border-radius: 2px;
+		//}
+		&:hover:after {
+			content: '+';
+			position: absolute;
+			bottom: 0;
+			top: 0;
+			width: 57px;
+			border-radius: 2px;
+			font-size: 21px;
+			text-align: center;
+			color: $text-color-white;
+			background-color: $text-color-hover;
+			//pointer-events: none;
+		}
+	}
+
+	&.placed:hover {
+		background: $meeting-room-color-hover;
 	}
 }
 
@@ -32,8 +113,8 @@
 	right: 0;
 	top: 0;
 	bottom: 0;
-	z-index: -1;
 	display: flex;
+	pointer-events: none;
 
 	&__time-line-block {
 		background-color: $meeting-room-color-background;
@@ -47,7 +128,7 @@
 
 	&__title-block {
 		width: calc(18vw - 2px);
-		min-width: 251px;
+		min-width: 249px;
 		border-right: 1px solid $outer-shadow-color;
 	}
 
@@ -56,6 +137,7 @@
 		height: 100%;
 		display: flex;
 		justify-content: center;
+		z-index: 2;
 
 		&:last-child {
 			margin-right: -11px;

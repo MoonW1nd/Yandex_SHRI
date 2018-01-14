@@ -43,6 +43,7 @@ $size-round: 24px;
 	flex: 1;
 	min-width: $min-width-time-line - 3px;
 	padding-left: 3px;
+	position: relative;
 	div {
 		text-align: center;
 		font-size: $fs-small;
@@ -50,7 +51,38 @@ $size-round: 24px;
 		line-height: 13px;
 		width: 49px;
 	}
+
 	&:last-child {
 		margin-right: -11px;
+	}
+}
+
+.time-line-figure {
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	align-items: center;
+	height: 100vh;
+	top: 12px;
+	left: 442px;
+	pointer-events: none;
+	z-index: 3;
+
+	.time-line-figure__time {
+		width: 49px;
+		height: 20px;
+		background-color: $button-color-hover;
+		border-radius: 10px;
+		font-size: $fs-medium;
+		line-height: 20px;
+		text-align: center;
+		font-family: $ff-medium;
+		color: $text-color-white;
+	}
+
+	.time-line-figure__line {
+		width: 1px;
+		height: 100vh;
+		background-color: $button-color-hover;
 	}
 }

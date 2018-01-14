@@ -1,0 +1,35 @@
+.meeting-room {
+	&__wash-room {
+		.time_8-00 {
+			flex-grow: 185;
+		}
+
+		.time_8-15 {
+			flex-grow: 160;
+		}
+
+		.time_8-30 {
+			flex-grow: 555;
+		}
+	}
+
+	&__yellow-house {
+		.time_8-00 {
+			flex-grow: 185;
+		}
+
+		.time_8-15 {
+			flex-grow: 145;
+		}
+
+		.time_8-30 {
+			flex-grow: 420;
+		}
+		.time_8-45 {
+			flex-grow: 100;
+		}
+		.time_9-00 {
+			flex-grow: 50;
+		}
+	}
+}
