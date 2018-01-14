@@ -92,8 +92,12 @@ header {
       -ms-flex-pack: justify;
           justify-content: space-between;
   height: 45px;
+  min-width: 1218px;
+  overflow: hidden;
+  width: 100vw;
   border-bottom: 1px solid #E9ECEF; }
   .wrapper-time-line .day-switcher {
+    width: calc(18vw - 48px);
     min-width: 202px; }
 
 .wrapper-date {
@@ -125,7 +129,7 @@ header {
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
-  min-width: 955px;
+  min-width: 954px;
   padding-left: 3px; }
   .time-line div {
     text-align: center;
@@ -135,6 +139,69 @@ header {
     width: 49px; }
   .time-line:last-child {
     margin-right: -11px; }
+
+.meeting-rooms {
+  position: relative;
+  min-height: calc(100vh - 117px); }
+
+.table-meeting-room {
+  width: 100vw;
+  min-width: 1220px; }
+  .table-meeting-room__first-column {
+    width: calc(18vw - 5px);
+    min-width: 245px; }
+  .table-meeting-room__second-column {
+    width: 82vw;
+    min-width: 957px; }
+  .table-meeting-room__time-line {
+    background-color: #D5DFE9;
+    height: 28px;
+    margin-left: -2px; }
+
+.background-meeting-rooms {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: -1;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; }
+  .background-meeting-rooms__time-line-block {
+    background-color: #F5F6F8;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    -webkit-box-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    min-width: 963px;
+    padding-left: 3px;
+    overflow: hidden; }
+  .background-meeting-rooms__title-block {
+    width: calc(18vw - 2px);
+    min-width: 251px;
+    border-right: 1px solid #E9ECEF; }
+  .background-meeting-rooms__time-line-wrapper {
+    -ms-flex-preferred-size: 49px;
+        flex-basis: 49px;
+    height: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center; }
+    .background-meeting-rooms__time-line-wrapper:last-child {
+      margin-right: -11px; }
+  .background-meeting-rooms__time-line {
+    width: 1px;
+    height: 100%;
+    background-color: rgba(19, 100, 205, 0.1); }
 
 @media (max-width: 1200px) {
   main {

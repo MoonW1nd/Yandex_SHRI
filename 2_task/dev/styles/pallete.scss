@@ -4,6 +4,10 @@ $button-color-disabled: #E9ECEF;
 $button-color-pressed: rgba(11,0,255,0.80);
 $text-color-white: #FFFFFF;
 $outer-shadow-color: #E9ECEF;
+$meeting-room-color-normal: #D5DFE9;
+$meeting-room-color-hover: rgba(152, 169, 185, 0.12);
+$meeting-room-color-background: #F5F6F8;
+$meeting-room-color-support-time-line: rgba(19,100,205,0.10);
 
 
 $fs-main: 15px;
@@ -13,3 +17,9 @@ $fs-small: 0.73em;
 $ff-main: "HelveticaNeue", sans-serif;
 $ff-medium: "HelveticaNeue-Medium", sans-serif;
 $ff-bold: "HelveticaNeue-Bold", sans-serif;
+
+$min-width-name-table: 250px;
+$min-width-time-line: 957px;
+
+$header-height: 70px;
+$time-line-height: 46px;

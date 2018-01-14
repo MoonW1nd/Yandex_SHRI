@@ -5,10 +5,14 @@ $size-round: 24px;
 	display: flex;
 	justify-content: space-between;
 	height: 45px;
+	min-width: $min-width-name-table + $min-width-time-line + 11px;
+	overflow: hidden;
+	width: 100vw;
 	border-bottom: 1px solid $outer-shadow-color;
 
 	.day-switcher {
-		min-width: 202px;
+		width: calc(18vw - 48px);
+		min-width: $min-width-name-table - 48px;
 	}
 }
 
@@ -37,7 +41,7 @@ $size-round: 24px;
 	justify-content: space-between;
 	align-items: center;
 	flex: 1;
-	min-width: 955px;
+	min-width: $min-width-time-line - 3px;
 	padding-left: 3px;
 	div {
 		text-align: center;

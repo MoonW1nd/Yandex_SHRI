@@ -1,0 +1,70 @@
+@import "pallete";
+
+.meeting-rooms {
+	position: relative;
+	min-height: calc(100vh - 117px)
+}
+
+.table-meeting-room {
+	width: 100vw;
+	min-width: $min-width-time-line + $min-width-name-table + 13;
+
+	&__first-column {
+		width: calc(18vw - 5px);
+		min-width: $min-width-name-table - 5px;
+	}
+
+	&__second-column {
+		width: 82vw;
+		min-width: $min-width-time-line;
+	}
+
+	&__time-line {
+		background-color: $meeting-room-color-normal;
+		height: 28px;
+		margin-left: -2px;
+	}
+}
+
+.background-meeting-rooms {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	z-index: -1;
+	display: flex;
+
+	&__time-line-block {
+		background-color: $meeting-room-color-background;
+		display: flex;
+		justify-content: space-between;
+		flex: 1;
+		min-width: 963px;
+		padding-left: 3px;
+		overflow: hidden;
+	}
+
+	&__title-block {
+		width: calc(18vw - 2px);
+		min-width: 251px;
+		border-right: 1px solid $outer-shadow-color;
+	}
+
+	&__time-line-wrapper {
+		flex-basis: 49px;
+		height: 100%;
+		display: flex;
+		justify-content: center;
+
+		&:last-child {
+			margin-right: -11px;
+		}
+	}
+
+	&__time-line {
+		width: 1px;
+		height: 100%;
+		background-color: $meeting-room-color-support-time-line;
+	}
+}
