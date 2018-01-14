@@ -145,6 +145,28 @@ header {
   .time-line:last-child {
     margin-right: -11px; }
 
+.time-line-figure__wrapper {
+  position: absolute;
+  top: 0;
+  z-index: 3;
+  overflow: visible; }
+  .time-line-figure__wrapper.day-switcher {
+    width: calc(18vw - 48px);
+    min-width: 202px; }
+
+.time-line__fake {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  min-width: 954px;
+  padding-left: 3px;
+  position: relative; }
+  .time-line__fake:last-child {
+    margin-right: -11px; }
+
 .time-line-figure {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -153,15 +175,15 @@ header {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  position: absolute;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
   height: 100vh;
-  top: 12px;
-  left: 442px;
   pointer-events: none;
-  z-index: 3; }
+  padding-top: 12px;
+  -webkit-box-flex: 185;
+      -ms-flex-positive: 185;
+          flex-grow: 185; }
   .time-line-figure .time-line-figure__time {
     width: 49px;
     height: 20px;
@@ -175,7 +197,13 @@ header {
   .time-line-figure .time-line-figure__line {
     width: 1px;
     height: 100vh;
-    background-color: #0059FF; }
+    background-color: #0059FF;
+    position: relative;
+    right: 24.5px; }
+  .time-line-figure__helper {
+    -webkit-box-flex: 715;
+        -ms-flex-positive: 715;
+            flex-grow: 715; }
 
 .meeting-rooms {
   position: relative;
@@ -337,9 +365,186 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
       -ms-flex-positive: 50;
           flex-grow: 50; }
 
+.meeting-room__joker .time_8-00 {
+  -webkit-box-flex: 185;
+      -ms-flex-positive: 185;
+          flex-grow: 185; }
+
+.meeting-room__joker .time_8-15 {
+  -webkit-box-flex: 115;
+      -ms-flex-positive: 115;
+          flex-grow: 115; }
+
+.meeting-room__joker .time_8-30 {
+  -webkit-box-flex: 370;
+      -ms-flex-positive: 370;
+          flex-grow: 370; }
+
+.meeting-room__joker .time_8-45 {
+  -webkit-box-flex: 100;
+      -ms-flex-positive: 100;
+          flex-grow: 100; }
+
+.meeting-room__joker .time_9-00 {
+  -webkit-box-flex: 50;
+      -ms-flex-positive: 50;
+          flex-grow: 50; }
+
+.meeting-room__joker .time_9-15 {
+  -webkit-box-flex: 30;
+      -ms-flex-positive: 30;
+          flex-grow: 30; }
+
+.meeting-room__joker .time_9-30 {
+  -webkit-box-flex: 50;
+      -ms-flex-positive: 50;
+          flex-grow: 50; }
+
+.meeting-room__mary .time_8-00 {
+  -webkit-box-flex: 285;
+      -ms-flex-positive: 285;
+          flex-grow: 285; }
+
+.meeting-room__mary .time_8-15 {
+  -webkit-box-flex: 115;
+      -ms-flex-positive: 115;
+          flex-grow: 115; }
+
+.meeting-room__mary .time_8-30 {
+  -webkit-box-flex: 270;
+      -ms-flex-positive: 270;
+          flex-grow: 270; }
+
+.meeting-room__mary .time_8-45 {
+  -webkit-box-flex: 100;
+      -ms-flex-positive: 100;
+          flex-grow: 100; }
+
+.meeting-room__mary .time_9-00 {
+  -webkit-box-flex: 50;
+      -ms-flex-positive: 50;
+          flex-grow: 50; }
+
+.meeting-room__mary .time_9-15 {
+  -webkit-box-flex: 30;
+      -ms-flex-positive: 30;
+          flex-grow: 30; }
+
+.meeting-room__mary .time_9-30 {
+  -webkit-box-flex: 50;
+      -ms-flex-positive: 50;
+          flex-grow: 50; }
+
+.meeting-room__tiny-bob .time_8-00 {
+  -webkit-box-flex: 235;
+      -ms-flex-positive: 235;
+          flex-grow: 235; }
+
+.meeting-room__tiny-bob .time_8-15 {
+  -webkit-box-flex: 115;
+      -ms-flex-positive: 115;
+          flex-grow: 115; }
+
+.meeting-room__tiny-bob .time_8-30 {
+  -webkit-box-flex: 270;
+      -ms-flex-positive: 270;
+          flex-grow: 270; }
+
+.meeting-room__tiny-bob .time_8-45 {
+  -webkit-box-flex: 80;
+      -ms-flex-positive: 80;
+          flex-grow: 80; }
+
+.meeting-room__tiny-bob .time_9-00 {
+  -webkit-box-flex: 100;
+      -ms-flex-positive: 100;
+          flex-grow: 100; }
+
+.meeting-room__tiny-bob .time_9-15 {
+  -webkit-box-flex: 50;
+      -ms-flex-positive: 50;
+          flex-grow: 50; }
+
+.meeting-room__tiny-bob .time_9-30 {
+  -webkit-box-flex: 50;
+      -ms-flex-positive: 50;
+          flex-grow: 50; }
+
+.meeting-room__black-mamba .time_8-00 {
+  -webkit-box-flex: 205;
+      -ms-flex-positive: 205;
+          flex-grow: 205; }
+
+.meeting-room__black-mamba .time_8-15 {
+  -webkit-box-flex: 125;
+      -ms-flex-positive: 125;
+          flex-grow: 125; }
+
+.meeting-room__black-mamba .time_8-30 {
+  -webkit-box-flex: 270;
+      -ms-flex-positive: 270;
+          flex-grow: 270; }
+
+.meeting-room__black-mamba .time_8-45 {
+  -webkit-box-flex: 100;
+      -ms-flex-positive: 100;
+          flex-grow: 100; }
+
+.meeting-room__black-mamba .time_9-00 {
+  -webkit-box-flex: 100;
+      -ms-flex-positive: 100;
+          flex-grow: 100; }
+
+.meeting-room__black-mamba .time_9-15 {
+  -webkit-box-flex: 50;
+      -ms-flex-positive: 50;
+          flex-grow: 50; }
+
+.meeting-room__black-mamba .time_9-30 {
+  -webkit-box-flex: 50;
+      -ms-flex-positive: 50;
+          flex-grow: 50; }
+
+.meeting-room__liker .time_8-00 {
+  -webkit-box-flex: 185;
+      -ms-flex-positive: 185;
+          flex-grow: 185; }
+
+.meeting-room__liker .time_8-15 {
+  -webkit-box-flex: 115;
+      -ms-flex-positive: 115;
+          flex-grow: 115; }
+
+.meeting-room__liker .time_8-30 {
+  -webkit-box-flex: 50;
+      -ms-flex-positive: 50;
+          flex-grow: 50; }
+
+.meeting-room__liker .time_8-45 {
+  -webkit-box-flex: 120;
+      -ms-flex-positive: 120;
+          flex-grow: 120; }
+
+.meeting-room__liker .time_9-00 {
+  -webkit-box-flex: 100;
+      -ms-flex-positive: 100;
+          flex-grow: 100; }
+
+.meeting-room__liker .time_9-15 {
+  -webkit-box-flex: 150;
+      -ms-flex-positive: 150;
+          flex-grow: 150; }
+
+.meeting-room__liker .time_9-30 {
+  -webkit-box-flex: 170;
+      -ms-flex-positive: 170;
+          flex-grow: 170; }
+
 @media (max-width: 1200px) {
   main {
     overflow-x: auto;
     overflow-y: hidden; }
   .table-meeting-room__time-line {
-    padding-right: 16px; } }
+    padding-right: 16px; }
+  .time-line-figure {
+    left: 442px; } }
