@@ -42,6 +42,11 @@ button::-moz-focus-inner {
   -moz-user-select: none;
   -ms-user-select: none; }
 
+button:focus {
+  outline: none;
+  -webkit-box-shadow: 0 0 10px rgba(70, 70, 70, 0.5);
+          box-shadow: 0 0 10px rgba(70, 70, 70, 0.5); }
+
 body {
   letter-spacing: 0.3px;
   font-family: "HelveticaNeue", sans-serif;
@@ -109,16 +114,30 @@ header {
   line-height: 24px;
   margin: 0 13px; }
 
-.arrow {
+.button-arrow {
   width: 24px;
   height: 24px;
   border-radius: 50%;
   background: #E9ECEF no-repeat;
-  background-position: center; }
-  .arrow.arrow-left {
-    background-image: url("/assets/arrow-left.svg"); }
-  .arrow.arrow-right {
-    background-image: url("/assets/arrow-right.svg"); }
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center; }
+  .button-arrow__arrow-right {
+    padding-left: 2px; }
+  .button-arrow__arrow-left {
+    padding-right: 2px; }
+  .button-arrow img {
+    opacity: 0.43; }
+  .button-arrow:hover {
+    cursor: pointer; }
+    .button-arrow:hover img {
+      opacity: 1; }
 
 .time-line {
   display: -webkit-box;
@@ -149,7 +168,8 @@ header {
   position: absolute;
   top: 0;
   z-index: 3;
-  overflow: visible; }
+  overflow: visible;
+  pointer-events: none; }
   .time-line-figure__wrapper.day-switcher {
     width: calc(18vw - 48px);
     min-width: 202px; }
@@ -261,7 +281,8 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
 .time-piece {
   -webkit-box-flex: 1;
       -ms-flex: 1;
-          flex: 1; }
+          flex: 1;
+  position: relative; }
   .time-piece.active {
     background-color: #FFFFFF;
     cursor: pointer; }
@@ -278,6 +299,8 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
       background-color: #0070E0; }
   .time-piece.placed:hover {
     background: #98A9B9; }
+  .time-piece.pressed {
+    background-color: #98A9B9; }
 
 .background-meeting-rooms {
   position: absolute;
@@ -539,6 +562,83 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
   -webkit-box-flex: 170;
       -ms-flex-positive: 170;
           flex-grow: 170; }
+
+.meeting-info__title {
+  font-family: "HelveticaNeue-Medium", sans-serif;
+  margin-bottom: 4px; }
+
+.meeting-info__wrapper {
+  border-radius: 8px;
+  width: 340px;
+  height: 110px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, 10%);
+          transform: translate(-50%, 10%);
+  z-index: 10;
+  background-color: #FFFFFF;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 16px;
+  -webkit-box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+          box-shadow: 0 0 25px rgba(0, 0, 0, 0.3); }
+  .meeting-info__wrapper:after {
+    content: '';
+    width: 0;
+    height: 0;
+    position: absolute;
+    left: 50%;
+    bottom: 77%;
+    -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+    border: 15px solid transparent;
+    border-bottom: 18px solid #FFFFFF; }
+
+.meeting-info__avatar-wrapper {
+  margin-top: 8px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-size: 0.86em; }
+  .meeting-info__avatar-wrapper .members {
+    margin-left: 8px; }
+    .meeting-info__avatar-wrapper .members span {
+      color: #858E98; }
+
+.meeting-info__time-place {
+  font-size: 0.86em; }
+
+.avatar-round {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%; }
+
+.edit-button {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  right: 8px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  top: 8px;
+  border-radius: 50%;
+  background-color: #E9ECEF;
+  cursor: pointer; }
+  .edit-button__pen {
+    opacity: 0.43; }
+    .edit-button__pen:hover {
+      opacity: 1; }
 
 @media (max-width: 1200px) {
   main {

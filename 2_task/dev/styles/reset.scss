@@ -43,3 +43,8 @@ button::-moz-focus-inner {
 	-moz-user-select: none;
 	-ms-user-select: none;
 }
+
+button:focus {
+	outline: none;
+	box-shadow: 0 0 10px rgba(70,70,70,0.50);
+}

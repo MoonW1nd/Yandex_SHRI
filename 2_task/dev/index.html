@@ -32,9 +32,13 @@
 	</section>
 	<section class="wrapper-time-line">
 		<div class="wrapper day-switcher">
-			<button class="arrow arrow-left"></button>
+			<button class="button-arrow">
+				<img class="button-arrow__arrow-left" src="./assets/arrow-left.svg" alt="arrow left">
+			</button>
 			<div class="wrapper-date">14 дек · Сегодня</div>
-			<button class="arrow arrow-right"></button>
+			<button class="button-arrow">
+				<img class="button-arrow__arrow-right" src="./assets/arrow-right.svg" alt="arrow right">
+			</button>
 		</div>
 		<div class="time-line">
 			<div>8:00</div>
@@ -140,7 +144,7 @@
 				<div class="table-meeting-room__time-line">
 					<div class="time-piece time_8-00"></div>
 					<div class="time-piece time_8-15 active"></div>
-					<div class="time-piece time_8-30"></div>
+					<div class="time-piece time_8-30 placed"></div>
 				</div>
 			</td>
 		</tr>
@@ -156,7 +160,19 @@
 					<div class="time-piece time_8-00"></div>
 					<div class="time-piece time_8-15 active"></div>
 					<div class="time-piece time_9-00 placed"></div>
-					<div class="time-piece time_8-45 placed"></div>
+					<div class="time-piece time_8-45 pressed">
+						<div class="meeting-info__wrapper">
+							<div class="meeting-info__title">Рассуждения о высоком</div>
+							<div class="meeting-info__time-place">14 декабря, 15:00&mdash;17:00 · Желтый дом</div>
+							<div class="meeting-info__avatar-wrapper">
+								<img class="avatar-round" src="./assets/darth-vader-avatar.jpg" alt="Darth Vader avatar">
+								<p class="members">Дарт Вейдер<span>&nbsp;и 12 участников</span></p>
+							</div>
+							<button class="edit-button">
+								<img class="edit-button__pen" src="./assets/edit.svg" alt="pen">
+							</button>
+						</div>
+					</div>
 					<div class="time-piece time_8-30 placed"></div>
 				</div>
 			</td>

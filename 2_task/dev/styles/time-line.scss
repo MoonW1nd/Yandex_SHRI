@@ -22,18 +22,32 @@ $size-round: 24px;
 	margin: 0 13px;
 }
 
-.arrow {
+.button-arrow {
 	width: $size-round;
  	height: $size-round;
 	border-radius: 50%;
 	background: $outer-shadow-color no-repeat;
-	background-position: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 
-	&.arrow-left {
-		background-image: url("/assets/arrow-left.svg");
+	&__arrow-right {
+		padding-left: 2px;
 	}
-	&.arrow-right {
-		background-image: url("/assets/arrow-right.svg");
+
+	&__arrow-left {
+		padding-right: 2px;
+	}
+
+	img {
+		opacity: 0.43;
+	}
+
+	&:hover {
+		cursor: pointer;
+		img {
+			opacity: 1;
+		}
 	}
 }
 .time-line {
@@ -62,6 +76,7 @@ $size-round: 24px;
 	top: 0;
 	z-index: 3;
 	overflow: visible;
+	pointer-events: none;
 
 	&.day-switcher {
 		width: calc(18vw - 48px);

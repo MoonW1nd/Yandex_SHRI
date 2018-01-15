@@ -78,6 +78,7 @@ tr:hover {
 
 .time-piece {
 	flex: 1;
+	position: relative;
 
 	&.active {
 		background-color: $text-color-white;
@@ -104,6 +105,11 @@ tr:hover {
 
 	&.placed:hover {
 		background: $meeting-room-color-hover;
+	}
+
+	//TODO:[A.Ivankov] remove after
+	&.pressed {
+		background-color: $meeting-room-color-hover;
 	}
 }
 
