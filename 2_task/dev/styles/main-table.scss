@@ -18,7 +18,7 @@ tr:hover {
 
 .table-meeting-room {
 	width: 100vw;
-	min-width: $min-width-time-line + $min-width-name-table + 13;
+	min-width: $min-width-time-line + $min-width-title;
 	border-spacing: 0 16px;
 
 	&__wrapper.disabled {
@@ -27,8 +27,8 @@ tr:hover {
 	}
 
 	&__first-column {
-		width: calc(18vw - 1px);
-		min-width: $min-width-name-table - 1px;
+		width: calc(20vw - 1px);
+		min-width: $min-width-title - 1px;
 		font-size: $fs-small;
 		font-family: $ff-bold;
 		color: $text-color-disabled;
@@ -40,8 +40,8 @@ tr:hover {
 	}
 
 	&__second-column {
-		width: 82vw;
-		min-width: $min-width-time-line + 10px;
+		width: 80vw;
+		min-width: $min-width-time-line;
 	}
 
 	&__time-line {
@@ -50,7 +50,7 @@ tr:hover {
 		position: relative;
 		display: flex;
 		padding-left: 27px;
-		padding-right: 12px;
+		padding-right: 23px;
 	}
 
 	&__name {
@@ -127,15 +127,15 @@ tr:hover {
 		display: flex;
 		justify-content: space-between;
 		flex: 1;
-		min-width: 963px;
+		min-width: $min-width-time-line;
 		padding-left: 3px;
 		overflow: hidden;
 	}
 
 	&__title-block {
-		width: calc(18vw - 2px);
-		min-width: 249px;
-		border-right: 1px solid $outer-shadow-color;
+		width: calc(20vw - 2px);
+		min-width: $min-width-title - 1;
+		border-right: $separator-block-setting;
 	}
 
 	&__time-line-wrapper {
@@ -144,10 +144,10 @@ tr:hover {
 		display: flex;
 		justify-content: center;
 		z-index: 2;
-
-		&:last-child {
-			margin-right: -11px;
-		}
+		//
+		//&:last-child {
+		//	margin-right: -11px;
+		//}
 	}
 
 	&__time-line {

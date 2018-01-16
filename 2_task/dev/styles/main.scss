@@ -12,6 +12,12 @@ main {
 	overflow: hidden;
 }
 
+.day-switcher__wrapper-mobile {
+	visibility: hidden;
+	width: 0;
+	height: 0;
+}
+
 
 @import "header";
 @import "time-line";
@@ -19,7 +25,7 @@ main {
 @import "mock-data-imitation";
 @import "meeting-info-hint";
 
-@media (max-width: 1200px) {
+@media (max-width: 1250px) {
 	main {
 		overflow-x: auto;
 		overflow-y: hidden;
@@ -29,5 +35,52 @@ main {
 	}
 	.time-line-figure {
 		left: 442px;
+	}
+}
+
+@media (max-width: 410px) {
+	header {
+		justify-content: center;
+
+		.wrapper {
+			padding: 0;
+		}
+	}
+
+	.wrapper__add-button {
+		visibility: hidden;
+		width: 0;
+	}
+
+	.wrapper-time-line .day-switcher {
+		visibility: hidden;
+	}
+
+	.day-switcher__wrapper-mobile {
+		visibility: visible;
+		width: 100vw;
+		position: fixed;
+		height: 55px;
+		justify-content: space-around;
+		padding: 0;
+		border-bottom: $separator-block-setting;
+
+		.day-switcher {
+			height: 100%;
+		}
+	}
+
+	.wrapper-time-line {
+		height: 31px;
+		position: relative;
+		top: 24px;
+	}
+
+	.time-line-figure__wrapper {
+		top: 56px;
+	}
+
+	.meeting-rooms {
+		top: 24px;
 	}
 }

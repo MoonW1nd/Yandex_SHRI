@@ -21,8 +21,11 @@ $ff-main: "HelveticaNeue", sans-serif;
 $ff-medium: "HelveticaNeue-Medium", sans-serif;
 $ff-bold: "HelveticaNeue-Bold", sans-serif;
 
-$min-width-name-table: 250px;
-$min-width-time-line: 957px;
+//sizing
+$min-width-title: 250px;
+$min-width-time-line: 1000px;
 
 $header-height: 70px;
 $time-line-height: 46px;
+
+$separator-block-setting: 1px solid $outer-shadow-color;
