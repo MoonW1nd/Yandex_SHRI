@@ -1,7 +1,7 @@
 @import "reset";
-@import "pallete";
+@import "variables";
 body {
-	letter-spacing: 0.3px;
+	letter-spacing: .3px;
 	font-family: $ff-main;
 	font-size: $fs-main;
 	margin: 0;
@@ -20,67 +20,25 @@ main {
 
 
 @import "header";
+@import "meeting-ui";
+@import "time-indicator";
+@import "day-switcher";
+@import "button-arrow";
 @import "time-line";
 @import "main-table";
+@import "background-meeting-rooms";
+@import "table-meeting-room";
 @import "mock-data-imitation";
 @import "meeting-info-hint";
 
-@media (max-width: 1250px) {
-	main {
-		overflow-x: auto;
-		overflow-y: hidden;
-	}
-	.table-meeting-room__time-line {
-		padding-right: 16px;
-	}
-	.time-line-figure {
-		left: 442px;
-	}
-}
 
 @media (max-width: 410px) {
-	header {
-		justify-content: center;
 
-		.wrapper {
-			padding: 0;
-		}
-	}
-
-	.wrapper__add-button {
-		visibility: hidden;
-		width: 0;
-	}
-
-	.wrapper-time-line .day-switcher {
+	.meeting-rooms__time-line .day-switcher {
 		visibility: hidden;
 	}
 
-	.day-switcher__wrapper-mobile {
-		visibility: visible;
-		width: 100vw;
-		position: fixed;
-		height: 55px;
-		justify-content: space-around;
-		padding: 0;
-		border-bottom: $separator-block-setting;
-
-		.day-switcher {
-			height: 100%;
-		}
-	}
-
-	.wrapper-time-line {
-		height: 31px;
-		position: relative;
-		top: 24px;
-	}
-
-	.time-line-figure__wrapper {
-		top: 56px;
-	}
-
-	.meeting-rooms {
-		top: 24px;
+	.time-indicator__position-handler {
+		padding-top: 4px;
 	}
 }

@@ -1,4 +1,4 @@
-@import "pallete";
+@import "variables";
 
 .meeting-info {
 	&__title {
@@ -73,7 +73,7 @@
 	cursor: pointer;
 
 	&__pen {
-		opacity: 0.43;
+		opacity: .43;
 
 		&:hover {
 			opacity: 1;

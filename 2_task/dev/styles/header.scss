@@ -1,20 +1,21 @@
-@import "pallete";
+@import "variables";
 
-header {
+.header {
 	display: flex;
 	justify-content: space-between;
-	height: 70px;
-	border-bottom: 1px solid $outer-shadow-color;
-}
-
-.wrapper {
-	display: flex;
-	justify-content: center;
 	align-items: center;
+	height: 70px;
+	border-bottom: $separator-block-setting;
+	box-sizing: border-box;
 	padding: 0 24px;
+	position: fixed;
+	width: 100vw;
+	background-color: $text-color-white;
+	z-index: 3;
 }
 
-.add-meeting__button {
+
+.add-button {
 	width: 140px;
 	height: 36px;
 	font-family: $ff-medium;
@@ -27,5 +28,16 @@ header {
 	&:hover {
 		cursor: pointer;
 		background-color: $button-color-hover;
+	}
 }
+
+@media (max-width: 410px) {
+	.header {
+		height: 48px;
+	}
+
+	.add-button {
+		visibility: hidden;
+		width: 0;
+	}
 }

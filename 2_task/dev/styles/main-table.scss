@@ -1,78 +1,23 @@
-@import "pallete";
+@import "variables";
 
-tr:hover {
-
-}
 .meeting-rooms {
 	position: relative;
 	min-height: calc(100vh - 117px);
+	top: $offset-meeting-rooms-mobile;
+	padding-bottom: $offset-meeting-rooms-mobile;
 }
 
-tr:hover {
-	.table-meeting-room__wrapper:not(.disabled) {
-		.table-meeting-room__name{
-			color: $text-color-hover;
-		}
-	}
-}
-
-.table-meeting-room {
-	width: 100vw;
-	min-width: $min-width-time-line + $min-width-title;
-	border-spacing: 0 16px;
-
-	&__wrapper.disabled {
-		color: $text-color-disabled;
+tr {
+	td:first-child {
 		pointer-events: none;
 	}
 
-	&__first-column {
-		width: calc(20vw - 1px);
-		min-width: $min-width-title - 1px;
-		font-size: $fs-small;
-		font-family: $ff-bold;
-		color: $text-color-disabled;
-		text-align: left;
-		padding-left: 24px;
-		box-sizing: border-box;
-		position: relative;
-		top: 10px;
-	}
-
-	&__second-column {
-		width: 80vw;
-		min-width: $min-width-time-line;
-	}
-
-	&__time-line {
-		background-color: $meeting-room-color-normal;
-		height: 28px;
-		position: relative;
-		display: flex;
-		padding-left: 27px;
-		padding-right: 23px;
-	}
-
-	&__name {
-		font-family: $ff-medium;
-		padding-left: 24px;
-	}
-
-	&__count {
-		font-size: $fs-small;
-		padding-left: 24px;
-	}
-
-	&__free-room {
-		position: absolute;
-		background-color: $text-color-white;
-		//TODO:[A.Ivankov] set from js
-		min-width: 199px;
-		width: calc(199px + (100vw - 1220px) / 15);
-
-		top: 0;
-		bottom: 0;
-		left: 350px;
+	&:hover {
+		.table-meeting-room__wrapper:not(.disabled) {
+			.table-meeting-room__name {
+				color: $text-color-hover;
+			}
+		}
 	}
 }
 
@@ -99,7 +44,6 @@ tr:hover {
 			text-align: center;
 			color: $text-color-white;
 			background-color: $text-color-hover;
-			//pointer-events: none;
 		}
 	}
 
@@ -113,46 +57,3 @@ tr:hover {
 	}
 }
 
-.background-meeting-rooms {
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 0;
-	display: flex;
-	pointer-events: none;
-
-	&__time-line-block {
-		background-color: $meeting-room-color-background;
-		display: flex;
-		justify-content: space-between;
-		flex: 1;
-		min-width: $min-width-time-line;
-		padding-left: 3px;
-		overflow: hidden;
-	}
-
-	&__title-block {
-		width: calc(20vw - 2px);
-		min-width: $min-width-title - 1;
-		border-right: $separator-block-setting;
-	}
-
-	&__time-line-wrapper {
-		flex-basis: 49px;
-		height: 100%;
-		display: flex;
-		justify-content: center;
-		z-index: 2;
-		//
-		//&:last-child {
-		//	margin-right: -11px;
-		//}
-	}
-
-	&__time-line {
-		width: 1px;
-		height: 100%;
-		background-color: $meeting-room-color-support-time-line;
-	}
-}

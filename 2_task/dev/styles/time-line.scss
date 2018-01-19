@@ -1,61 +1,5 @@
-@import "pallete";
-$size-round: 24px;
+@import "variables";
 
-html {
-	margin-left: calc(100vw - 100%);
-	margin-right: 0;
-}
-
-.wrapper-time-line {
-	display: flex;
-	justify-content: space-between;
-	height: 45px;
-	min-width: $min-width-title + $min-width-time-line;
-	overflow: hidden;
-	width: 100vw;
-	border-bottom: $separator-block-setting;
-
-	.day-switcher {
-		width: calc(20vw);
-		box-sizing: border-box;
-		min-width: $min-width-title;
-	}
-}
-
-.wrapper-date {
-	font-family: $ff-medium;
-	line-height: $size-round;
-	margin: 0 13px;
-}
-
-.button-arrow {
-	width: $size-round;
- 	height: $size-round;
-	border-radius: 50%;
-	background: $outer-shadow-color no-repeat;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-
-	&__arrow-right {
-		padding-left: 2px;
-	}
-
-	&__arrow-left {
-		padding-right: 2px;
-	}
-
-	img {
-		opacity: 0.43;
-	}
-
-	&:hover {
-		cursor: pointer;
-		img {
-			opacity: 1;
-		}
-	}
-}
 .time-line {
 	display: flex;
 	justify-content: space-between;
@@ -65,67 +9,12 @@ html {
 	min-width: $min-width-time-line;
 	position: relative;
 	padding-left: 2px;
-	div {
+
+	&__hour {
 		text-align: center;
 		font-size: $fs-small;
 		height: 13px;
 		line-height: 13px;
 		width: 49px;
-	}
-}
-
-.time-line-figure__wrapper {
-	position: absolute;
-	top: 0;
-	z-index: 3;
-	overflow: visible;
-	pointer-events: none;
-
-	&.day-switcher {
-		width: calc(20vw);
-		min-width: $min-width-title;
-	}
-}
-
-.time-line__fake {
-	display: flex;
-	flex: 1;
-	min-width: $min-width-time-line;
-	position: relative;
-	width: 80vw;
-}
-
-.time-line-figure {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-end;
-	height: 100vh;
-	pointer-events: none;
-	padding-top: 12px;
-	padding-left: 3px;
-	flex-grow: 185;
-
-	.time-line-figure__time {
-		width: 49px;
-		height: 20px;
-		background-color: $button-color-hover;
-		border-radius: 10px;
-		font-size: $fs-medium;
-		line-height: 20px;
-		text-align: center;
-		font-family: $ff-medium;
-		color: $text-color-white;
-	}
-
-	.time-line-figure__line {
-		width: 1px;
-		height: 100vh;
-		background-color: $button-color-hover;
-		position: relative;
-		right: 24.5px;
-	}
-
-	&__helper {
-		flex-grow: 715;
 	}
 }
