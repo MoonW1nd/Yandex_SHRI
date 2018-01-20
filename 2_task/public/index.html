@@ -11,7 +11,8 @@
 <body>
 <header class="header">
 	<img class="logo" src="assets/logo.svg" alt="Yandex Переговорки">
-	<button class="add-button">Создать встречу</button>
+	<input type="button" class="add-button" value="Создать встречу" onClick='location.href="new-meeting.html"'>
+	<!--<button class="add-button">Создать встречу</button>-->
 </header>
 <main class="meeting-ui">
 	<div class="day-switcher day-switcher_mobile">
@@ -168,7 +169,7 @@
 						<div class="time-piece time_8-15 active"></div>
 						<div class="time-piece time_9-00 placed"></div>
 						<div class="time-piece time_8-45 pressed">
-							<div class="meeting-info__wrapper">
+							<div class="meeting-info">
 								<div class="meeting-info__title">Рассуждения о высоком</div>
 								<div class="meeting-info__time-place">14 декабря, 15:00&mdash;17:00 · Желтый дом</div>
 								<div class="meeting-info__avatar-wrapper">
@@ -715,10 +716,7 @@
 	var lastScrollLeft = $('.meeting-ui').scrollLeft();
 	$(window).scroll(
 	  () => {
-	  	timeLines.css({
-		  position: 'fixed',
-		  transform: `translate(-${$('.meeting-ui').scrollLeft()}px, 0px)`
-	  	});
+	  	timeLines.css('position', 'fixed');
 	  	console.log(lastScrollLeft, $('.meeting-ui').scrollLeft());
 	  	
 	  }
@@ -728,7 +726,7 @@
 			  if (lastScrollLeft !== $('.meeting-ui').scrollLeft()) {
 				  timeLines.css({
 					  position: 'absolute',
-					  transform: `translate(0px, ${$(window).scrollTop()}px)`
+					  transform: `translateY(${$(window).scrollTop()}px)`
 				  })
 			  }
 	  }

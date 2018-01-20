@@ -11,7 +11,8 @@
 <body>
 <header class="header">
 	<img class="logo" src="assets/logo.svg" alt="Yandex Переговорки">
-	<button class="add-button">Создать встречу</button>
+	<input type="button" class="add-button" value="Создать встречу" onClick='location.href="new-meeting.html"'>
+	<!--<button class="add-button">Создать встречу</button>-->
 </header>
 <main class="meeting-ui">
 	<div class="day-switcher day-switcher_mobile">
@@ -168,7 +169,7 @@
 						<div class="time-piece time_8-15 active"></div>
 						<div class="time-piece time_9-00 placed"></div>
 						<div class="time-piece time_8-45 pressed">
-							<div class="meeting-info__wrapper">
+							<div class="meeting-info">
 								<div class="meeting-info__title">Рассуждения о высоком</div>
 								<div class="meeting-info__time-place">14 декабря, 15:00&mdash;17:00 · Желтый дом</div>
 								<div class="meeting-info__avatar-wrapper">
@@ -713,30 +714,6 @@
 	// var topPositionTimeLine;
 	var timeLines = $('.meeting-ui__time-line');
 	var lastScrollLeft = $('.meeting-ui').scrollLeft();
-	// $(window).on('load',windowSize);
-	// $(window).resize(function () {
-	// 		windowSize();
-	// 		setPosition();
-	// 	});
-	//
-	// window.onscroll = function () {
-	// 		setPosition();
-	// 	};
-	//
-	// $('.meeting-ui').scrollLeft( 300 );
-	//
-	// function windowSize(){
-	// 	if ($(window).width() <= '410'){
-	// 		topPositionTimeLine = 103;
-	// 	} else {
-	// 		topPositionTimeLine = 70;
-	// 	}
-	// }
-	//
-	// function setPosition() {
-	// 	var scrolled = window.pageYOffset || document.documentElement.scrollTop;
-	// 	timeLines.css('top', `${scrolled + topPositionTimeLine}px`);
-	// }
 	$(window).scroll(
 	  () => {
 	  	timeLines.css('position', 'fixed');

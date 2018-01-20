@@ -1,51 +1,49 @@
-[role="button"],
-input[type="submit"],
-input[type="reset"],
-input[type="button"],
-button {
-  -webkit-box-sizing: content-box;
-  box-sizing: content-box; }
-
-/* Reset `button` and button-style `input` default styles */
-input[type="submit"],
-input[type="reset"],
-input[type="button"],
-button {
-  background: none;
-  border: 0;
-  color: inherit;
-  /* cursor: default; */
-  line-height: normal;
-  overflow: visible;
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
   padding: 0;
-  -webkit-appearance: button;
-  /* for input */
-  -webkit-user-select: none;
-  /* for button */
-  -moz-user-select: none;
-  -ms-user-select: none; }
-
-input::-moz-focus-inner,
-button::-moz-focus-inner {
   border: 0;
-  padding: 0; }
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline; }
 
-/* Make `a` like a button */
-[role="button"] {
-  color: inherit;
-  cursor: default;
-  display: inline-block;
-  text-align: center;
-  text-decoration: none;
-  white-space: pre;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none; }
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block; }
 
-button:focus {
-  outline: none;
-  -webkit-box-shadow: 0 0 10px rgba(70, 70, 70, 0.5);
-          box-shadow: 0 0 10px rgba(70, 70, 70, 0.5); }
+body {
+  line-height: 1; }
+
+ol, ul {
+  list-style: none; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
 
 body {
   letter-spacing: .3px;
@@ -619,11 +617,7 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
       -ms-flex-positive: 170;
           flex-grow: 170; }
 
-.meeting-info__title {
-  font-family: "HelveticaNeue-Medium", sans-serif;
-  margin-bottom: 4px; }
-
-.meeting-info__wrapper {
+.meeting-info {
   border-radius: 8px;
   width: 340px;
   height: 110px;
@@ -639,7 +633,7 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
   padding: 16px;
   -webkit-box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
           box-shadow: 0 0 25px rgba(0, 0, 0, 0.3); }
-  .meeting-info__wrapper:after {
+  .meeting-info:after {
     content: '';
     width: 0;
     height: 0;
@@ -650,23 +644,24 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
             transform: translate(-50%, -50%);
     border: 15px solid transparent;
     border-bottom: 18px solid #FFFFFF; }
-
-.meeting-info__avatar-wrapper {
-  margin-top: 8px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  font-size: 0.86em; }
-  .meeting-info__avatar-wrapper .members {
-    margin-left: 8px; }
-    .meeting-info__avatar-wrapper .members span {
-      color: #858E98; }
-
-.meeting-info__time-place {
-  font-size: 0.86em; }
+  .meeting-info__title {
+    font-family: "HelveticaNeue-Medium", sans-serif;
+    margin-bottom: 4px; }
+  .meeting-info__avatar-wrapper {
+    margin-top: 8px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    font-size: 0.86em; }
+    .meeting-info__avatar-wrapper .members {
+      margin-left: 8px; }
+      .meeting-info__avatar-wrapper .members span {
+        color: #858E98; }
+  .meeting-info__time-place {
+    font-size: 0.86em; }
 
 .avatar-round {
   width: 24px;
@@ -695,6 +690,276 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
     opacity: .43; }
     .edit-button__pen:hover {
       opacity: 1; }
+
+.add-meeting-ui {
+  position: relative;
+  top: 70px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  height: calc(100vh - 70px); }
+  .add-meeting-ui__layout {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    position: relative;
+    top: 31px; }
+  .add-meeting-ui__title {
+    margin-left: 16px;
+    font-size: 1.33em;
+    font-family: "HelveticaNeue-Medium", sans-serif; }
+  .add-meeting-ui__footer {
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+    padding: 20px;
+    width: 100vw;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    border-top: 1px solid #E9ECEF; }
+
+@media (max-width: 720px) {
+  .add-meeting-ui__layout {
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center; }
+    .add-meeting-ui__layout .form-data-layout {
+      width: -webkit-min-content;
+      width: -moz-min-content;
+      width: min-content; } }
+
+.form-data-layout {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  max-width: 904px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap; }
+  .form-data-layout__inputs-layout, .form-data-layout__time-set-layout {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap; }
+
+.input-block, .offer-meeting-room {
+  margin-top: 24px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 0 16px;
+  position: relative; }
+  .input-block__label, .offer-meeting-room__label {
+    font-size: "HelveticaNeue-Medium", sans-serif;
+    font-family: "HelveticaNeue-Medium", sans-serif;
+    padding-bottom: 4px; }
+  .input-block__input {
+    max-width: 420px;
+    width: 32.8vw;
+    min-width: 328px;
+    height: 38px;
+    border-radius: 4px;
+    border: 2px solid #E9ECEF;
+    background: #ffffff !important;
+    outline: none;
+    font-size: 0.86em;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+    padding-left: 10px; }
+  .input-block__input:focus {
+    color: #000000;
+    border: 2px solid #007DFF; }
+  .input-block__icon_calendar {
+    position: absolute;
+    right: 30px;
+    bottom: 13px;
+    opacity: .5; }
+  .input-block__input_data {
+    min-width: 238px;
+    max-width: 238px;
+    width: 18vw; }
+  .input-block__input_time {
+    width: 72px;
+    min-width: 72px; }
+
+.input-block__input_data:before {
+  content: attr(data-date);
+  display: inline-block;
+  font-family: "HelveticaNeue", sans-serif;
+  font-size: 1em;
+  color: black; }
+
+.input-block__input_data::-webkit-datetime-edit,
+.input-block__input_data::-webkit-inner-spin-button,
+.input-block__input_data::-webkit-clear-button,
+.input-block__input_time::-webkit-inner-spin-button,
+.input-block__input_time::-webkit-clear-button {
+  display: none; }
+
+.input-block__input_data::-webkit-calendar-picker-indicator,
+.input-block__input_data::-webkit-calendar-picker-indicator:hover {
+  position: absolute;
+  right: 30px;
+  color: transparent;
+  background-color: transparent;
+  opacity: 1;
+  cursor: pointer; }
+
+.time-input-block {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  max-width: 446px; }
+  .time-input-block .input-block, .time-input-block .offer-meeting-room {
+    -ms-flex-preferred-size: 238px;
+        flex-basis: 238px; }
+
+.set-time-block {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center; }
+  .set-time-block__dash {
+    margin-top: 24px;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+    padding-top: 20px; }
+  .set-time-block .input-block, .set-time-block .offer-meeting-room {
+    padding: 0 4px; }
+
+.input-block, .offer-meeting-room {
+  margin-top: 24px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 0 16px;
+  position: relative; }
+  .input-block__label, .offer-meeting-room__label {
+    font-size: "HelveticaNeue-Medium", sans-serif;
+    font-family: "HelveticaNeue-Medium", sans-serif;
+    padding-bottom: 4px; }
+  .input-block__input {
+    max-width: 420px;
+    width: 32.8vw;
+    min-width: 328px;
+    height: 38px;
+    border-radius: 4px;
+    border: 2px solid #E9ECEF;
+    background: #ffffff !important;
+    outline: none;
+    font-size: 0.86em;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+    padding-left: 10px; }
+  .input-block__input:focus {
+    color: #000000;
+    border: 2px solid #007DFF; }
+  .input-block__icon_calendar {
+    position: absolute;
+    right: 30px;
+    bottom: 13px;
+    opacity: .5; }
+  .input-block__input_data {
+    min-width: 238px;
+    max-width: 238px;
+    width: 18vw; }
+  .input-block__input_time {
+    width: 72px;
+    min-width: 72px; }
+
+.input-block__input_data:before {
+  content: attr(data-date);
+  display: inline-block;
+  font-family: "HelveticaNeue", sans-serif;
+  font-size: 1em;
+  color: black; }
+
+.input-block__input_data::-webkit-datetime-edit,
+.input-block__input_data::-webkit-inner-spin-button,
+.input-block__input_data::-webkit-clear-button,
+.input-block__input_time::-webkit-inner-spin-button,
+.input-block__input_time::-webkit-clear-button {
+  display: none; }
+
+.input-block__input_data::-webkit-calendar-picker-indicator,
+.input-block__input_data::-webkit-calendar-picker-indicator:hover {
+  position: absolute;
+  right: 30px;
+  color: transparent;
+  background-color: transparent;
+  opacity: 1;
+  cursor: pointer; }
+
+.offer-meeting-room__element {
+  max-width: 420px;
+  width: 32.8vw;
+  min-width: 328px;
+  height: 37px;
+  background-color: #007DFF;
+  border-radius: 4px;
+  color: #FFFFFF;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: relative;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 0 10px; }
+
+.offer-meeting-room__room {
+  font-size: 0.73em;
+  margin-left: 10px; }
+
+.button-delete {
+  background-color: transparent;
+  padding: 0;
+  border: 0;
+  position: absolute;
+  right: 10px;
+  top: 12px; }
 
 @media (max-width: 410px) {
   .meeting-rooms__time-line .day-switcher {

@@ -1,0 +1,23 @@
+@import "variables";
+
+.edit-button {
+	position: absolute;
+	width: 24px;
+	height: 24px;
+	right: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	top: 8px;
+	border-radius: 50%;
+	background-color: $button-color-disabled;
+	cursor: pointer;
+
+	&__pen {
+		opacity: .43;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+}

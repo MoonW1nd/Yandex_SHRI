@@ -30,7 +30,13 @@ main {
 @import "table-meeting-room";
 @import "mock-data-imitation";
 @import "meeting-info-hint";
-
+@import "edit-button";
+@import "add-meeting-ui";
+@import "form-data-layout";
+@import "input-block";
+@import "time-input-block";
+@import "offer-meeting-room";
+@import "button-delete";
 
 @media (max-width: 410px) {
 

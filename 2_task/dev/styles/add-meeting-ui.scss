@@ -1,0 +1,44 @@
+@import "variables";
+
+.add-meeting-ui {
+	position: relative;
+	top: $header-height;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: space-between;
+	height: calc(100vh - 70px);
+
+	&__layout {
+		//max-width: 875px;
+		display: flex;
+		flex-direction: column;
+		position: relative;
+		top: 31px;
+	}
+
+	&__title {
+		margin-left: 16px;
+		font-size: $fs-title;
+		font-family: $ff-medium;
+	}
+
+	&__footer {
+		box-sizing: border-box;
+		padding: 20px;
+		width: 100vw;
+		display: flex;
+		justify-content: center;
+		border-top: $separator-block-setting;
+	}
+}
+
+@media (max-width: 720px) {
+	.add-meeting-ui__layout {
+		align-items: center;
+
+		& .form-data-layout {
+			width: min-content;
+		}
+	}
+}

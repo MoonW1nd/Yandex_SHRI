@@ -1,0 +1,29 @@
+@import "variables";
+@import "input-block";
+
+.offer-meeting-room {
+	@extend .input-block;
+
+	&__label {
+		@extend .input-block__label;
+	}
+
+	&__element {
+		max-width: 420px;
+		width: 32.8vw;
+		min-width: 328px;
+		height: 37px;
+		background-color: $button-color-normal;
+		border-radius: 4px;
+		color: $text-color-white;
+		display: flex;
+		position: relative;
+		align-items: center;
+		box-sizing: border-box;
+		padding: 0 10px;
+	}
+	&__room {
+		font-size: $fs-small;
+		margin-left: 10px;
+	}
+}
