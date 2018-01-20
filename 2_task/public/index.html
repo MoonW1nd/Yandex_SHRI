@@ -713,33 +713,12 @@
 	// var topPositionTimeLine;
 	var timeLines = $('.meeting-ui__time-line');
 	var lastScrollLeft = $('.meeting-ui').scrollLeft();
-	// $(window).on('load',windowSize);
-	// $(window).resize(function () {
-	// 		windowSize();
-	// 		setPosition();
-	// 	});
-	//
-	// window.onscroll = function () {
-	// 		setPosition();
-	// 	};
-	//
-	// $('.meeting-ui').scrollLeft( 300 );
-	//
-	// function windowSize(){
-	// 	if ($(window).width() <= '410'){
-	// 		topPositionTimeLine = 103;
-	// 	} else {
-	// 		topPositionTimeLine = 70;
-	// 	}
-	// }
-	//
-	// function setPosition() {
-	// 	var scrolled = window.pageYOffset || document.documentElement.scrollTop;
-	// 	timeLines.css('top', `${scrolled + topPositionTimeLine}px`);
-	// }
 	$(window).scroll(
 	  () => {
-	  	timeLines.css('position', 'fixed');
+	  	timeLines.css({
+		  position: 'fixed',
+		  transform: `translate(-${$('.meeting-ui').scrollLeft()}px, 0px)`
+	  	});
 	  	console.log(lastScrollLeft, $('.meeting-ui').scrollLeft());
 	  	
 	  }
@@ -749,7 +728,7 @@
 			  if (lastScrollLeft !== $('.meeting-ui').scrollLeft()) {
 				  timeLines.css({
 					  position: 'absolute',
-					  transform: `translateY(${$(window).scrollTop()}px)`
+					  transform: `translate(0px, ${$(window).scrollTop()}px)`
 				  })
 			  }
 	  }

@@ -1,0 +1,43 @@
+@import "variables";
+
+.meeting-ui {
+	position: relative;
+	overflow: hidden;
+	min-height: 100vh;
+
+	&__time-line {
+		display: flex;
+		justify-content: space-between;
+		height: 45px;
+		min-width: $min-width-title + $min-width-time-line;
+		overflow: hidden;
+		width: 100vw;
+		position: absolute;
+		top: 70px;
+		z-index: 3;
+		background-color: $text-color-white;
+		border-bottom: $separator-block-setting;
+
+		&_time-indicator {
+			background-color: transparent;
+			z-index: 4;
+			overflow: visible;
+			pointer-events: none;
+		}
+	}
+}
+
+@media (max-width: 1250px) {
+	.meeting-ui {
+		overflow-x: auto;
+		overflow-y: hidden;
+	}
+}
+
+@media (max-width: 410px) {
+	.meeting-ui__time-line {
+		top: 103px;
+		height: 31px;
+		position: absolute;
+	}
+}

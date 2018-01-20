@@ -1,0 +1,56 @@
+@import "variables";
+
+.table-meeting-room {
+	width: 100vw;
+	min-width: $min-width-time-line + $min-width-title;
+	border-spacing: 0 16px;
+
+	&__wrapper.disabled {
+		color: $text-color-disabled;
+		pointer-events: none;
+	}
+
+	&__first-column {
+		width: 20vw;
+		min-width: $min-width-title;
+		font-size: $fs-small;
+		font-family: $ff-bold;
+		color: $text-color-disabled;
+		text-align: left;
+		padding-left: 24px;
+		box-sizing: border-box;
+		position: relative;
+		top: 10px;
+	}
+
+	&__second-column {
+		width: 80vw;
+		box-sizing: border-box;
+		min-width: $min-width-time-line;
+	}
+
+	&__time-line {
+		background-color: $meeting-room-color-normal;
+		height: 28px;
+		position: relative;
+		display: flex;
+		padding-left: 27px;
+		padding-right: 23px;
+	}
+
+	&__name {
+		font-family: $ff-medium;
+		padding-left: 24px;
+	}
+
+	&__count {
+		font-size: $fs-small;
+		padding-left: 24px;
+	}
+}
+
+@media (max-width: 1250px) {
+	.table-meeting-room__time-line {
+		padding-right: 20px;
+	}
+}
