@@ -3,8 +3,9 @@
 .meeting-rooms {
 	position: relative;
 	min-height: calc(100vh - 117px);
-	top: $offset-meeting-rooms-mobile;
+	top: $offset-meeting-rooms-mobile - 19px;
 	padding-bottom: $offset-meeting-rooms-mobile;
+
 }
 
 tr {
@@ -41,6 +42,7 @@ tr {
 			width: 57px;
 			border-radius: 2px;
 			font-size: 21px;
+			line-height: 28px;
 			text-align: center;
 			color: $text-color-white;
 			background-color: $text-color-hover;

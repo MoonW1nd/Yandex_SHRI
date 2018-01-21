@@ -261,9 +261,9 @@
 			</button>
 		</section>
 	</main>
-	<footer class="add-meeting-ui__footer">
+	<footer class="add-meeting-ui__footer footer_add-meeting">
 		<button type="button" class="button-cancel" onClick='location.href="./index.html"'>Отмена</button>
-		<button type="submit" class="add-button" onClick='location.href="./new-meeting-created.html"'>Создать встречу</button>
+		<button type="submit" class="add-button disabled" onClick='location.href="./new-meeting-created.html"'>Создать встречу</button>
 	</footer>
 </form>
 </body>
@@ -286,6 +286,11 @@
 			moment(this.value, "YYYY-MM-DD")
 				.format( this.getAttribute("data-date-format") )
 		)
-	}).trigger("change")
+	}).trigger("change");
+	var reg = /Firefox/ig;
+	if (reg.test(window.navigator.userAgent)) {
+		$('.input-block__input_time').css('padding', '0');
+		$('.input-block__icon_calendar').css('right', '40px');
+	};
 </script>
 </html>

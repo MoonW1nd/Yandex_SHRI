@@ -68,3 +68,8 @@ $('.meeting-ui').scroll(
 	}
 );
 $('.day-switcher__date').on('click', () => $('.calendar').toggleClass('hidden'));
+
+var reg = /Firefox/ig;
+if (reg.test(window.navigator.userAgent)) {
+	$('.input-block__input_time').css('padding', '0')
+}

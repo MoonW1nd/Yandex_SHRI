@@ -18,6 +18,11 @@ main {
 	height: 0;
 }
 
+button.disabled {
+	background-color: $button-color-disabled;
+	color: $text-color-disabled;
+	pointer-events: none;
+}
 
 
 @import "header";

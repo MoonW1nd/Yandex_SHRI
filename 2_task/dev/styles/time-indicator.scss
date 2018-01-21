@@ -28,10 +28,16 @@
 		background-color: $button-color-hover;
 		border-radius: 10px;
 		font-size: $fs-medium;
-		line-height: 20px;
 		text-align: center;
 		font-family: $ff-medium;
 		color: $text-color-white;
+		position: relative;
+		top: 1px;
+
+		& p {
+			position: relative;
+			top: 4px;
+		}
 	}
 
 	&__line {

@@ -13,6 +13,7 @@
 		font-size: $ff-medium;
 		font-family: $ff-medium;
 		padding-bottom: 5px;
+		font-weight: 600;
 	}
 
 	&__input {
@@ -60,6 +61,10 @@
 	font-family: $ff-main;
 	font-size: 1em;
 	color: black;
+}
+
+.input-block__input_data::-ms-clear {
+	display: none;
 }
 
 .input-block__input_data::-webkit-datetime-edit,

@@ -5,14 +5,15 @@
 	width: 24px;
 	height: 24px;
 	right: 8px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 	top: 8px;
 	border-radius: 50%;
 	background-color: $button-color-disabled;
 	cursor: pointer;
 	padding: 0;
+
+	img {
+		margin: 0 auto;
+	}
 
 	&__pen {
 		opacity: .43;

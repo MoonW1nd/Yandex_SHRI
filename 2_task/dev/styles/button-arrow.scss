@@ -5,13 +5,14 @@
 	height: $size-round;
 	border-radius: 50%;
 	background: $outer-shadow-color no-repeat;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 	padding: 0;
+
 
 	&__image {
 		opacity: .43;
+		margin: 0 auto;
+		position: relative;
+		top: 1px;
 
 		&_left {
 			padding-right: 2px;

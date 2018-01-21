@@ -50,6 +50,7 @@
 	//input-block
 	.input-block__input_time {
 		width: 153px;
+		padding-left: 10px !important;
 	}
 
 	.offer-meeting-room__element {
@@ -67,6 +68,105 @@
 			width: 0;
 		}
 	}
+
+	.add-meeting-ui__layout {
+		padding-bottom: 43px;
+	}
+
+	.time-piece.active:hover::after {
+		line-height: 57px;
+	}
+
+	.table-meeting-room {
+		border-spacing: 0 2px;
+		margin-bottom: 24px;
+
+		&__time-line {
+			height: 58px;
+		}
+
+		&__first-column {
+			top: 3px;
+		}
+	}
+
+	.meeting-rooms {
+		top: 135px;
+	}
+
+	.edit-meeting-ui__main {
+		display: block;
+	}
+
+	.add-meeting-ui__footer.footer_add-meeting {
+		&:after {
+			content: 'Выберите переговорку';
+			position: absolute;
+			height: 43px;
+			color: white;
+			font-size: $fs-main;
+			background-color: rgba(0,16,33,0.80);
+			width: 100vw;
+			padding: 16px;
+			box-sizing: border-box;
+			bottom: 70px;
+			left: 0;
+		}
+	}
+	.footer_edit {
+		flex-wrap: wrap;
+		height: 150px;
+		padding: 0;
+		justify-content: flex-end;
+		position: relative;
+
+		& .button-remove {
+			flex-basis: 100vw;
+			background-color: transparent;
+			color: red;
+			font-weight: 400;
+			height: 54px;
+			margin: 8px 0;
+			position: relative;
+
+			&:after {
+				content: '';
+				bottom: -8px;
+				left: 0;
+				height: 8px;
+				width: 100vw;
+				position: absolute;
+				background-color: $button-color-disabled;
+			}
+
+			&:before {
+				top: -8px;
+				left: 0;
+				content: '';
+				height: 8px;
+				width: 100vw;
+				position: absolute;
+				background-color: $button-color-disabled;
+			}
+		}
+
+		& .button-footer {
+			order: 1;
+			margin: 16px;
+
+			&:first-child {
+				margin-right: 0px;
+			}
+		}
+	}
+}
+
+@media (max-width: 450px) {
+	body.dimmed .modal {
+		width: 100vw;
+		top: calc(100vh - 24px);
+		transform: translate(-50%, -100%);
+	}
 }
 
 // day-switcher
@@ -75,6 +175,16 @@
 		visibility: hidden;
 	}
 
+	.footer_add-meeting {
+		& .button-cancel {
+			visibility: hidden;
+			display: none;
+		}
+
+		& .add-button {
+			padding: 0 57px;
+		}
+	}
 	.day-switcher_mobile {
 		visibility: visible;
 		width: 100vw;

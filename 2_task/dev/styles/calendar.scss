@@ -1,3 +1,5 @@
+@import "variables";
+
 #calendar {
 	width: 100%;
 	font: monospace;
@@ -21,10 +23,10 @@
 #calendar tbody td {
 	width: 29px;
 	height: 23px;
-	color: rgb(44, 86, 122);
+	color: rgb(0, 0, 0);
 }
 #calendar tbody td:nth-child(n+6), #calendar .holiday {
-	color: rgb(231, 140, 92);
+	color: rgb(220, 0, 0);
 }
 #calendar tbody td.today {
 	background: rgb(220, 0, 0);
@@ -45,6 +47,16 @@
 
 	&.hidden {
 		visibility: hidden;
+	}
+
+	&__month {
+		font-family: $ff-medium;
+		font-weight: bold;
+	}
+
+	&__week {
+		font-family: $ff-medium;
+		font-weight: bold;
 	}
 }
 

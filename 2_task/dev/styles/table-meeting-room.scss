@@ -3,7 +3,8 @@
 .table-meeting-room {
 	width: 100vw;
 	min-width: $min-width-time-line + $min-width-title;
-	border-spacing: 0 16px;
+	border-spacing: 0 24px;
+	margin-bottom: -34px;
 
 	&__wrapper.disabled {
 		color: $text-color-disabled;
@@ -15,12 +16,13 @@
 		min-width: $min-width-title;
 		font-size: $fs-small;
 		font-family: $ff-bold;
+		font-weight: bold;
 		color: $text-color-disabled;
 		text-align: left;
 		padding-left: 24px;
 		box-sizing: border-box;
 		position: relative;
-		top: 10px;
+		top: 15px;
 	}
 
 	&__second-column {
@@ -40,12 +42,18 @@
 
 	&__name {
 		font-family: $ff-medium;
+		font-weight: bold;
 		padding-left: 24px;
+		position: relative;
+		bottom: 2px;
 	}
 
 	&__count {
 		font-size: $fs-small;
 		padding-left: 24px;
+		position: relative;
+		top: 4px;
+
 	}
 }
 
