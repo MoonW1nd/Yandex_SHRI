@@ -1,53 +1,53 @@
-//[role="button"],
-//input[type="submit"],
-//input[type="reset"],
-//input[type="button"],
-//button {
-//	-webkit-box-sizing: content-box;
-//	-moz-box-sizing: content-box;
-//	box-sizing: content-box;
-//}
-//
-///* Reset `button` and button-style `input` default styles */
-//input[type="submit"],
-//input[type="reset"],
-//input[type="button"],
-//button {
-//	background: none;
-//	border: 0;
-//	color: inherit;
-//	/* cursor: default; */
-//	line-height: normal;
-//	overflow: visible;
-//	padding: 0;
-//	-webkit-appearance: button; /* for input */
-//	-webkit-user-select: none; /* for button */
-//	-moz-user-select: none;
-//	-ms-user-select: none;
-//}
-//input::-moz-focus-inner,
-//button::-moz-focus-inner {
-//	border: 0;
-//	padding: 0;
-//}
-//
-///* Make `a` like a button */
-//[role="button"] {
-//	color: inherit;
-//	cursor: default;
-//	display: inline-block;
-//	text-align: center;
-//	text-decoration: none;
-//	white-space: pre;
-//	-webkit-user-select: none;
-//	-moz-user-select: none;
-//	-ms-user-select: none;
-//}
-//
-//button:focus {
-//	outline: none;
-//	box-shadow: 0 0 10px rgba(70,70,70,0.50);
-//}
+[role="button"],
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+button {
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+}
+
+/* Reset `button` and button-style `input` default styles */
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+button {
+	//background: none;
+	border: 0;
+	//color: inherit;
+	/* cursor: default; */
+	line-height: normal;
+	overflow: visible;
+	padding: 0;
+	-webkit-appearance: button; /* for input */
+	-webkit-user-select: none; /* for button */
+	-moz-user-select: none;
+	-ms-user-select: none;
+}
+input::-moz-focus-inner,
+button::-moz-focus-inner {
+	border: 0;
+	padding: 0;
+}
+
+/* Make `a` like a button */
+[role="button"] {
+	color: inherit;
+	cursor: default;
+	display: inline-block;
+	text-align: center;
+	text-decoration: none;
+	white-space: pre;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+}
+
+button:focus {
+	outline: none;
+	box-shadow: 0 0 10px rgba(70,70,70,0.50);
+}
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
@@ -92,7 +92,7 @@ q:before, q:after {
 	content: '';
 	content: none;
 }
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}
+//table {
+//	border-collapse: collapse;
+//	border-spacing: 0;
+//}

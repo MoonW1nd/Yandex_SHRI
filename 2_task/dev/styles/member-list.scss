@@ -1,0 +1,40 @@
+@import "variables";
+
+.member-list {
+	@extend .input-block__input;
+	max-height: 136px;
+	height: auto;
+	overflow-y: scroll;
+	display: none;
+	position: absolute;
+	top: 57px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+	z-index: 2;
+
+	&__element {
+		width: 100%;
+		height: 34px;
+		display: flex;
+		align-items: center;
+		cursor: pointer;
+
+		&:hover {
+			font-weight: bold;
+			background-color: #F6F7F9;
+		}
+	}
+}
+
+.member {
+	display: flex;
+	align-items: center;
+	font-size: $fs-medium;
+
+	.avatar-round {
+		margin-right: 8px;
+	}
+
+	&__floor {
+		color: $text-color-disabled;
+	}
+}

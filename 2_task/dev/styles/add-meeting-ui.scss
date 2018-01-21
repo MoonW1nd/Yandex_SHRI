@@ -9,11 +9,19 @@
 	justify-content: space-between;
 	height: calc(100vh - 70px);
 
+	&__main {
+		height: 100vh;
+		width: 100vw;
+		overflow-y: scroll;
+	}
+
 	&__layout {
 		//max-width: 875px;
 		display: flex;
 		flex-direction: column;
 		position: relative;
+		margin: 0 auto;
+		width: fit-content;
 		top: 31px;
 	}
 

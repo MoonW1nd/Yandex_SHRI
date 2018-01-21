@@ -5,4 +5,12 @@
 	position: absolute;
 	right: 10px;
 	top: 12px;
+
+	&_add-member {
+		position: relative;
+		top: 0;
+		right: 0;
+		box-sizing: border-box;
+		padding: 0 9px 0 15px;
+	}
 }

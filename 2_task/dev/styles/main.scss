@@ -19,6 +19,7 @@ main {
 }
 
 
+
 @import "header";
 @import "meeting-ui";
 @import "time-indicator";
@@ -37,6 +38,12 @@ main {
 @import "time-input-block";
 @import "offer-meeting-room";
 @import "button-delete";
+@import "member-list";
+@import "cancel-button";
+@import "modal";
+@import "button-ok";
+@import "add-member-list";
+@import "card-add-member";
 
 @media (max-width: 410px) {
 
