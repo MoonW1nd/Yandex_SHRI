@@ -107,7 +107,7 @@
 								<div class="card-add-member">
 									<img class="avatar-round card-add-member__image" src="./assets/darth-vader-avatar.jpg" alt="Lex Luthor">
 									<div class="card-add-member__name">Лекс Лютер</div>
-									<button class="button-delete button-delete_add-member">
+									<button type="button" class="button-delete button-delete_add-member">
 										<?xml version="1.0" encoding="UTF-8"?>
 										<svg width="10px" height="10px" viewBox="0 0 10 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 											<!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
@@ -132,7 +132,7 @@
 								<div class="card-add-member">
 									<img class="avatar-round card-add-member__image" src="./assets/darth-vader-avatar.jpg" alt="Dart Veider">
 									<div class="card-add-member__name">Дарт Вейдер</div>
-									<button class="button-delete button-delete_add-member">
+									<button type="button" class="button-delete button-delete_add-member">
 									<?xml version="1.0" encoding="UTF-8"?>
 									<svg width="10px" height="10px" viewBox="0 0 10 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 										<!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
@@ -157,7 +157,7 @@
 								<div class="card-add-member">
 									<img class="avatar-round card-add-member__image" src="./assets/darth-vader-avatar.jpg" alt="Tomas Anderson">
 									<div class="card-add-member__name">Томас Андерсон</div>
-									<button class="button-delete button-delete_add-member">
+									<button type="button" class="button-delete button-delete_add-member">
 										<?xml version="1.0" encoding="UTF-8"?>
 										<svg width="10px" height="10px" viewBox="0 0 10 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 											<!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
@@ -186,7 +186,7 @@
 							<li class="offer-meeting-room__element">
 								<div class="offer-meeting-room__time">16:00&mdash;16:30</div>
 								<div class="offer-meeting-room__room">Готем&nbsp;&bull;&nbsp;4 этаж</div>
-								<button class="button-delete">
+								<button type="button" class="button-delete">
 									<?xml version="1.0" encoding="UTF-8"?>
 									<svg width="10px" height="10px" viewBox="0 0 10 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 										<!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
@@ -209,7 +209,7 @@
 							<li class="offer-meeting-room__element">
 								<div class="offer-meeting-room__time">16:00&mdash;16:30</div>
 								<div class="offer-meeting-room__room">Готем&nbsp;&bull;&nbsp;4 этаж</div>
-								<button class="button-delete">
+								<button type="button" class="button-delete">
 									<?xml version="1.0" encoding="UTF-8"?>
 									<svg width="10px" height="10px" viewBox="0 0 10 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 										<!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
@@ -232,7 +232,7 @@
 							<li class="offer-meeting-room__element">
 								<div class="offer-meeting-room__time">16:00&mdash;16:30</div>
 								<div class="offer-meeting-room__room">Готем&nbsp;&bull;&nbsp;4 этаж</div>
-								<button class="button-delete">
+								<button type="button" class="button-delete">
 									<?xml version="1.0" encoding="UTF-8"?>
 									<svg width="10px" height="10px" viewBox="0 0 10 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 										<!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
@@ -256,12 +256,14 @@
 					</div>
 				</div>
 			</div>
-			<input type="button" class="button-close button-close_add-meeting-ui" onClick='location.href="./index.html"'>
+			<button type="button" class="button-close button-close_add-meeting-ui" onClick='location.href="./index.html"'>
+				<img src="./assets/close.svg" alt="close">
+			</button>
 		</section>
 	</main>
 	<footer class="add-meeting-ui__footer">
-		<input type="button" class="button-cancel" value="Отмена" onClick='location.href="./index.html"'>
-		<input type="submit" class="add-button" value="Создать встречу" onClick='location.href="./new-meeting-created.html"'>
+		<button type="button" class="button-cancel" onClick='location.href="./index.html"'>Отмена</button>
+		<button type="submit" class="add-button" onClick='location.href="./new-meeting-created.html"'>Создать встречу</button>
 	</footer>
 </form>
 </body>

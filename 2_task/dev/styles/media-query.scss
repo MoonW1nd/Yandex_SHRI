@@ -14,6 +14,7 @@
 //add-meeting-ui
 	.add-meeting-ui {
 		top: 42px;
+		height: calc(100vh - 42px);
 
 		&__layout {
 			align-items: center;
@@ -26,6 +27,19 @@
 		&__title {
 			align-self: flex-start;
 		}
+	}
+
+
+	//add-member-list
+	.add-member-list {
+		flex-wrap: nowrap;
+		flex-direction: column;
+	}
+
+	//card-add-member
+	.button-delete_add-member {
+		position: absolute;
+		top: 6px;
 	}
 
 	.header_add-ui {
@@ -71,5 +85,20 @@
 		top: 48px;
 		z-index: 4;
 		border-bottom: $separator-block-setting;
+	}
+
+	// meeting-ui
+	.meeting-ui__time-line {
+		top: 103px;
+		height: 31px;
+		position: absolute;
+	}
+}
+
+// meeting-ui
+@media (max-width: 1250px) {
+	.meeting-ui {
+		overflow-x: auto;
+		overflow-y: hidden;
 	}
 }

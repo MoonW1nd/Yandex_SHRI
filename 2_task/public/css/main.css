@@ -164,17 +164,6 @@ main {
       overflow: visible;
       pointer-events: none; }
 
-@media (max-width: 1250px) {
-  .meeting-ui {
-    overflow-x: auto;
-    overflow-y: hidden; } }
-
-@media (max-width: 410px) {
-  .meeting-ui__time-line {
-    top: 103px;
-    height: 31px;
-    position: absolute; } }
-
 .time-indicator {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -240,6 +229,8 @@ main {
       -ms-flex-align: center;
           align-items: center;
   padding: 0 24px; }
+  .day-switcher__date:hover {
+    cursor: pointer; }
 
 .day-switcher_mobile {
   visibility: hidden;
@@ -883,75 +874,6 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
   .set-time-block .input-block, .set-time-block .offer-meeting-room {
     padding: 0 4px; }
 
-.input-block, .offer-meeting-room {
-  margin-top: 24px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-  padding: 0 16px;
-  position: relative; }
-  .input-block__label, .offer-meeting-room__label {
-    font-size: "HelveticaNeue-Medium", sans-serif;
-    font-family: "HelveticaNeue-Medium", sans-serif;
-    padding-bottom: 5px; }
-  .input-block__input, .member-list {
-    max-width: 420px;
-    width: 32.8vw;
-    min-width: 328px;
-    height: 38px;
-    border-radius: 4px;
-    border: 2px solid #E9ECEF;
-    background: #ffffff !important;
-    outline: none;
-    font-size: 0.86em;
-    -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-    padding-left: 10px; }
-  .input-block__input:focus, .member-list:focus {
-    color: #000000;
-    border: 2px solid #007DFF; }
-  .input-block__icon_calendar {
-    position: absolute;
-    right: 30px;
-    bottom: 13px;
-    opacity: .5; }
-  .input-block__input_data {
-    min-width: 238px;
-    max-width: 238px;
-    width: 18vw; }
-  .input-block__input_time {
-    width: 72px;
-    min-width: 72px; }
-
-.input-block__input_data:before {
-  content: attr(data-date);
-  display: inline-block;
-  font-family: "HelveticaNeue", sans-serif;
-  font-size: 1em;
-  color: black; }
-
-.input-block__input_data::-webkit-datetime-edit,
-.input-block__input_data::-webkit-inner-spin-button,
-.input-block__input_data::-webkit-clear-button,
-.input-block__input_time::-webkit-inner-spin-button,
-.input-block__input_time::-webkit-clear-button {
-  display: none; }
-
-.input-block__input_data::-webkit-calendar-picker-indicator,
-.input-block__input_data::-webkit-calendar-picker-indicator:hover {
-  position: absolute;
-  right: 30px;
-  color: transparent;
-  background-color: transparent;
-  opacity: 1;
-  cursor: pointer; }
-
 .offer-meeting-room__element {
   width: 420px;
   height: 37px;
@@ -997,13 +919,18 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
   position: absolute;
   right: 10px;
   top: 12px; }
+  .button-delete:focus {
+    -webkit-box-shadow: none;
+            box-shadow: none; }
+  .button-delete:hover {
+    cursor: pointer; }
   .button-delete_add-member {
     position: relative;
     top: 0;
     right: 0;
     -webkit-box-sizing: border-box;
             box-sizing: border-box;
-    padding: 0 9px 0 15px; }
+    margin: 0 9px 0 15px; }
 
 .member-list {
   max-height: 136px;
@@ -1143,7 +1070,8 @@ body.dimmed .modal {
   border-radius: 12px;
   font-size: 0.86em;
   line-height: 17px;
-  margin: 0 4px 8px 4px; }
+  margin: 0 4px 8px 4px;
+  position: relative; }
   .card-add-member__image {
     margin-right: 8px; }
 
@@ -1152,10 +1080,7 @@ body.dimmed .modal {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background-color: #E9ECEF;
-  background-image: url("/assets/close.svg");
-  background-repeat: no-repeat;
-  background-position: center; }
+  background-color: #E9ECEF; }
   .button-close:hover {
     cursor: pointer;
     color: #DDE0E4; }
@@ -1163,6 +1088,64 @@ body.dimmed .modal {
     position: absolute;
     top: -2px;
     right: 14px; }
+
+#calendar {
+  width: 100%;
+  font: monospace;
+  line-height: 1.2em;
+  font-size: 15px;
+  text-align: center;
+  border-spacing: 10px;
+  background-color: #E9ECEF;
+  border-radius: 4px; }
+
+#calendar thead tr:last-child {
+  font-size: small;
+  color: #555555; }
+
+#calendar thead tr:nth-child(1) td:nth-child(2) {
+  color: #323232; }
+
+#calendar thead tr:nth-child(1) td:nth-child(1):hover, #calendar thead tr:nth-child(1) td:nth-child(3):hover {
+  cursor: pointer; }
+
+#calendar tbody td {
+  width: 29px;
+  height: 23px;
+  color: #2c567a; }
+
+#calendar tbody td:nth-child(n+6), #calendar .holiday {
+  color: #e78c5c; }
+
+#calendar tbody td.today {
+  background: #dc0000;
+  color: #fff;
+  border-radius: 50%;
+  line-height: 29px; }
+
+.calendar {
+  position: absolute;
+  top: 115px;
+  left: 24px;
+  z-index: 10;
+  background-color: white;
+  border-radius: 4px;
+  padding: 16px;
+  -webkit-box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+          box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3); }
+  .calendar.hidden {
+    visibility: hidden; }
+
+#table-arrow-left,
+#table-arrow-right {
+  position: absolute;
+  top: 23px; }
+
+#table-arrow-right {
+  right: 40px; }
+
+#table-arrow-left {
+  left: 40px; }
 
 @media (max-width: 410px) {
   .meeting-rooms__time-line .day-switcher {
@@ -1177,7 +1160,8 @@ body.dimmed .modal {
     max-width: 328px;
     min-width: 328px; }
   .add-meeting-ui {
-    top: 42px; }
+    top: 42px;
+    height: calc(100vh - 42px); }
     .add-meeting-ui__layout {
       -webkit-box-align: center;
           -ms-flex-align: center;
@@ -1187,6 +1171,16 @@ body.dimmed .modal {
     .add-meeting-ui__title {
       -ms-flex-item-align: start;
           align-self: flex-start; }
+  .add-member-list {
+    -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column; }
+  .button-delete_add-member {
+    position: absolute;
+    top: 6px; }
   .header_add-ui {
     height: 48px; }
   .input-block__input_time {
@@ -1214,4 +1208,13 @@ body.dimmed .modal {
     padding: 0;
     top: 48px;
     z-index: 4;
-    border-bottom: 1px solid #E9ECEF; } }
+    border-bottom: 1px solid #E9ECEF; }
+  .meeting-ui__time-line {
+    top: 103px;
+    height: 31px;
+    position: absolute; } }
+
+@media (max-width: 1250px) {
+  .meeting-ui {
+    overflow-x: auto;
+    overflow-y: hidden; } }

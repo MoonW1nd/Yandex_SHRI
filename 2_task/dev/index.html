@@ -11,7 +11,7 @@
 <body class="dimmed">
 <header class="header">
 	<img class="logo" src="assets/logo.svg" alt="Yandex Переговорки">
-	<input type="button" class="add-button" value="Создать встречу" onClick='location.href="new-meeting.html"'>
+	<button type="button" class="add-button" onClick='location.href="new-meeting.html"'>Создать встречу</button>
 	<!--<button class="add-button">Создать встречу</button>-->
 </header>
 <main class="meeting-ui">
@@ -33,6 +33,24 @@
 			<img class="button-arrow__image button-arrow__image_right" src="./assets/arrow-right.svg" alt="arrow right">
 		</button>
 	</div>
+	<!--id="table-arrow-left"-->
+	<section class="calendar hidden">
+		<div class="calendar__switcher">
+			<button id="table-arrow-right" class="button-arrow">
+				<img class="button-arrow__image" src="./assets/arrow-right.svg" alt="arrow left">
+			</button>
+			<button id="table-arrow-left" class="button-arrow">
+				<img class="button-arrow__image" src="./assets/arrow-left.svg" alt="arrow left">
+			</button>
+		</div>
+		<table id="calendar"  border="0" cellspacing="0" cellpadding="1">
+			<thead>
+			<tr><td><b></b><td colspan="5"><td><b></b>
+			<tr><td>Пн<td>Вт<td>Ср<td>Чт<td>Пт<td>Сб<td>Вс
+			</thead>
+			<tbody></tbody>
+		</table>
+	</section>
 	<section class="
 	meeting-ui__time-line
 	meeting-ui__time-line_time-indicator"
@@ -52,7 +70,9 @@
 			<button class="button-arrow">
 				<img class="button-arrow__image button-arrow__image_left" src="./assets/arrow-left.svg" alt="arrow left">
 			</button>
-			<div class="wrapper-date">14 дек · Сегодня</div>
+			<div class="wrapper-date">
+				<P class="day-switcher__date">14 дек · Сегодня</P>
+			</div>
 			<button class="button-arrow">
 				<img class="button-arrow__image button-arrow__image_right" src="./assets/arrow-right.svg" alt="arrow right">
 			</button>
@@ -719,32 +739,6 @@
 	src="https://code.jquery.com/jquery-3.2.1.min.js"
 	integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
 	crossorigin="anonymous"></script>
-<script>
-	// var topPositionTimeLine;
-	$('.time-piece.active').on('click', () => $('body').addClass('dimmed'));
-	var timeLines = $('.meeting-ui__time-line');
-	var lastScrollLeft = $('.meeting-ui').scrollLeft();
-	$(window).scroll(
-	  () => {
-	  	timeLines.css({
-		  position: 'fixed',
-		  transform: `translate(-${lastScrollLeft}px, 0)`
-		  
-	  	});
-	  	console.log(lastScrollLeft, $('.meeting-ui').scrollLeft());
-	  	
-	  }
-	);
-	$('.meeting-ui').scroll(
-	  () => {
-			  if (lastScrollLeft !== $('.meeting-ui').scrollLeft()) {
-				  timeLines.css({
-					  position: 'absolute',
-					  transform: `translate(0, ${$(window).scrollTop()}px)`
-				  })
-			    lastScrollLeft = $('.meeting-ui').scrollLeft();
-			  }
-	  }
-	)
+<script src="js/helpers.js">
 </script>
 </html>

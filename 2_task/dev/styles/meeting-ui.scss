@@ -26,18 +26,3 @@
 		}
 	}
 }
-
-@media (max-width: 1250px) {
-	.meeting-ui {
-		overflow-x: auto;
-		overflow-y: hidden;
-	}
-}
-
-@media (max-width: 410px) {
-	.meeting-ui__time-line {
-		top: 103px;
-		height: 31px;
-		position: absolute;
-	}
-}

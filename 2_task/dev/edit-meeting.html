@@ -16,8 +16,8 @@
 	<tspan class="modal__image" xmlns="http://www.w3.org/2000/svg" x="0.5" y="40">🙅🏻</tspan>
 	<div class="modal__title">Встреча будет <br> удалена безвозвратно</div>
 	<div class="modal__buttons-layout">
-		<button onclick="$('body').removeClass('dimmed')" class="button-cancel">Отмена</button>
-		<button onclick="$('body').removeClass('dimmed')" class="button-cancel">Удалить</button>
+		<button type="button" onclick="$('body').removeClass('dimmed')" class="button-cancel">Отмена</button>
+		<button type="button" onclick="$('body').removeClass('dimmed')" class="button-cancel">Удалить</button>
 	</div>
 </div>
 <form class="add-meeting-ui" action="edit-meeting.html" method="POST">
@@ -115,7 +115,7 @@
 								<div class="card-add-member">
 									<img class="avatar-round card-add-member__image" src="./assets/darth-vader-avatar.jpg" alt="Lex Luthor">
 									<div class="card-add-member__name">Лекс Лютер</div>
-									<button class="button-delete button-delete_add-member">
+									<button type="button" class="button-delete button-delete_add-member">
 										<?xml version="1.0" encoding="UTF-8"?>
 										<svg width="10px" height="10px" viewBox="0 0 10 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 											<!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
@@ -140,7 +140,7 @@
 								<div class="card-add-member">
 									<img class="avatar-round card-add-member__image" src="./assets/darth-vader-avatar.jpg" alt="Dart Veider">
 									<div class="card-add-member__name">Дарт Вейдер</div>
-									<button class="button-delete button-delete_add-member">
+									<button type="button" class="button-delete button-delete_add-member">
 									<?xml version="1.0" encoding="UTF-8"?>
 									<svg width="10px" height="10px" viewBox="0 0 10 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 										<!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
@@ -165,7 +165,7 @@
 								<div class="card-add-member">
 									<img class="avatar-round card-add-member__image" src="./assets/darth-vader-avatar.jpg" alt="Tomas Anderson">
 									<div class="card-add-member__name">Томас Андерсон</div>
-									<button class="button-delete button-delete_add-member">
+									<button type="button" class="button-delete button-delete_add-member">
 										<?xml version="1.0" encoding="UTF-8"?>
 										<svg width="10px" height="10px" viewBox="0 0 10 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 											<!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
@@ -194,7 +194,7 @@
 							<li class="offer-meeting-room__element active">
 								<div class="offer-meeting-room__time">16:00&mdash;16:30</div>
 								<div class="offer-meeting-room__room">Готем&nbsp;&bull;&nbsp;4 этаж</div>
-								<button class="button-delete">
+								<button type="button" class="button-delete">
 									<?xml version="1.0" encoding="UTF-8"?>
 									<svg width="10px" height="10px" viewBox="0 0 10 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 										<!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
@@ -218,13 +218,15 @@
 					</div>
 				</div>
 			</div>
-			<input type="button" class="button-close button-close_add-meeting-ui" onClick='location.href="./index.html"'>
+			<button type="button" class="button-close button-close_add-meeting-ui" onClick='location.href="./index.html"'>
+				<img src="./assets/close.svg" alt="close">
+			</button>
 		</section>
 	</main>
 	<footer class="add-meeting-ui__footer">
-		<input type="button" class="button-cancel" value="Отмена" onClick='location.href="./index.html"'>
-		<input type="button" class="button-cancel" value="Удалить встречу" onclick="$('body').addClass('dimmed')">
-		<input type="submit" class="button-cancel" value="Сохранить" onClick='location.href="./index.html"'>
+		<button type="button" class="button-cancel" onClick='location.href="./index.html"'>Отмена</button>
+		<button type="button" class="button-cancel" onclick="$('body').addClass('dimmed')">Удалить встречу</button>
+		<button type="submit" class="button-cancel" onClick='location.href="./index.html"'>Сохранить</button>
 	</footer>
 </form>
 </body>

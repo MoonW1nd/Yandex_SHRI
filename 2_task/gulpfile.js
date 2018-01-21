@@ -26,6 +26,12 @@ gulp.task('html', function() {
 		.pipe(gulp.dest('public'));
 });
 
+gulp.task('js', function() {
+	return gulp.src(['dev/js/*.js'])
+		.pipe(newer('public/js'))
+		.pipe(gulp.dest('public/js'));
+});
+
 gulp.task('serve', function () {
     browserSync.init({
         server: 'public'
@@ -36,7 +42,8 @@ gulp.task('serve', function () {
 gulp.task('watch', function() {
 	gulp.watch('dev/styles/**/*.*', ['styles']).on('change', browserSync.reload);
 	gulp.watch('dev/assets/*.*', ['assets']).on('change', browserSync.reload);
+	gulp.watch('dev/js/*.js', ['js']).on('change', browserSync.reload);
 	gulp.watch('dev/*.html', ['html']).on('change', browserSync.reload);
 });
 
-gulp.task('build', ['styles', 'html', 'assets', 'watch','serve']);
+gulp.task('build', ['styles', 'html', 'assets', 'js', 'watch','serve']);
