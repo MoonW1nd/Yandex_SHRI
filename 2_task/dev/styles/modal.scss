@@ -15,7 +15,9 @@ body.dimmed {
 	.modal {
 		position: fixed;
 		width: 444px;
-		height: 252px;
+		//height: 252px;
+		box-sizing: border-box;
+		padding: 32px 0;
 		z-index: 12;
 		background-color: $text-color-white;
 		border-radius: 8px;
@@ -35,6 +37,7 @@ body.dimmed {
 	align-items: center;
 
 	&__title {
+		text-align: center;
 		margin: 16px 0 8px 0;
 		font-size: $fs-title;
 		font-family: $ff-medium;
@@ -47,5 +50,9 @@ body.dimmed {
 
 	&__image {
 		font-size: 40px;
+	}
+
+	&__buttons-layout {
+		margin-top: 16px;
 	}
 }

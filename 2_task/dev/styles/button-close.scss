@@ -1,0 +1,23 @@
+@import "variables";
+
+.button-close {
+	padding: 0;
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	background-color: $button-color-disabled;
+	background-image: url('/assets/close.svg');
+	background-repeat: no-repeat;
+	background-position: center;
+
+	&:hover {
+		cursor: pointer;
+		color: $button-cancel-hover;
+	}
+
+	&_add-meeting-ui {
+		position: absolute;
+		top: -2px;
+		right: 14px;
+	}
+}

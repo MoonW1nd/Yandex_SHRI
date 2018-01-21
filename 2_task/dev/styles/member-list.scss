@@ -10,6 +10,7 @@
 	top: 57px;
 	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 	z-index: 2;
+	padding: 0;
 
 	&__element {
 		width: 100%;
@@ -17,6 +18,8 @@
 		display: flex;
 		align-items: center;
 		cursor: pointer;
+		padding-left: 10px;
+		background-clip: padding-box;
 
 		&:hover {
 			font-weight: bold;

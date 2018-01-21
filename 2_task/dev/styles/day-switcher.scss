@@ -24,21 +24,3 @@
 	line-height: $size-round;
 	margin: 0 13px;
 }
-
-@media (max-width: 410px) {
-	.day-switcher {
-		visibility: hidden;
-	}
-
-	.day-switcher_mobile {
-		visibility: visible;
-		width: 100vw;
-		position: fixed;
-		height: 55px;
-		justify-content: space-around;
-		padding: 0;
-		top: 48px;
-		z-index: 4;
-		border-bottom: $separator-block-setting;
-	}
-}

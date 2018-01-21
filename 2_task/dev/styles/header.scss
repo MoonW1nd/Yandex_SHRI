@@ -16,9 +16,11 @@
 
 
 .add-button {
-	width: 140px;
+	//width: 140px;
+	box-sizing: border-box;
 	height: 36px;
 	margin: 0 8px;
+	padding: 0 16px;
 	font-family: $ff-medium;
 	font-size: $fs-medium;
 	color: $text-color-white;
@@ -29,16 +31,5 @@
 	&:hover {
 		cursor: pointer;
 		background-color: $button-color-hover;
-	}
-}
-
-@media (max-width: 410px) {
-	.header {
-		height: 48px;
-	}
-
-	.add-button {
-		visibility: hidden;
-		width: 0;
 	}
 }

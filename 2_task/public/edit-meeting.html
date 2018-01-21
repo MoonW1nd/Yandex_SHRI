@@ -12,15 +12,23 @@
 <header class="header header_add-ui">
 	<img class="logo" src="assets/logo.svg" alt="Yandex Переговорки">
 </header>
-<form class="add-meeting-ui" action="new-meeting.html" method="POST">
+<div class="modal modal_remove-meeting">
+	<tspan class="modal__image" xmlns="http://www.w3.org/2000/svg" x="0.5" y="40">🙅🏻</tspan>
+	<div class="modal__title">Встреча будет <br> удалена безвозвратно</div>
+	<div class="modal__buttons-layout">
+		<button onclick="$('body').removeClass('dimmed')" class="button-cancel">Отмена</button>
+		<button onclick="$('body').removeClass('dimmed')" class="button-cancel">Удалить</button>
+	</div>
+</div>
+<form class="add-meeting-ui" action="edit-meeting.html" method="POST">
 	<main class="add-meeting-ui__main">
 		<section class="add-meeting-ui__layout">
-			<div class="add-meeting-ui__title">Новая встреча</div>
+			<div class="add-meeting-ui__title">Редактирование встречи</div>
 			<div class="form-data-layout">
 				<div class="form-data-layout__inputs-layout">
 					<div class="input-block">
 						<label class="input-block__label" for="input-title">Тема</label>
-						<input id="input-title" class="input-block__input" type="text" name="input-title" placeholder="О чем будем говорить?">
+						<input id="input-title" class="input-block__input" type="text" name="input-title" placeholder="О чем будем говорить?" value="Тестовое задание в ШРИ">
 					</div>
 					<div class="time-input-block">
 						<div class="input-block">
@@ -181,55 +189,9 @@
 						</ul>
 					</div>
 					<div class="offer-meeting-room">
-						<label for="offer-rooms" class="offer-meeting-room__label">Рекомендованные переговорки</label>
+						<label for="offer-rooms" class="offer-meeting-room__label"> Ваша переговорка</label>
 						<ul id="offer-rooms" class="offer-meeting-room__list">
-							<li class="offer-meeting-room__element">
-								<div class="offer-meeting-room__time">16:00&mdash;16:30</div>
-								<div class="offer-meeting-room__room">Готем&nbsp;&bull;&nbsp;4 этаж</div>
-								<button class="button-delete">
-									<?xml version="1.0" encoding="UTF-8"?>
-									<svg width="10px" height="10px" viewBox="0 0 10 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-										<!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
-										<title>close</title>
-										<desc>Created with Sketch.</desc>
-										<defs></defs>
-										<g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-											<g id="Новая-встреча" transform="translate(-325.000000, -306.000000)">
-												<g id="человек3" transform="translate(204.000000, 299.000000)">
-													<g id="close" transform="translate(118.000000, 4.000000)">
-														<rect id="Rectangle" x="0" y="0" width="16" height="16"></rect>
-														<path d="M8.02081528,6.62132034 L5.19238816,3.79289322 C4.80186386,3.40236893 4.16869888,3.40236893 3.77817459,3.79289322 L3.77817459,3.79289322 L3.77817459,3.79289322 C3.3876503,4.18341751 3.3876503,4.81658249 3.77817459,5.20710678 L3.77817459,5.20710678 L6.60660172,8.03553391 L3.77817459,10.863961 C3.3876503,11.2544853 3.3876503,11.8876503 3.77817459,12.2781746 L3.77817459,12.2781746 L3.77817459,12.2781746 C4.16869888,12.6686989 4.80186386,12.6686989 5.19238816,12.2781746 L5.19238816,12.2781746 L8.02081528,9.44974747 L10.8492424,12.2781746 C11.2397667,12.6686989 11.8729317,12.6686989 12.263456,12.2781746 C12.6539803,11.8876503 12.6539803,11.2544853 12.263456,10.863961 L9.43502884,8.03553391 L12.263456,5.20710678 C12.6539803,4.81658249 12.6539803,4.18341751 12.263456,3.79289322 C11.8729317,3.40236893 11.2397667,3.40236893 10.8492424,3.79289322 L8.02081528,6.62132034 Z" id="Combined-Shape" fill="#fff"></path>
-													</g>
-												</g>
-											</g>
-										</g>
-									</svg>
-								</button>
-							</li>
-							<li class="offer-meeting-room__element">
-								<div class="offer-meeting-room__time">16:00&mdash;16:30</div>
-								<div class="offer-meeting-room__room">Готем&nbsp;&bull;&nbsp;4 этаж</div>
-								<button class="button-delete">
-									<?xml version="1.0" encoding="UTF-8"?>
-									<svg width="10px" height="10px" viewBox="0 0 10 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-										<!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
-										<title>close</title>
-										<desc>Created with Sketch.</desc>
-										<defs></defs>
-										<g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-											<g id="Новая-встреча" transform="translate(-325.000000, -306.000000)">
-												<g id="человек3" transform="translate(204.000000, 299.000000)">
-													<g id="close" transform="translate(118.000000, 4.000000)">
-														<rect id="Rectangle" x="0" y="0" width="16" height="16"></rect>
-														<path d="M8.02081528,6.62132034 L5.19238816,3.79289322 C4.80186386,3.40236893 4.16869888,3.40236893 3.77817459,3.79289322 L3.77817459,3.79289322 L3.77817459,3.79289322 C3.3876503,4.18341751 3.3876503,4.81658249 3.77817459,5.20710678 L3.77817459,5.20710678 L6.60660172,8.03553391 L3.77817459,10.863961 C3.3876503,11.2544853 3.3876503,11.8876503 3.77817459,12.2781746 L3.77817459,12.2781746 L3.77817459,12.2781746 C4.16869888,12.6686989 4.80186386,12.6686989 5.19238816,12.2781746 L5.19238816,12.2781746 L8.02081528,9.44974747 L10.8492424,12.2781746 C11.2397667,12.6686989 11.8729317,12.6686989 12.263456,12.2781746 C12.6539803,11.8876503 12.6539803,11.2544853 12.263456,10.863961 L9.43502884,8.03553391 L12.263456,5.20710678 C12.6539803,4.81658249 12.6539803,4.18341751 12.263456,3.79289322 C11.8729317,3.40236893 11.2397667,3.40236893 10.8492424,3.79289322 L8.02081528,6.62132034 Z" id="Combined-Shape" fill="#fff"></path>
-													</g>
-												</g>
-											</g>
-										</g>
-									</svg>
-								</button>
-							</li>
-							<li class="offer-meeting-room__element">
+							<li class="offer-meeting-room__element active">
 								<div class="offer-meeting-room__time">16:00&mdash;16:30</div>
 								<div class="offer-meeting-room__room">Готем&nbsp;&bull;&nbsp;4 этаж</div>
 								<button class="button-delete">
@@ -261,7 +223,8 @@
 	</main>
 	<footer class="add-meeting-ui__footer">
 		<input type="button" class="button-cancel" value="Отмена" onClick='location.href="./index.html"'>
-		<input type="submit" class="add-button" value="Создать встречу" onClick='location.href="./new-meeting-created.html"'>
+		<input type="button" class="button-cancel" value="Удалить встречу" onclick="$('body').addClass('dimmed')">
+		<input type="submit" class="button-cancel" value="Сохранить" onClick='location.href="./index.html"'>
 	</footer>
 </form>
 </body>

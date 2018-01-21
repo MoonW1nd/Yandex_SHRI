@@ -1,0 +1,75 @@
+@import "variables";
+
+// time-input-block
+@media (max-width: 815px) {
+	.set-time-block .input-block:first-child {
+		padding-left: 16px;
+	}
+	.input-block__input_data {
+		max-width: 328px;
+		min-width: 328px;
+	}
+
+
+//add-meeting-ui
+	.add-meeting-ui {
+		top: 42px;
+
+		&__layout {
+			align-items: center;
+
+			& .form-data-layout {
+				width: 360px;
+			}
+		}
+
+		&__title {
+			align-self: flex-start;
+		}
+	}
+
+	.header_add-ui {
+		height: 48px;
+	}
+
+
+	//input-block
+	.input-block__input_time {
+		width: 153px;
+	}
+
+	.offer-meeting-room__element {
+		width: 328px;
+	}
+}
+
+// header
+@media (max-width: 420px) {
+	.header {
+		height: 48px;
+
+		& .add-button {
+			visibility: hidden;
+			width: 0;
+		}
+	}
+}
+
+// day-switcher
+@media (max-width: 420px) {
+	.day-switcher {
+		visibility: hidden;
+	}
+
+	.day-switcher_mobile {
+		visibility: visible;
+		width: 100vw;
+		position: fixed;
+		height: 55px;
+		justify-content: space-around;
+		padding: 0;
+		top: 48px;
+		z-index: 4;
+		border-bottom: $separator-block-setting;
+	}
+}

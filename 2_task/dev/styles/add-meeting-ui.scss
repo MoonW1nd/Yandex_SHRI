@@ -41,12 +41,3 @@
 	}
 }
 
-@media (max-width: 720px) {
-	.add-meeting-ui__layout {
-		align-items: center;
-
-		& .form-data-layout {
-			width: min-content;
-		}
-	}
-}

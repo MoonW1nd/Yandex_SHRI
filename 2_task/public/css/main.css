@@ -15,7 +15,6 @@ button {
   /* cursor: default; */
   line-height: normal;
   overflow: visible;
-  padding: 0;
   -webkit-appearance: button;
   /* for input */
   -webkit-user-select: none;
@@ -25,8 +24,7 @@ button {
 
 input::-moz-focus-inner,
 button::-moz-focus-inner {
-  border: 0;
-  padding: 0; }
+  border: 0; }
 
 /* Make `a` like a button */
 [role="button"] {
@@ -124,9 +122,11 @@ main {
   z-index: 3; }
 
 .add-button, .button-ok {
-  width: 140px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   height: 36px;
   margin: 0 8px;
+  padding: 0 16px;
   font-family: "HelveticaNeue-Medium", sans-serif;
   font-size: 0.86em;
   color: #FFFFFF;
@@ -137,13 +137,6 @@ main {
   .add-button:hover, .button-ok:hover {
     cursor: pointer;
     background-color: #0059FF; }
-
-@media (max-width: 410px) {
-  .header {
-    height: 48px; }
-  .add-button, .button-ok {
-    visibility: hidden;
-    width: 0; } }
 
 .meeting-ui {
   position: relative;
@@ -259,21 +252,6 @@ main {
   line-height: 24px;
   margin: 0 13px; }
 
-@media (max-width: 410px) {
-  .day-switcher {
-    visibility: hidden; }
-  .day-switcher_mobile {
-    visibility: visible;
-    width: 100vw;
-    position: fixed;
-    height: 55px;
-    -ms-flex-pack: distribute;
-        justify-content: space-around;
-    padding: 0;
-    top: 48px;
-    z-index: 4;
-    border-bottom: 1px solid #E9ECEF; } }
-
 .button-arrow {
   width: 24px;
   height: 24px;
@@ -287,7 +265,8 @@ main {
           justify-content: center;
   -webkit-box-align: center;
       -ms-flex-align: center;
-          align-items: center; }
+          align-items: center;
+  padding: 0; }
   .button-arrow__image {
     opacity: .43; }
     .button-arrow__image_left {
@@ -729,7 +708,8 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
   top: 8px;
   border-radius: 50%;
   background-color: #E9ECEF;
-  cursor: pointer; }
+  cursor: pointer;
+  padding: 0; }
   .edit-button__pen {
     opacity: .43; }
     .edit-button__pen:hover {
@@ -787,16 +767,6 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
             justify-content: center;
     border-top: 1px solid #E9ECEF; }
 
-@media (max-width: 720px) {
-  .add-meeting-ui__layout {
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center; }
-    .add-meeting-ui__layout .form-data-layout {
-      width: -webkit-min-content;
-      width: -moz-min-content;
-      width: min-content; } }
-
 .form-data-layout {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -834,7 +804,7 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
   .input-block__label, .offer-meeting-room__label {
     font-size: "HelveticaNeue-Medium", sans-serif;
     font-family: "HelveticaNeue-Medium", sans-serif;
-    padding-bottom: 4px; }
+    padding-bottom: 5px; }
   .input-block__input, .member-list {
     max-width: 420px;
     width: 32.8vw;
@@ -929,7 +899,7 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
   .input-block__label, .offer-meeting-room__label {
     font-size: "HelveticaNeue-Medium", sans-serif;
     font-family: "HelveticaNeue-Medium", sans-serif;
-    padding-bottom: 4px; }
+    padding-bottom: 5px; }
   .input-block__input, .member-list {
     max-width: 420px;
     width: 32.8vw;
@@ -983,13 +953,11 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
   cursor: pointer; }
 
 .offer-meeting-room__element {
-  max-width: 420px;
-  width: 32.8vw;
-  min-width: 328px;
+  width: 420px;
   height: 37px;
-  background-color: #007DFF;
+  background-color: #E9ECEF;
+  color: black;
   border-radius: 4px;
-  color: #FFFFFF;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -999,11 +967,28 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
           align-items: center;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  padding: 0 10px; }
+  padding: 0 10px;
+  margin-bottom: 8px; }
+  .offer-meeting-room__element:hover {
+    background-color: #DDE0E4;
+    cursor: pointer; }
+  .offer-meeting-room__element.active {
+    color: #FFFFFF;
+    background-color: #007DFF; }
+    .offer-meeting-room__element.active:hover {
+      background-color: #0059FF;
+      cursor: auto; }
+    .offer-meeting-room__element.active .button-delete {
+      visibility: visible; }
+      .offer-meeting-room__element.active .button-delete:hover {
+        cursor: pointer; }
 
 .offer-meeting-room__room {
   font-size: 0.73em;
   margin-left: 10px; }
+
+.offer-meeting-room .button-delete {
+  visibility: hidden; }
 
 .button-delete {
   background-color: transparent;
@@ -1029,7 +1014,8 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
   top: 57px;
   -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
           box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  z-index: 2; }
+  z-index: 2;
+  padding: 0; }
   .member-list__element {
     width: 100%;
     height: 34px;
@@ -1039,7 +1025,9 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
     -webkit-box-align: center;
         -ms-flex-align: center;
             align-items: center;
-    cursor: pointer; }
+    cursor: pointer;
+    padding-left: 10px;
+    background-clip: padding-box; }
     .member-list__element:hover {
       font-weight: bold;
       background-color: #F6F7F9; }
@@ -1057,15 +1045,17 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
   .member__floor {
     color: #858E98; }
 
-.cancel-button {
+.button-cancel {
   height: 36px;
-  width: 80px;
   background-color: #E9ECEF;
   border-radius: 4px;
   font-family: "HelveticaNeue-Medium", sans-serif;
   font-size: 0.86em;
-  margin: 0 8px; }
-  .cancel-button:hover {
+  margin: 0 8px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 0 16px; }
+  .button-cancel:hover {
     cursor: pointer;
     background: #DDE0E4; }
 
@@ -1082,7 +1072,9 @@ body.dimmed:before {
 body.dimmed .modal {
   position: fixed;
   width: 444px;
-  height: 252px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 32px 0;
   z-index: 12;
   background-color: #FFFFFF;
   border-radius: 8px;
@@ -1109,6 +1101,7 @@ body.dimmed .modal {
       -ms-flex-align: center;
           align-items: center; }
   .modal__title {
+    text-align: center;
     margin: 16px 0 8px 0;
     font-size: 1.33em;
     font-family: "HelveticaNeue-Medium", sans-serif; }
@@ -1117,6 +1110,8 @@ body.dimmed .modal {
     margin-bottom: 24px; }
   .modal__image {
     font-size: 40px; }
+  .modal__buttons-layout {
+    margin-top: 16px; }
 
 .button-ok {
   width: 84px; }
@@ -1152,8 +1147,71 @@ body.dimmed .modal {
   .card-add-member__image {
     margin-right: 8px; }
 
+.button-close {
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #E9ECEF;
+  background-image: url("/assets/close.svg");
+  background-repeat: no-repeat;
+  background-position: center; }
+  .button-close:hover {
+    cursor: pointer;
+    color: #DDE0E4; }
+  .button-close_add-meeting-ui {
+    position: absolute;
+    top: -2px;
+    right: 14px; }
+
 @media (max-width: 410px) {
   .meeting-rooms__time-line .day-switcher {
     visibility: hidden; }
   .time-indicator__position-handler {
     padding-top: 4px; } }
+
+@media (max-width: 815px) {
+  .set-time-block .input-block:first-child, .set-time-block .offer-meeting-room:first-child {
+    padding-left: 16px; }
+  .input-block__input_data {
+    max-width: 328px;
+    min-width: 328px; }
+  .add-meeting-ui {
+    top: 42px; }
+    .add-meeting-ui__layout {
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center; }
+      .add-meeting-ui__layout .form-data-layout {
+        width: 360px; }
+    .add-meeting-ui__title {
+      -ms-flex-item-align: start;
+          align-self: flex-start; }
+  .header_add-ui {
+    height: 48px; }
+  .input-block__input_time {
+    width: 153px; }
+  .offer-meeting-room__element {
+    width: 328px; } }
+
+@media (max-width: 420px) {
+  .header {
+    height: 48px; }
+    .header .add-button, .header .button-ok {
+      visibility: hidden;
+      width: 0; } }
+
+@media (max-width: 420px) {
+  .day-switcher {
+    visibility: hidden; }
+  .day-switcher_mobile {
+    visibility: visible;
+    width: 100vw;
+    position: fixed;
+    height: 55px;
+    -ms-flex-pack: distribute;
+        justify-content: space-around;
+    padding: 0;
+    top: 48px;
+    z-index: 4;
+    border-bottom: 1px solid #E9ECEF; } }

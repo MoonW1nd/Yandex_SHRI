@@ -9,21 +9,46 @@
 	}
 
 	&__element {
-		max-width: 420px;
-		width: 32.8vw;
-		min-width: 328px;
+		width: 420px;
 		height: 37px;
-		background-color: $button-color-normal;
+		background-color: $button-color-disabled;
+		color: black;
 		border-radius: 4px;
-		color: $text-color-white;
 		display: flex;
 		position: relative;
 		align-items: center;
 		box-sizing: border-box;
 		padding: 0 10px;
+		margin-bottom: 8px;
+
+		&:hover {
+			background-color: $button-cancel-hover;
+			cursor: pointer;
+		}
+
+		&.active {
+			color: $text-color-white;
+			background-color: $button-color-normal;
+
+			&:hover {
+				background-color: $button-color-hover;
+				cursor: auto;
+			}
+
+			.button-delete {
+				visibility: visible;
+
+				&:hover {
+					cursor: pointer;
+				}
+			}
+		}
 	}
 	&__room {
 		font-size: $fs-small;
 		margin-left: 10px;
+	}
+	.button-delete {
+		visibility: hidden;
 	}
 }
