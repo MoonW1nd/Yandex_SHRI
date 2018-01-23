@@ -15,8 +15,11 @@
 	//filter: drop-shadow(0px 2px 5px rgba(0,0,0, .3));
 	box-shadow: 0 0 25px rgba(0, 0, 0, .3);
 
-	&:after {
-		content: '';
+	&.hidden {
+		visibility: hidden;
+	}
+
+	&__corner {
 		width: 0;
 		height: 0;
 		position: absolute;

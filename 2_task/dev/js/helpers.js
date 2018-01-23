@@ -45,29 +45,71 @@ document.querySelector('#table-arrow-right').onclick = function () {
 $('.time-piece.active').on('click', () => $('body').addClass('dimmed'));
 var timeLines = $('.meeting-ui__time-line');
 var lastScrollLeft = $('.meeting-ui').scrollLeft();
+var calendar = $('.calendar');
+var meetingInfo = $('.meeting-info');
 $(window).scroll(
 	() => {
+		calendar.addClass('hidden');
+		calendar.css('transform', `translate(0, ${$(window).scrollTop()}px)`);
 		timeLines.css({
 			position: 'fixed',
 			transform: `translate(-${lastScrollLeft}px, 0)`
 			
 		});
-		console.log(lastScrollLeft, $('.meeting-ui').scrollLeft());
-		
 	}
 );
 $('.meeting-ui').scroll(
 	() => {
 		if (lastScrollLeft !== $('.meeting-ui').scrollLeft()) {
+			// if ($('.time-piece.pressed').offset().left < 150) {
+			// 	$('.meeting-info').css('left', `${parseInt($('.meeting-info').css('left'), 10) + 1}px`)
+			// }
+			// console.log($('.time-piece.pressed').offset().left, $('.meeting-ui').scrollLeft());
+			calendar.addClass('hidden');
 			timeLines.css({
 				position: 'absolute',
 				transform: `translate(0, ${$(window).scrollTop()}px)`
-			})
+			});
 			lastScrollLeft = $('.meeting-ui').scrollLeft();
 		}
 	}
 );
-$('.day-switcher__date').on('click', () => $('.calendar').toggleClass('hidden'));
+$('.day-switcher__date').on('click', () => calendar.toggleClass('hidden'));
+$('.time-piece.pressed').on('click', () => {
+	var width = window.innerWidth;
+	var offset = meetingInfo.parent().offset().left;
+	var widthElem = parseInt(meetingInfo.parent().css('width'), 10);
+	var meetingInfoWidth = parseInt(meetingInfo.css('width'), 10);;
+	var needOffset;
+	var rightTrigger = ((offset + widthElem / 2) + meetingInfoWidth / 2);
+	var leftTrigger = ((offset - widthElem / 2) - meetingInfoWidth / 2);
+	var cornerOffset;
+	
+	meetingInfo.toggleClass('hidden');
+	// console.log(rightTrigger);
+	// console.log(leftTrigger);
+	if (!((rightTrigger < width) && (leftTrigger > 0))) {
+		if (rightTrigger < width) {
+			needOffset = leftTrigger + 50;
+			cornerOffset = offset + 50;
+		}
+		if (leftTrigger > 0) {
+			needOffset = rightTrigger - width - 50;
+			cornerOffset = meetingInfoWidth + ( - width + offset)/2;
+		}
+		
+		$('.meeting-info').css('left', `${-needOffset}px`);
+		$('.meeting-info__corner').css('left', `${cornerOffset}px`);
+		
+		if ((rightTrigger < width) && (leftTrigger > 0)) {
+			$('.meeting-info').css('left', `${widthElem/2}px`);
+			$('.meeting-info__corner').css('left', `${meetingInfoWidth/2}px`);
+		}
+	} else {
+		$('.meeting-info').css('left', `${widthElem/2}px`);
+		$('.meeting-info__corner').css('left', `${meetingInfoWidth/2}px`);
+	}
+});
 
 var reg = /Firefox/ig;
 if (reg.test(window.navigator.userAgent)) {

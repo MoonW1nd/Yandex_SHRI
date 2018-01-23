@@ -115,40 +115,9 @@
 	}
 	.footer_edit {
 		flex-wrap: wrap;
-		height: 150px;
 		padding: 0;
 		justify-content: flex-end;
 		position: relative;
-
-		& .button-remove {
-			flex-basis: 100vw;
-			background-color: transparent;
-			color: red;
-			font-weight: 400;
-			height: 54px;
-			margin: 8px 0;
-			position: relative;
-
-			&:after {
-				content: '';
-				bottom: -8px;
-				left: 0;
-				height: 8px;
-				width: 100vw;
-				position: absolute;
-				background-color: $button-color-disabled;
-			}
-
-			&:before {
-				top: -8px;
-				left: 0;
-				content: '';
-				height: 8px;
-				width: 100vw;
-				position: absolute;
-				background-color: $button-color-disabled;
-			}
-		}
 
 		& .button-footer {
 			order: 1;
@@ -158,13 +127,73 @@
 				margin-right: 0px;
 			}
 		}
+
+		.button-remove {
+			visibility: hidden;
+			display: none;
+		}
+	}
+
+	.add-meeting-ui__main .button-remove {
+		flex-basis: 100vw;
+		width: 100vw;
+		background-color: transparent;
+		color: red;
+		font-weight: 400;
+		height: 54px;
+		margin: 8px 0;
+		position: relative;
+		visibility: visible;
+
+		&:after {
+			content: '';
+			bottom: -8px;
+			left: 0;
+			height: 8px;
+			width: 100vw;
+			position: absolute;
+			background-color: $button-color-disabled;
+		}
+
+		&:before {
+			top: -8px;
+			left: 0;
+			content: '';
+			height: 8px;
+			width: 100vw;
+			position: absolute;
+			background-color: $button-color-disabled;
+		}
+	}
+	.form-data-layout__time-set-layout {
+		position: relative;
+		margin-top: 24px;
+
+		&:before {
+			@extend .button-remove:before;
+			left: 50% !important;
+			top: 0 !important;
+			transform: translateX(-50%);
+		}
+	}
+
+	.offer-meeting-room {
+		position: relative;
+		margin-top: 37px;
+
+		&:before {
+			@extend .button-remove:before;
+			left: 50% !important;
+			top: -24px !important;
+			transform: translateX(-50%);
+		}
 	}
 }
 
 @media (max-width: 450px) {
 	body.dimmed .modal {
 		width: 100vw;
-		top: calc(100vh - 24px);
+		top: calc(100vh - 70px);
 		transform: translate(-50%, -100%);
 	}
 }
@@ -195,6 +224,25 @@
 		top: 48px;
 		z-index: 4;
 		border-bottom: $separator-block-setting;
+	}
+
+	.calendar {
+		position: fixed;
+		width: 100vw;
+		left: 0;
+		display: flex;
+		top: 100px;
+		justify-content: center;
+
+		&__switcher {
+			position: absolute;
+			width: 75vw;
+			min-width: 280px;
+			top: 0;
+		}
+		#calendar {
+			width: auto;
+		}
 	}
 
 	// meeting-ui

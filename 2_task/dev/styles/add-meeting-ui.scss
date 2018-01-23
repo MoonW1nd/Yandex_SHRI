@@ -50,10 +50,12 @@
 	}
 }
 
-.edit-meeting-ui__main {
-	display: flex;
-	justify-content: space-between;
-	flex-direction: column;
+.add-meeting-ui__main {
+	& .button-remove {
+		visibility: hidden;
+		width: 0;
+		height: 0;
+	}
 
 }
 

@@ -662,8 +662,9 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
   padding: 16px;
   -webkit-box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
           box-shadow: 0 0 25px rgba(0, 0, 0, 0.3); }
-  .meeting-info:after {
-    content: '';
+  .meeting-info.hidden {
+    visibility: hidden; }
+  .meeting-info__corner {
     width: 0;
     height: 0;
     position: absolute;
@@ -768,17 +769,10 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
             justify-content: center;
     border-top: 1px solid #E9ECEF; }
 
-.edit-meeting-ui__main {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column; }
+.add-meeting-ui__main .button-remove {
+  visibility: hidden;
+  width: 0;
+  height: 0; }
 
 .form-data-layout {
   display: -webkit-box;
@@ -1158,11 +1152,13 @@ body.dimmed .modal {
   top: 115px;
   left: 24px;
   z-index: 10;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   background-color: white;
   border-radius: 4px;
   padding: 16px;
-  -webkit-box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
-          box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3); }
+  -webkit-box-shadow: 0 2px 25px rgba(0, 0, 0, 0.3);
+          box-shadow: 0 2px 25px rgba(0, 0, 0, 0.3); }
   .calendar.hidden {
     visibility: hidden; }
   .calendar__month {
@@ -1262,49 +1258,69 @@ body.dimmed .modal {
   .footer_edit {
     -ms-flex-wrap: wrap;
         flex-wrap: wrap;
-    height: 150px;
     padding: 0;
     -webkit-box-pack: end;
         -ms-flex-pack: end;
             justify-content: flex-end;
     position: relative; }
-    .footer_edit .button-remove {
-      -ms-flex-preferred-size: 100vw;
-          flex-basis: 100vw;
-      background-color: transparent;
-      color: red;
-      font-weight: 400;
-      height: 54px;
-      margin: 8px 0;
-      position: relative; }
-      .footer_edit .button-remove:after {
-        content: '';
-        bottom: -8px;
-        left: 0;
-        height: 8px;
-        width: 100vw;
-        position: absolute;
-        background-color: #E9ECEF; }
-      .footer_edit .button-remove:before {
-        top: -8px;
-        left: 0;
-        content: '';
-        height: 8px;
-        width: 100vw;
-        position: absolute;
-        background-color: #E9ECEF; }
     .footer_edit .button-footer {
       -webkit-box-ordinal-group: 2;
           -ms-flex-order: 1;
               order: 1;
       margin: 16px; }
       .footer_edit .button-footer:first-child {
-        margin-right: 0px; } }
+        margin-right: 0px; }
+    .footer_edit .button-remove {
+      visibility: hidden;
+      display: none; }
+  .add-meeting-ui__main .button-remove {
+    -ms-flex-preferred-size: 100vw;
+        flex-basis: 100vw;
+    width: 100vw;
+    background-color: transparent;
+    color: red;
+    font-weight: 400;
+    height: 54px;
+    margin: 8px 0;
+    position: relative;
+    visibility: visible; }
+    .add-meeting-ui__main .button-remove:after {
+      content: '';
+      bottom: -8px;
+      left: 0;
+      height: 8px;
+      width: 100vw;
+      position: absolute;
+      background-color: #E9ECEF; }
+    .add-meeting-ui__main .button-remove:before, .add-meeting-ui__main .form-data-layout__time-set-layout:before, .add-meeting-ui__main .offer-meeting-room:before {
+      top: -8px;
+      left: 0;
+      content: '';
+      height: 8px;
+      width: 100vw;
+      position: absolute;
+      background-color: #E9ECEF; }
+  .form-data-layout__time-set-layout {
+    position: relative;
+    margin-top: 24px; }
+    .form-data-layout__time-set-layout:before {
+      left: 50% !important;
+      top: 0 !important;
+      -webkit-transform: translateX(-50%);
+              transform: translateX(-50%); }
+  .offer-meeting-room {
+    position: relative;
+    margin-top: 37px; }
+    .offer-meeting-room:before {
+      left: 50% !important;
+      top: -24px !important;
+      -webkit-transform: translateX(-50%);
+              transform: translateX(-50%); } }
 
 @media (max-width: 450px) {
   body.dimmed .modal {
     width: 100vw;
-    top: calc(100vh - 24px);
+    top: calc(100vh - 70px);
     -webkit-transform: translate(-50%, -100%);
             transform: translate(-50%, -100%); } }
 
@@ -1327,6 +1343,24 @@ body.dimmed .modal {
     top: 48px;
     z-index: 4;
     border-bottom: 1px solid #E9ECEF; }
+  .calendar {
+    position: fixed;
+    width: 100vw;
+    left: 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    top: 100px;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center; }
+    .calendar__switcher {
+      position: absolute;
+      width: 75vw;
+      min-width: 280px;
+      top: 0; }
+    .calendar #calendar {
+      width: auto; }
   .meeting-ui__time-line {
     top: 103px;
     height: 31px;
