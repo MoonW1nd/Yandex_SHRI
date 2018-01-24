@@ -1,0 +1,47 @@
+{
+  "name": "shri-2018",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=8.4.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "semistandard",
+    "prod": "node ./start.js",
+    "watch": "nodemon ./index.js --ignore public/",
+    "start": "concurrently \"npm run watch\" \"npm run assets\" --names \"💻,📦\" --prefix name",
+    "assets": "webpack -w --display-max-modules 0",
+    "reset-db": "rm -f ./db.sqlite3 && node create-mock-data.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^4.15.4",
+    "express-graphql": "^0.6.11",
+    "graphql": "^0.11.1",
+    "graphql-date": "^1.0.3",
+    "graphql-tools": "^1.2.1",
+    "pug": "^2.0.0-rc.4",
+    "request": "^2.83.0",
+    "sequelize": "^4.7.5",
+    "sqlite3": "^3.1.9"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.5",
+    "semistandard": "^11.0.0",
+    "autoprefixer": "6.7.7",
+    "babel-core": "6.24.0",
+    "babel-loader": "6.4.0",
+    "babel-preset-es2015": "6.24.0",
+    "concurrently": "3.4.0",
+    "css-loader": "0.27.3",
+    "extract-text-webpack-plugin": "2.1.0",
+    "node-sass": "4.5.0",
+    "postcss-loader": "1.3.3",
+    "sass-loader": "6.0.3",
+    "webpack": "2.2.1"
+  }
+}

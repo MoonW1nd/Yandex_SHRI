@@ -1,0 +1,16 @@
+@import "variables";
+
+.card-add-member {
+	display: flex;
+	align-items: center;
+	background-color: $button-color-disabled;
+	border-radius: 12px;
+	font-size: $fs-medium;
+	line-height: 17px;
+	margin: 0 4px 8px 4px;
+	position: relative;
+
+	&__image {
+		margin-right: 8px;
+	}
+}

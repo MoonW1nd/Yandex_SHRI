@@ -86,8 +86,6 @@ $('.time-piece.pressed').on('click', () => {
 	var cornerOffset;
 	
 	meetingInfo.toggleClass('hidden');
-	// console.log(rightTrigger);
-	// console.log(leftTrigger);
 	if (!((rightTrigger < width) && (leftTrigger > 0))) {
 		if (rightTrigger < width) {
 			needOffset = leftTrigger + 50;

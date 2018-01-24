@@ -1,0 +1,262 @@
+@import "variables";
+
+// time-input-block
+@media (max-width: 815px) {
+	.set-time-block .input-block:first-child {
+		padding-left: 16px;
+	}
+	.input-block__input_data {
+		max-width: 328px;
+		min-width: 328px;
+	}
+
+
+//add-meeting-ui
+	.add-meeting-ui {
+		top: 42px;
+		height: calc(100vh - 42px);
+
+		&__layout {
+			align-items: center;
+
+			& .form-data-layout {
+				width: 360px;
+			}
+		}
+
+		&__title {
+			align-self: flex-start;
+		}
+	}
+
+
+	//add-member-list
+	.add-member-list {
+		flex-wrap: nowrap;
+		flex-direction: column;
+	}
+
+	//card-add-member
+	.button-delete_add-member {
+		position: absolute;
+		top: 6px;
+	}
+
+	.header_add-ui {
+		height: 48px;
+	}
+
+
+	//input-block
+	.input-block__input_time {
+		width: 153px;
+		padding-left: 10px !important;
+	}
+
+	.offer-meeting-room__element {
+		width: 328px;
+	}
+}
+
+// header
+@media (max-width: 420px) {
+	.header {
+		height: 48px;
+
+		& .add-button {
+			visibility: hidden;
+			width: 0;
+		}
+	}
+
+	.add-meeting-ui__layout {
+		padding-bottom: 43px;
+	}
+
+	.time-piece.active:hover::after {
+		line-height: 57px;
+	}
+
+	.table-meeting-room {
+		border-spacing: 0 2px;
+		margin-bottom: 24px;
+
+		&__time-line {
+			height: 58px;
+		}
+
+		&__first-column {
+			top: 3px;
+		}
+	}
+
+	.meeting-rooms {
+		top: 135px;
+	}
+
+	.edit-meeting-ui__main {
+		display: block;
+	}
+
+	.add-meeting-ui__footer.footer_add-meeting {
+		&:after {
+			content: 'Выберите переговорку';
+			position: absolute;
+			height: 43px;
+			color: white;
+			font-size: $fs-main;
+			background-color: rgba(0,16,33,0.80);
+			width: 100vw;
+			padding: 16px;
+			box-sizing: border-box;
+			bottom: 70px;
+			left: 0;
+		}
+	}
+	.footer_edit {
+		flex-wrap: wrap;
+		padding: 0;
+		justify-content: flex-end;
+		position: relative;
+
+		& .button-footer {
+			order: 1;
+			margin: 16px;
+
+			&:first-child {
+				margin-right: 0px;
+			}
+		}
+
+		.button-remove {
+			visibility: hidden;
+			display: none;
+		}
+	}
+
+	.add-meeting-ui__main .button-remove {
+		flex-basis: 100vw;
+		width: 100vw;
+		background-color: transparent;
+		color: red;
+		font-weight: 400;
+		height: 54px;
+		margin: 8px 0;
+		position: relative;
+		visibility: visible;
+
+		&:after {
+			content: '';
+			bottom: -8px;
+			left: 0;
+			height: 8px;
+			width: 100vw;
+			position: absolute;
+			background-color: $button-color-disabled;
+		}
+
+		&:before {
+			top: -8px;
+			left: 0;
+			content: '';
+			height: 8px;
+			width: 100vw;
+			position: absolute;
+			background-color: $button-color-disabled;
+		}
+	}
+	.form-data-layout__time-set-layout {
+		position: relative;
+		margin-top: 24px;
+
+		&:before {
+			@extend .button-remove:before;
+			left: 50% !important;
+			top: 0 !important;
+			transform: translateX(-50%);
+		}
+	}
+
+	.offer-meeting-room {
+		position: relative;
+		margin-top: 37px;
+
+		&:before {
+			@extend .button-remove:before;
+			left: 50% !important;
+			top: -24px !important;
+			transform: translateX(-50%);
+		}
+	}
+}
+
+@media (max-width: 450px) {
+	body.dimmed .modal {
+		width: 100vw;
+		top: calc(100vh - 70px);
+		transform: translate(-50%, -100%);
+	}
+}
+
+// day-switcher
+@media (max-width: 420px) {
+	.day-switcher {
+		visibility: hidden;
+	}
+
+	.footer_add-meeting {
+		& .button-cancel {
+			visibility: hidden;
+			display: none;
+		}
+
+		& .add-button {
+			padding: 0 57px;
+		}
+	}
+	.day-switcher_mobile {
+		visibility: visible;
+		width: 100vw;
+		position: fixed;
+		height: 55px;
+		justify-content: space-around;
+		padding: 0;
+		top: 48px;
+		z-index: 4;
+		border-bottom: $separator-block-setting;
+	}
+
+	.calendar {
+		position: fixed;
+		width: 100vw;
+		left: 0;
+		display: flex;
+		top: 100px;
+		justify-content: center;
+
+		&__switcher {
+			position: absolute;
+			width: 75vw;
+			min-width: 280px;
+			top: 0;
+		}
+		#calendar {
+			width: auto;
+		}
+	}
+
+	// meeting-ui
+	.meeting-ui__time-line {
+		top: 103px;
+		height: 31px;
+		position: absolute;
+	}
+}
+
+// meeting-ui
+@media (max-width: 1250px) {
+	.meeting-ui {
+		overflow-x: auto;
+		overflow-y: hidden;
+	}
+}

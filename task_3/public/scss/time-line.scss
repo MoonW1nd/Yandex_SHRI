@@ -1,0 +1,20 @@
+@import "variables";
+
+.time-line {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex: 1;
+	width: 80vw;
+	min-width: $min-width-time-line;
+	position: relative;
+	padding-left: 2px;
+
+	&__hour {
+		text-align: center;
+		font-size: $fs-small;
+		height: 13px;
+		line-height: 13px;
+		width: 49px;
+	}
+}

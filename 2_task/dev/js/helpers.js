@@ -61,10 +61,6 @@ $(window).scroll(
 $('.meeting-ui').scroll(
 	() => {
 		if (lastScrollLeft !== $('.meeting-ui').scrollLeft()) {
-			// if ($('.time-piece.pressed').offset().left < 150) {
-			// 	$('.meeting-info').css('left', `${parseInt($('.meeting-info').css('left'), 10) + 1}px`)
-			// }
-			// console.log($('.time-piece.pressed').offset().left, $('.meeting-ui').scrollLeft());
 			calendar.addClass('hidden');
 			timeLines.css({
 				position: 'absolute',
@@ -86,8 +82,6 @@ $('.time-piece.pressed').on('click', () => {
 	var cornerOffset;
 	
 	meetingInfo.toggleClass('hidden');
-	// console.log(rightTrigger);
-	// console.log(leftTrigger);
 	if (!((rightTrigger < width) && (leftTrigger > 0))) {
 		if (rightTrigger < width) {
 			needOffset = leftTrigger + 50;
