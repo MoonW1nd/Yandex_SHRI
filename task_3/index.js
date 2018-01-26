@@ -18,3 +18,5 @@ app.use('/graphql', graphqlRoutes);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(3000, () => console.log('Express app listening on localhost:3000'));
+
+//TODO:[A.Ivankov] не забыть сделать название переговорок на мобилках при свайпе!

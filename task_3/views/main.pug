@@ -1,5 +1,6 @@
 extends layout
 
+include mixins/_table-meeting-room
 
 
 block button
@@ -78,3 +79,5 @@ block content
 						.background-meeting-rooms__time-line-wrapper
 							.background-meeting-rooms__time-line
 					- }
+			each floor in floors
+				+table-meeting-room(floor)

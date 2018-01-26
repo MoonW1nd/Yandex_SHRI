@@ -1,0 +1,37 @@
+mixin table-meeting-room(floor = {})
+	table.table-meeting-room
+		tr
+			th.table-meeting-room__first-column
+				span.floor=`${floor.rooms[0].floor} ЭТАЖ`
+			th.table-meeting-room__second-column &nbsp;
+		each room in floor.rooms
+			tr
+				td
+					.table-meeting-room__wrapper
+						.table-meeting-room__name= room.title
+						.table-meeting-room__count= `${room.capacity} человек`
+				td
+					.table-meeting-room__time-line
+						-if (room.timeLine !== undefined) {
+							each event in room.timeLine
+								- if (event.id === 'helper') {
+								.time-piece.active(style=`flex-grow: ${event.flexGrow}`)
+								- } else {
+								.time-piece.placed(style=`flex-grow: ${event.flexGrow}`)
+									.meeting-info.hidden
+										.meeting-info__title= event.title
+										.meeting-info__time-place= `${event.dateStart.getUTCDate()} ${event.dateStart.getUTCMonth()}, ${event.dateStart.getUTCHours()}:${event.dateStart.getUTCMinutes()} — ${event.dateEnd.getUTCHours()}:${event.dateEnd.getUTCMinutes()} · ${event.room.title}`
+										.meeting-info__avatar-wrapper
+											img.avatar-round(src=`${event.users[0].avatarUrl}` alt="avatar image")
+											p.member=`${event.users[0].login}`
+											-if (event.users.length - 1 > 0) {
+											span=` и ${event.users.length - 1} участников`
+											-}
+											button.edit-button
+												img.edit-button__pen(src='/dist/assets/edit.svg' alt='pen')
+										.meeting-info__corner
+								-}
+						-} else {
+						.time-piece.active(style=`flex-grow: 900`)
+						-}
+							//.time-piece= event.dateStart.slice(10,12)
