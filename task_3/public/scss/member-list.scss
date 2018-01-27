@@ -27,15 +27,23 @@
 			background-color: #F6F7F9;
 		}
 	}
+
+	&__checkbox {
+		visibility: hidden;
+		width: 0;
+		height: 0;
+	}
 }
 
 .member {
 	display: flex;
 	align-items: center;
 	font-size: $fs-medium;
+	pointer-events: none;
 
 	.avatar-round {
 		margin-right: 8px;
+		pointer-events: none;
 	}
 
 	&__floor {

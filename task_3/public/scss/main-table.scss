@@ -51,6 +51,7 @@ tr {
 
 	&.placed:hover {
 		background: $meeting-room-color-hover;
+		cursor: pointer;
 	}
 
 	//TODO:[A.Ivankov] remove after

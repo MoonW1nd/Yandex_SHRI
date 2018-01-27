@@ -1,0 +1,56 @@
+extends layout
+
+block content
+	form.add-meeting-ui(action='/', method='POST')
+		main.add-meeting-ui__main
+			section.add-meeting-ui__layout
+				.add-meeting-ui__title Новая встреча
+				.form-data-layout
+					.form-data-layout__inputs-layout
+						.input-block
+							label.input-block__label(for='input-title') Тема
+							input#input-title.input-block__input(type='text', name='input-title', placeholder='О чем будем говорить?', autocomplete='off')
+						.time-input-block
+							.input-block
+								label.input-block__label(for='input-date') Дата
+								img.input-block__icon_calendar(src='/dist/assets/calendar.svg', alt='calendar-icon')
+								input#input-date.input-block__input.input-block__input_data(type='date', name='input-date', data-date='', data-date-format='DD MMMM, YYYY', value=`2018-01-13`)
+							.set-time-block
+								.input-block
+									label.input-block__label(for='input-start-time') Начало
+									input#input-start-time.input-block__input.input-block__input_time(type='time', name='input-start-time')
+								.set-time-block__dash —
+								.input-block
+									label.input-block__label(for='input-stop-time') Конец
+									input#input-stop-time.input-block__input.input-block__input_time(type='time', name='input-end-time')
+					.form-data-layout__time-set-layout
+						.input-block
+							label.input-block__label(for='input-members') Участники
+							input#input-members.input-block__input.input-block__input_members(type='text', name='input-members', placeholder='Например, Тор Одинович', autocomplete='off')
+							ul.member-list
+								each member in members
+									li.member-list__element(data-name=`${member.login}`)
+										.member
+											img.avatar-round(src=`${member.avatarUrl}`, alt=`${member.login} avatar`)
+											.member__name= `${member.login} •`
+												span.member__floor= ` ${member.homeFloor} этаж`
+							ul.add-member-list
+								each member in members
+									li.add-member-list__element.hidden(data-name=`${member.login}`)
+										.card-add-member
+											img.avatar-round.card-add-member__image(src=`${member.avatarUrl}`, alt=`${member.login} avatar`)
+											.card-add-member__name=`${member.login}`
+											button.button-delete.button-delete_add-member(type='button')
+												img(src='/dist/assets/close.svg', alt='close')
+											input.member-list__checkbox(type='checkbox' name='member' value=`${member.login}`)
+				button.button-close.button-close_add-meeting-ui(type='button', onclick='location.href="./"')
+					img(src='/dist/assets/close.svg', alt='close')
+		footer.add-meeting-ui__footer.footer_add-meeting
+			button.button-cancel(type='button', onclick='location.href="/"') Отмена
+			button.add-button(type='submit') Создать встречу
+
+
+block scripts
+	script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js")
+	script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/locale/ru.js")
+	script(src='/dist/App.bundle.js')

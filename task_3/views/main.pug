@@ -4,7 +4,7 @@ include mixins/_table-meeting-room
 
 
 block button
-	button.add-button(type='button') Создать встречу
+	button.add-button(type='button' onclick='location.href="./add-meeting"') Создать встречу
 
 block content
 	main.meeting-ui
@@ -81,3 +81,6 @@ block content
 					- }
 			each floor in floors
 				+table-meeting-room(floor)
+
+block scripts
+	script(src='/dist/App.bundle.js')

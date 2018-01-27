@@ -11,6 +11,9 @@ const app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// parse application/json
 app.use(bodyParser.json());
 
 app.use('/', pagesRoutes);
@@ -19,4 +22,4 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(3000, () => console.log('Express app listening on localhost:3000'));
 
-//TODO:[A.Ivankov] не забыть сделать название переговорок на мобилках при свайпе!
+//TODO:[A.Ivankov] не забыть сделать название переговорок на мобилках

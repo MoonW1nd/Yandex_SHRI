@@ -306,7 +306,8 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
       color: #FFFFFF;
       background-color: #0070E0; }
   .time-piece.placed:hover {
-    background: #98A9B9; }
+    background: #98A9B9;
+    cursor: pointer; }
   .time-piece.pressed {
     background-color: #98A9B9; }
 
@@ -580,6 +581,7 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
   background-color: #FFFFFF;
   box-sizing: border-box;
   padding: 16px;
+  pointer-events: none;
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.3); }
   .meeting-info.hidden {
     visibility: hidden; }
@@ -626,6 +628,7 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
   border-radius: 50%;
   background-color: #E9ECEF;
   cursor: pointer;
+  pointer-events: auto;
   padding: 0; }
   .edit-button img {
     margin: 0 auto; }
@@ -863,15 +866,21 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
     .member-list__element:hover {
       font-weight: bold;
       background-color: #F6F7F9; }
+  .member-list__checkbox {
+    visibility: hidden;
+    width: 0;
+    height: 0; }
 
 .member {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;
       align-items: center;
-  font-size: 0.86em; }
+  font-size: 0.86em;
+  pointer-events: none; }
   .member .avatar-round {
-    margin-right: 8px; }
+    margin-right: 8px;
+    pointer-events: none; }
   .member__floor {
     color: #858E98; }
 
@@ -954,6 +963,9 @@ body.dimmed .modal {
       flex-wrap: wrap;
   -ms-flex-direction: row;
       flex-direction: row; }
+  .add-member-list__element.hidden {
+    visibility: hidden;
+    display: none; }
 
 .card-add-member {
   display: -ms-flexbox;

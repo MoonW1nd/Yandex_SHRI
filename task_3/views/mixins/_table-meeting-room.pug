@@ -18,17 +18,19 @@ mixin table-meeting-room(floor = {})
 								.time-piece.active(style=`flex-grow: ${event.flexGrow}`)
 								- } else {
 								.time-piece.placed(style=`flex-grow: ${event.flexGrow}`)
-									.meeting-info.hidden
+									.meeting-info.hidden(id=`${event.id}`)
 										.meeting-info__title= event.title
-										.meeting-info__time-place= `${event.dateStart.getUTCDate()} ${event.dateStart.getUTCMonth()}, ${event.dateStart.getUTCHours()}:${event.dateStart.getUTCMinutes()} — ${event.dateEnd.getUTCHours()}:${event.dateEnd.getUTCMinutes()} · ${event.room.title}`
+										.meeting-info__time-place= `${event.dateStart.getUTCDate()} `
+											span.month-UTC= event.dateStart.getUTCMonth()
+											span=`, ${event.dateStart.getUTCHours()}:${event.dateStart.getUTCMinutes()} — ${event.dateEnd.getUTCHours()}:${event.dateEnd.getUTCMinutes()} · ${event.room.title}`
 										.meeting-info__avatar-wrapper
 											img.avatar-round(src=`${event.users[0].avatarUrl}` alt="avatar image")
-											p.member=`${event.users[0].login}`
-											-if (event.users.length - 1 > 0) {
-											span=` и ${event.users.length - 1} участников`
-											-}
-											button.edit-button
-												img.edit-button__pen(src='/dist/assets/edit.svg' alt='pen')
+											p.members=`${event.users[0].login}`
+												-if (event.users.length - 1 > 0) {
+													span=` и ${event.users.length - 1} участников`
+												-}
+										button.edit-button
+											img.edit-button__pen(src='/dist/assets/edit.svg' alt='pen')
 										.meeting-info__corner
 								-}
 						-} else {

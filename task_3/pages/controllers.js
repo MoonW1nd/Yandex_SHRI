@@ -1,5 +1,6 @@
 const { graphql } = require('graphql');
 const schema = require('../graphql/schema').graphqlSchema;
+const siteName = 'Yandex Переговорки';
 
 module.exports.index = function(req, res) {
   const queryRooms = '{\n' +
@@ -111,9 +112,28 @@ module.exports.index = function(req, res) {
       });
       
       // res.json(floors);
-      res.render('main', {title: 'Календарь', siteName: 'Yandex Переговорки', rooms, floors});
+      res.render('main', {title: 'Календарь', siteName, rooms, floors});
     });
   });
+};
+
+module.exports.addMeeting = function (req, res) {
+  const queryUsers = `{
+    users{
+      id
+      login
+      homeFloor
+      avatarUrl
+    }
+  }`;
+  graphql(schema, queryUsers).then( data => {
+    const members = data.data.users;
+    res.render('add-meeting', { title: 'Создание встречи', siteName, members });
+  });
+};
+
+module.exports.createNewMeeting = function (req, res, next) {
+  res.json(req.body);
 };
 
 function validateDate(event) {
