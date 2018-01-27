@@ -85,17 +85,18 @@ module.exports.index = function(req, res) {
 
         } else {
           let timeLine = targetRoom[0].timeLine;
+          timeLine.pop(); // ремувим последнего helper'a
           let eventsInTimeLine =
-            timeLine.filter((event) => event.id !== 'helper');
+            timeLine.slice().filter((event) => event.id !== 'helper');
           let lastEvent = eventsInTimeLine[eventsInTimeLine.length-1];
-
+          console.log(getEndDiff(event));
           if (getDiffTwoEvents(lastEvent, event) !== 0) {
             event.flexGrow = getFlexGrow(event);
             // TODO:[A.Ivankov] если последний элемент не  хэлпер тогда мы до сюда вообще не должны дойти так как это будет событие которое завершпется ровно в 23:00
-            timeLine.pop(); // ремувим последнего helper'a
             let sumFlexGrow = timeLine
               .map(elem => elem.flexGrow)
-              .reduce((sum, current) => sum + current)
+              .reduce((sum, current) => sum + current);
+            console.log(sumFlexGrow, 900 - sumFlexGrow - event.flexGrow, event.flexGrow);
             timeLine.push(
               {
                 id: 'helper',
@@ -104,7 +105,7 @@ module.exports.index = function(req, res) {
               event,
               {
                 id: 'helper',
-                flexGrow: 900 - sumFlexGrow - event.flexGrow
+                flexGrow: getEndDiff(event)
               }
             );
           }
@@ -133,7 +134,23 @@ module.exports.addMeeting = function (req, res) {
 };
 
 module.exports.createNewMeeting = function (req, res, next) {
-  res.json(req.body);
+  let timeStart = getCorrectTimeFormat(req.body.date, req.body.startTime);
+  let timeEnd = getCorrectTimeFormat(req.body.date, req.body.endTime);
+  if (!Array.isArray(req.body.member)) {
+    req.body.member = [req.body.member];
+  }
+  let mutationQuery = `mutation create {
+    createEvent(input: {
+      title: "${req.body.title}",
+      dateEnd: "${timeEnd.toISOString()}",
+      dateStart: "${timeStart.toISOString()}"
+    } usersIds: [${req.body.member}] roomId: 2) {
+      id
+    }
+  }`;
+  graphql(schema, mutationQuery).then( data => {
+    res.json(data);
+  });
 };
 
 function validateDate(event) {
@@ -154,15 +171,55 @@ function getFlexGrow(event) {
 
 function getStartDiff(event) {
   let openTime = new Date(Date.UTC(
-    event.dateStart.getFullYear(),
-    event.dateStart.getMonth(),
-    event.dateStart.getDate(),
+    event.dateStart.getUTCFullYear(),
+    event.dateStart.getUTCMonth(),
+    event.dateStart.getUTCDate(),
     8,
     0
   ));
   return Math.floor((event.dateStart.getTime() - openTime.getTime()) / 1000 / 60)
 }
 
+function getEndDiff(event) {
+  let closeTime = new Date(Date.UTC(
+    event.dateStart.getUTCFullYear(),
+    event.dateStart.getUTCMonth(),
+    event.dateStart.getUTCDate(),
+    23,
+    0
+  ));
+  console.log(closeTime);
+  console.log(event);
+  return Math.floor((closeTime.getTime() - event.dateEnd.getTime()) / 1000 / 60)
+}
+
+// event on time < event two time
 function getDiffTwoEvents(eventOne, eventTwo) {
-  return Math.floor((eventOne.dateEnd.getTime() - eventTwo.dateStart.getTime()) / 1000 / 60)
+  return Math.floor((eventTwo.dateStart.getTime() - eventOne.dateEnd.getTime()) / 1000 / 60)
+}
+
+function getCorrectTimeFormat(date, time) {
+  let dateParts = date.split(' ');
+  let timeParts = time.split(':');
+  let numberMonth = [
+      'января',
+      'февраля',
+      'марта',
+      'апреля',
+      'мая',
+      'июня',
+      'июля',
+      'августа',
+      'сентября',
+      'октября',
+      'ноября',
+      'декабря'
+    ].indexOf(dateParts[1].toLowerCase());
+  return new Date(Date.UTC(
+    dateParts[2],
+    numberMonth,
+    dateParts[0],
+    timeParts[0],
+    timeParts[1]
+  ));
 }

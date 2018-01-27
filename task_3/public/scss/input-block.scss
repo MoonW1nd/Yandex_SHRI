@@ -55,13 +55,13 @@
 }
 
 
-.input-block__input_data:before {
-	content: attr(data-date);
-	display: inline-block;
-	font-family: $ff-main;
-	font-size: 1em;
-	color: black;
-}
+//.input-block__input_data:before {
+//	content: attr(data-date);
+//	display: inline-block;
+//	font-family: $ff-main;
+//	font-size: 1em;
+//	color: black;
+//}
 
 .input-block__input_data::-ms-clear {
 	display: none;

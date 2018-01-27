@@ -9,24 +9,24 @@ block content
 					.form-data-layout__inputs-layout
 						.input-block
 							label.input-block__label(for='input-title') Тема
-							input#input-title.input-block__input(type='text', name='input-title', placeholder='О чем будем говорить?', autocomplete='off')
+							input#input-title.input-block__input(type='text', name='title', placeholder='О чем будем говорить?', autocomplete='off')
 						.time-input-block
 							.input-block
 								label.input-block__label(for='input-date') Дата
 								img.input-block__icon_calendar(src='/dist/assets/calendar.svg', alt='calendar-icon')
-								input#input-date.input-block__input.input-block__input_data(type='date', name='input-date', data-date='', data-date-format='DD MMMM, YYYY', value=`2018-01-13`)
+								input#input-date.input-block__input.input-block__input_data(name='date',data-date-format="dd MM yyyy" autocomplete='off')
 							.set-time-block
 								.input-block
 									label.input-block__label(for='input-start-time') Начало
-									input#input-start-time.input-block__input.input-block__input_time(type='time', name='input-start-time')
+									input#input-start-time.timepicker.input-block__input.input-block__input_time(type='time' name='startTime' autocomplete='off')
 								.set-time-block__dash —
 								.input-block
 									label.input-block__label(for='input-stop-time') Конец
-									input#input-stop-time.input-block__input.input-block__input_time(type='time', name='input-end-time')
+									input#input-stop-time.timepicker.input-block__input.input-block__input_time(type='time', name='endTime' autocomplete='off')
 					.form-data-layout__time-set-layout
 						.input-block
 							label.input-block__label(for='input-members') Участники
-							input#input-members.input-block__input.input-block__input_members(type='text', name='input-members', placeholder='Например, Тор Одинович', autocomplete='off')
+							input#input-members.input-block__input.input-block__input_members(type='text', name='members', placeholder='Например, Тор Одинович', autocomplete='off')
 							ul.member-list
 								each member in members
 									li.member-list__element(data-name=`${member.login}`)
@@ -42,7 +42,7 @@ block content
 											.card-add-member__name=`${member.login}`
 											button.button-delete.button-delete_add-member(type='button')
 												img(src='/dist/assets/close.svg', alt='close')
-											input.member-list__checkbox(type='checkbox' name='member' value=`${member.login}`)
+											input.member-list__checkbox(type='checkbox' name='member' value=`${member.id}`)
 				button.button-close.button-close_add-meeting-ui(type='button', onclick='location.href="./"')
 					img(src='/dist/assets/close.svg', alt='close')
 		footer.add-meeting-ui__footer.footer_add-meeting
@@ -51,6 +51,13 @@ block content
 
 
 block scripts
-	script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js")
-	script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/locale/ru.js")
+	//script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js")
+	//script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/locale/ru.js")
 	script(src='/dist/App.bundle.js')
+
+block head
+	link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css")
+	link(rel="stylesheet" href="/dist/datepicker.min.css" type='text/css')
+	script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+	script(src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js")
+	script(src='/dist/datepicker.min.js')

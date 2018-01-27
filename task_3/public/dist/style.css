@@ -741,13 +741,6 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
     width: 72px;
     min-width: 72px; }
 
-.input-block__input_data:before {
-  content: attr(data-date);
-  display: inline-block;
-  font-family: "HelveticaNeue", sans-serif;
-  font-size: 1em;
-  color: black; }
-
 .input-block__input_data::-ms-clear {
   display: none; }
 
@@ -866,6 +859,9 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
     .member-list__element:hover {
       font-weight: bold;
       background-color: #F6F7F9; }
+    .member-list__element.hidden {
+      visibility: hidden;
+      display: none; }
   .member-list__checkbox {
     visibility: hidden;
     width: 0;
