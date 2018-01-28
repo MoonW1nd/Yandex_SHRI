@@ -15,21 +15,21 @@ mixin table-meeting-room(floor = {})
 						-if (room.timeLine !== undefined) {
 							each event in room.timeLine
 								- if (event.id === 'helper') {
-								.time-piece.active(style=`flex-grow: ${event.flexGrow}`)
+								.time-piece.active(style=`flex-grow: ${event.flexGrow}`, data-dateStart= event.dateStart, data-dateEnd= event.dateEnd)
 								- } else {
 								.time-piece.placed(style=`flex-grow: ${event.flexGrow}`)
 									.meeting-info.hidden(id=`${event.id}`)
 										.meeting-info__title= event.title
 										.meeting-info__time-place= `${event.dateStart.getUTCDate()} `
 											span.month-UTC= event.dateStart.getUTCMonth()
-											span=`, ${event.dateStart.getUTCHours()}:${event.dateStart.getUTCMinutes()} — ${event.dateEnd.getUTCHours()}:${event.dateEnd.getUTCMinutes()} · ${event.room.title}`
+											span=`, ${event.dateStart.getUTCHours()}:${(event.dateStart.getMinutes()<10?'0':'') + event.dateStart.getMinutes()} — ${event.dateEnd.getUTCHours()}:${(event.dateEnd.getMinutes()<10?'0':'') + event.dateEnd.getMinutes()} · ${event.room.title}`
 										.meeting-info__avatar-wrapper
 											img.avatar-round(src=`${event.users[0].avatarUrl}` alt="avatar image")
 											p.members=`${event.users[0].login}`
 												-if (event.users.length - 1 > 0) {
 													span=` и ${event.users.length - 1} участников`
 												-}
-										button.edit-button
+										button.edit-button(onclick=`location.href="/edit-event/${event.id}"`)
 											img.edit-button__pen(src='/dist/assets/edit.svg' alt='pen')
 										.meeting-info__corner
 								-}

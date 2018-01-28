@@ -157,6 +157,10 @@ $(document).ready(() => {
   $('.input-block__input_data').keydown(function(e){
     e.preventDefault();
   });
+  let dateInInput = Date.parse($('#input-date.needModifyData').data('value'));
+  dateInInput = new Date(dateInInput);
+  let resultString = `${dateInInput.getUTCDate()} ${getLetterMonthRu(dateInInput.getUTCMonth())} ${dateInInput.getUTCFullYear()}`;
+  $('#input-date.needModifyData').val(resultString);
   $('.timepicker').timepicker({
     timeFormat: 'HH:mm',
     interval: 15,

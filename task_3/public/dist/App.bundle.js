@@ -276,6 +276,10 @@ $(document).ready(function () {
   $('.input-block__input_data').keydown(function (e) {
     e.preventDefault();
   });
+  var dateInInput = Date.parse($('#input-date.needModifyData').data('value'));
+  dateInInput = new Date(dateInInput);
+  var resultString = dateInInput.getUTCDate() + ' ' + getLetterMonthRu(dateInInput.getUTCMonth()) + ' ' + dateInInput.getUTCFullYear();
+  $('#input-date.needModifyData').val(resultString);
   $('.timepicker').timepicker({
     timeFormat: 'HH:mm',
     interval: 15,
@@ -310,6 +314,31 @@ __webpack_require__(2);
 __webpack_require__(1);
 
 __webpack_require__(0);
+
+__webpack_require__(10);
+
+/***/ }),
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports.getRecommendation = function getRecommendation(date, members, db) {
+  // sort rooms by floors
+  var floors = [];
+  db.rooms.forEach(function (room) {
+    if (floors.indexOf(room.floor) !== -1) {
+      floors.push(room.floor);
+    }
+  });
+};
 
 /***/ })
 /******/ ]);

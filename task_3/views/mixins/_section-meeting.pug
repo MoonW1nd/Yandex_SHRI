@@ -1,0 +1,93 @@
+mixin sectionMeeting (members={}, title, selectMembers=[], event={})
+	section.add-meeting-ui__layout
+		.add-meeting-ui__title= title
+		.form-data-layout
+			.form-data-layout__inputs-layout
+				.input-block
+					label.input-block__label(for='input-title') Тема
+					-if (event.title !== 'undefined') {
+					input#input-title.input-block__input(type='text', name='title', placeholder='О чем будем говорить?', autocomplete='off', value=event.title)
+					-} else {
+					input#input-title.input-block__input(type='text', name='title', placeholder='О чем будем говорить?', autocomplete='off')
+					-}
+				.time-input-block
+					.input-block
+						label.input-block__label(for='input-date') Дата
+						img.input-block__icon_calendar(src='/dist/assets/calendar.svg', alt='calendar-icon')
+						-if (event.dateStart !== 'undefined') {
+						input#input-date.input-block__input.input-block__input_data.needModifyData(name='date',data-date-format="dd MM yyyy" autocomplete='off', data-value=event.dateStart)
+						-} else {
+						input#input-date.input-block__input.input-block__input_data(name='date',data-date-format="dd MM yyyy" autocomplete='off')
+						-}
+					.set-time-block
+						.input-block
+							label.input-block__label(for='input-start-time') Начало
+							-if (event.dateStart !== 'undefined') {
+							input#input-start-time.timepicker.input-block__input.input-block__input_time(type='time' name='startTime' autocomplete='off', value=`${(event.dateStart.getHours()<10?'0':'') + event.dateStart.getHours()}:${(event.dateStart.getMinutes()<10?'0':'') + event.dateStart.getMinutes()}`)
+							-} else {
+							input#input-start-time.timepicker.input-block__input.input-block__input_time(type='time' name='startTime' autocomplete='off')
+							-}
+						.set-time-block__dash —
+						.input-block
+							label.input-block__label(for='input-stop-time') Конец
+							-if (event.dateEnd !== 'undefined') {
+							input#input-stop-time.timepicker.input-block__input.input-block__input_time(type='time', name='endTime' autocomplete='off', value=`${(event.dateEnd.getHours()<10?'0':'') + event.dateEnd.getHours()}:${(event.dateEnd.getMinutes()<10?'0':'') + event.dateEnd.getMinutes()}`)
+							-} else {
+							input#input-stop-time.timepicker.input-block__input.input-block__input_time(type='time', name='endTime' autocomplete='off')
+							-}
+			.form-data-layout__time-set-layout
+				.input-block
+					label.input-block__label(for='input-members') Участники
+					input#input-members.input-block__input.input-block__input_members(type='text', name='members', placeholder='Например, Тор Одинович', autocomplete='off')
+					ul.member-list
+						each member in members
+							-if(selectMembers.indexOf(member.id) !== -1) {
+							li.member-list__element.hidden(data-name=`${member.login}`)
+								.member
+									img.avatar-round(src=`${member.avatarUrl}`, alt=`${member.login} avatar`)
+									.member__name= `${member.login} •`
+									span.member__floor= ` ${member.homeFloor} этаж`
+							-} else {
+							li.member-list__element(data-name=`${member.login}`)
+								.member
+									img.avatar-round(src=`${member.avatarUrl}`, alt=`${member.login} avatar`)
+									.member__name= `${member.login} •`
+									span.member__floor= ` ${member.homeFloor} этаж`
+							-}
+					ul.add-member-list
+						each member in members
+							-if(selectMembers.indexOf(member.id) !== -1) {
+							li.add-member-list__element(data-name=`${member.login}`)
+								.card-add-member
+									img.avatar-round.card-add-member__image(src=`${member.avatarUrl}`, alt=`${member.login} avatar`)
+									.card-add-member__name=`${member.login}`
+									button.button-delete.button-delete_add-member(type='button')
+										img(src='/dist/assets/close.svg', alt='close')
+									input.member-list__checkbox(type='checkbox' name='member' value=`${member.id}` checked="checked")
+							-} else {
+							li.add-member-list__element.hidden(data-name=`${member.login}`)
+								.card-add-member
+									img.avatar-round.card-add-member__image(src=`${member.avatarUrl}`, alt=`${member.login} avatar`)
+									.card-add-member__name=`${member.login}`
+									button.button-delete.button-delete_add-member(type='button')
+										img(src='/dist/assets/close.svg', alt='close')
+									input.member-list__checkbox(type='checkbox' name='member' value=`${member.id}`)
+							-}
+
+				- if(event.room !== 'undefined') {
+				.offer-meeting-room
+					label.offer-meeting-room__label(for='offer-rooms')  Ваша переговорка
+					ul#offer-rooms.offer-meeting-room__list
+						li.offer-meeting-room__element.active
+							.offer-meeting-room__time= `${(event.dateStart.getHours()<10?'0':'') + event.dateStart.getHours()}:${(event.dateStart.getMinutes()<10?'0':'') + event.dateStart.getMinutes()}—${(event.dateEnd.getHours()<10?'0':'') + event.dateEnd.getHours()}:${(event.dateEnd.getMinutes()<10?'0':'') + event.dateEnd.getMinutes()}`
+							.offer-meeting-room__room= `${event.room.title} • ${event.room.floor} этаж`
+							button.button-delete(type='button')
+								img(src='/dist/assets/close.svg', alt='close')
+				-} else {
+				.offer-meeting-room.hidden
+					label.offer-meeting-room__label(for='offer-rooms')  Ваша переговорка
+					ul#offer-rooms.offer-meeting-room__list
+				-}
+
+		button.button-close.button-close_add-meeting-ui(type='button', onclick='location.href="/"')
+			img(src='/dist/assets/close.svg', alt='close')
