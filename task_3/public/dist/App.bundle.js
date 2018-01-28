@@ -315,7 +315,7 @@ __webpack_require__(1);
 
 __webpack_require__(0);
 
-__webpack_require__(10);
+__webpack_require__(11);
 
 /***/ }),
 /* 4 */,
@@ -324,7 +324,8 @@ __webpack_require__(10);
 /* 7 */,
 /* 8 */,
 /* 9 */,
-/* 10 */
+/* 10 */,
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -334,10 +335,85 @@ module.exports.getRecommendation = function getRecommendation(date, members, db)
   // sort rooms by floors
   var floors = [];
   db.rooms.forEach(function (room) {
-    if (floors.indexOf(room.floor) !== -1) {
+    if (floors.indexOf(room.floor) === -1) {
       floors.push(room.floor);
     }
   });
+  floors = floors.map(function (floor) {
+    return { floorNumber: floor };
+  });
+  // надем сумму этажей пройдееную всеми участниками для каждого этажа
+  floors.forEach(function (floor) {
+    var floorNumber = floor.floorNumber;
+    floor.count = 0; // init count
+
+    members.forEach(function (member) {
+      floor.count += Math.abs(member.floor - parseInt(floorNumber, 10));
+    });
+  });
+  // // сортируем по меньшему числу пройденных этажей
+  floors.sort(function (a, b) {
+    return a.count - b.count;
+  });
+  // // ищем подходящие комнаты на этом этаже
+  var allRecommendation = [];
+  floors.forEach(function (floor) {
+    var recommendedRooms = db.rooms.filter(function (room) {
+      return room.floor === floor.floorNumber;
+    });
+    // фильтрровка и сортировка по вместимости
+    recommendedRooms = recommendedRooms.filter(function (room) {
+      return room.capacity >= members.length;
+    });
+    recommendedRooms.sort(function (a, b) {
+      return a.capacity - b.capacity;
+    });
+    // console.log(recommendedRooms);
+    // проверка по времени
+    var copyEvents = db.events.slice();
+    // console.log(copyEvents);
+    recommendedRooms.forEach(function (room) {
+      var eventsInRoom = copyEvents.filter(function (event) {
+        return event.room === parseInt(room.id, 10);
+      });
+      room.dateValid = true;
+      room.events = eventsInRoom;
+      eventsInRoom.forEach(function (eventInRoom) {
+        var dateStartValid = Date.parse(date.start) > Date.parse(eventInRoom.date.end);
+        var dateEndValid = Date.parse(date.end) < Date.parse(eventInRoom.date.start);
+        if (dateEndValid || dateStartValid) {
+          room.dateValid = true;
+        }
+      });
+    });
+    allRecommendation = allRecommendation.concat(recommendedRooms);
+  });
+  // console.log(allRecommendation);
+  allRecommendation = allRecommendation.filter(function (room) {
+    return room.dateValid;
+  });
+  if (allRecommendation.length = 0) {
+    var result = [];
+    allRecommendation.forEach(function (room) {
+      result.push({
+        date: {
+          start: date.start,
+          end: date.end
+        },
+        room: room.id,
+        swap: []
+      });
+    });
+    return result;
+  } else {
+    var copyEvents = db.events.slice();
+    copyEvents = copyEvents.filter(function (event) {
+      var dateStartIn = Date.parse(date.start) <= Date.parse(event.date.start);
+      var dateEndIn = Date.parse(date.end) >= Date.parse(event.date.end);
+      return dateEndIn && dateStartIn;
+    });
+    console.log(copyEvents);
+  }
 };
 
 /***/ })

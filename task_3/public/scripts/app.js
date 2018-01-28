@@ -1,4 +1,4 @@
 import '../scss/main.scss';
 import './helpers.js';
 import './calendar.js';
-import './getRecomendation'
+import '../../pages/getRecomendation'

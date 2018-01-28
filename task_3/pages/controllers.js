@@ -1,6 +1,7 @@
 const { graphql } = require('graphql');
 const schema = require('../graphql/schema').graphqlSchema;
 const siteName = 'Yandex Переговорки';
+const { getRecommendation } = require('./getRecomendation');
 const queryUsers = `{
     users{
       id
@@ -150,12 +151,62 @@ module.exports.index = async function(req, res) {
   // res.json(floors);
 };
 
-module.exports.addMeeting = function (req, res) {
-  // res.json(req.body.response);
-  graphql(schema, queryUsers).then( data => {
-    const members = data.data.users;
-    res.render('add-meeting', { title: 'Создание встречи', siteName, members });
+module.exports.addMeeting = async function (req, res) {
+  let db = {};
+  let members;
+  let date = {
+    start: '2018-01-27T12:00:00.000Z',
+    end: '2018-01-27T22:20:04.454Z'
+  };
+  members = [
+    {
+      login: 'alt-j',
+      avatar: 'https://avatars1.githubusercontent.com/u/3763844?s=400&v=4',
+      floor: 3
+    },
+    {
+      login: 'yeti-or',
+      avatar: 'https://avatars0.githubusercontent.com/u/1813468?s=460&v=4',
+      floor: 2
+    }
+  ];
+  // find date
+  let users = await graphql(schema, queryUsers);
+  let rooms = await graphql(schema, queryRooms);
+  let events = await graphql(schema, queryEvents);
+  db.persons = [];
+  users.data.users.forEach(user => {
+    db.persons.push({
+      login: user.login,
+      floor: user.homeFloor,
+      avatar: user.avatarUrl
+    });
   });
+  db.rooms = rooms.data.rooms;
+  db.events = [];
+  events.data.events.forEach((event) => {
+    event.users.forEach( (user, i) => {
+      event.users[i] = user.login;
+    });
+    event.room = parseInt(event.room.id);
+    db.events.push({
+      id: event.id,
+      title: event.title,
+      date: {
+        start: event.dateStart,
+        end: event.dateEnd
+      },
+      members: event.users,
+      room: event.room
+    });
+  });
+  // let result = getRecommendation(date, members, db);
+  res.json(getRecommendation(date, members, db));
+  // res.json(req.body.response);
+  // graphql(schema, queryUsers).then( data => {
+  //   const members = data.data.users;
+  //   res.render('add-meeting', { title: 'Создание встречи', siteName, members });
+  // });
 };
 
 module.exports.createNewMeeting = function (req, res, next) {
