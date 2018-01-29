@@ -334,7 +334,8 @@ __webpack_require__(11);
 module.exports.getRecommendation = function getRecommendation(date, members, db) {
   // sort rooms by floors
   var floors = [];
-  db.rooms.forEach(function (room) {
+  var rooms = JSON.parse(JSON.stringify(db.rooms));
+  rooms.forEach(function (room) {
     if (floors.indexOf(room.floor) === -1) {
       floors.push(room.floor);
     }
@@ -358,7 +359,7 @@ module.exports.getRecommendation = function getRecommendation(date, members, db)
   // // ищем подходящие комнаты на этом этаже
   var allRecommendation = [];
   floors.forEach(function (floor) {
-    var recommendedRooms = db.rooms.filter(function (room) {
+    var recommendedRooms = rooms.filter(function (room) {
       return room.floor === floor.floorNumber;
     });
     // фильтрровка и сортировка по вместимости
@@ -368,6 +369,7 @@ module.exports.getRecommendation = function getRecommendation(date, members, db)
     recommendedRooms.sort(function (a, b) {
       return a.capacity - b.capacity;
     });
+    floor.rooms = JSON.parse(JSON.stringify(recommendedRooms));
     // console.log(recommendedRooms);
     // проверка по времени
     var copyEvents = db.events.slice();
@@ -376,11 +378,13 @@ module.exports.getRecommendation = function getRecommendation(date, members, db)
       var eventsInRoom = copyEvents.filter(function (event) {
         return event.room === parseInt(room.id, 10);
       });
-      room.dateValid = true;
+      room.dateValid = false;
       room.events = eventsInRoom;
+
+      // validation date
       eventsInRoom.forEach(function (eventInRoom) {
-        var dateStartValid = Date.parse(date.start) > Date.parse(eventInRoom.date.end);
-        var dateEndValid = Date.parse(date.end) < Date.parse(eventInRoom.date.start);
+        var dateStartValid = Date.parse(date.start) >= Date.parse(eventInRoom.date.end);
+        var dateEndValid = Date.parse(date.end) <= Date.parse(eventInRoom.date.start);
         if (dateEndValid || dateStartValid) {
           room.dateValid = true;
         }
@@ -388,11 +392,15 @@ module.exports.getRecommendation = function getRecommendation(date, members, db)
     });
     allRecommendation = allRecommendation.concat(recommendedRooms);
   });
+  //копируем для будующих операций
+  var roomsWithEvents = JSON.parse(JSON.stringify(rooms));
+  // set recommended rooms id
+
   // console.log(allRecommendation);
   allRecommendation = allRecommendation.filter(function (room) {
     return room.dateValid;
   });
-  if (allRecommendation.length = 0) {
+  if (allRecommendation.length !== 0) {
     var result = [];
     allRecommendation.forEach(function (room) {
       result.push({
@@ -406,13 +414,168 @@ module.exports.getRecommendation = function getRecommendation(date, members, db)
     });
     return result;
   } else {
+    // find all event in this period
     var copyEvents = db.events.slice();
     copyEvents = copyEvents.filter(function (event) {
-      var dateStartIn = Date.parse(date.start) <= Date.parse(event.date.start);
-      var dateEndIn = Date.parse(date.end) >= Date.parse(event.date.end);
-      return dateEndIn && dateStartIn;
+      var firstCondition = Date.parse(event.date.end) > Date.parse(date.start) && Date.parse(date.end) > Date.parse(event.date.start);
+
+      var secondCondition = Date.parse(date.start) <= Date.parse(event.date.start) && Date.parse(date.end) >= Date.parse(event.date.end);
+
+      var thirdCondition = Date.parse(date.start) >= Date.parse(event.date.start) && Date.parse(date.end) <= Date.parse(event.date.end);
+      // console.log(date, event.title);
+      // console.log(firstCondition, secondCondition, thirdCondition);
+      // console.log((firstCondition || secondCondition || thirdCondition))
+      return firstCondition || secondCondition || thirdCondition;
     });
-    console.log(copyEvents);
+    // console.log(copyEvents);
+    // проходимся по всем пересекающимся с нужным времем event'ам
+    copyEvents.forEach(function (event) {
+      // берем комнаты и проходимся по всем ивентам в комнатах
+      rooms.forEach(function (room) {
+        if (parseInt(room.id, 10) !== event.room) {
+          var enableTransfer = true;
+          room.events.forEach(function (eventInRoom) {
+            // смотрим можно ли в эту комнату перенести переговорку
+            var firstCondition = Date.parse(eventInRoom.date.end) > Date.parse(event.date.start) && Date.parse(event.date.end) > Date.parse(eventInRoom.date.start);
+
+            var secondCondition = Date.parse(event.date.start) <= Date.parse(eventInRoom.date.start) && Date.parse(event.date.end) >= Date.parse(eventInRoom.date.end);
+
+            var thirdCondition = Date.parse(event.date.start) >= Date.parse(eventInRoom.date.start) && Date.parse(event.date.end) <= Date.parse(eventInRoom.date.end);
+            var dateValid = firstCondition || secondCondition || thirdCondition;
+
+            // прошли ли все проверки по совместимости
+            if (dateValid) {
+              enableTransfer = false;
+            }
+          });
+          // если все мероприятия прошли проверку совместимости то его можно перенести
+          if (enableTransfer) {
+            if (Array.isArray(room.swap)) {
+              var duplicate = room.swap.filter(function (item) {
+                return item.eventMain === event.id;
+              });
+              if (duplicate.length === 0) {
+                room.swap.push({
+                  event: event.id,
+                  room: room.id,
+                  roomEvent: event.room
+                });
+              }
+            } else {
+              room.swap = [{
+                event: event.id,
+                room: room.id,
+                roomEvent: event.room
+              }];
+            }
+          }
+        }
+      });
+    });
+    var _result = [];
+    var allSwaps = [];
+    // return(rooms);
+    // создвем мвссив для ответа
+    rooms.forEach(function (room) {
+      if (room.swap != null) {
+        allSwaps = allSwaps.concat(room.swap);
+      }
+    });
+    // return allSwaps
+    allSwaps.forEach(function (swap) {
+      var room = db.rooms.filter(function (room) {
+        return parseInt(swap.roomEvent, 10) === parseInt(room.id, 10);
+      });
+      console.log(room);
+      if (room[0] != null) {
+        swap.floorEvent = room[0].floor;
+      }
+    });
+
+    var sortSwapsByFloor = [];
+    // сортировка комнат по наименьшему количеству пройденных этажей
+    floors.forEach(function (floor) {
+      var swaps = allSwaps.filter(function (swap) {
+        return floor.floorNumber === swap.floorEvent;
+      });
+      sortSwapsByFloor = sortSwapsByFloor.concat(swaps);
+    });
+    // соединяем возможные переносы по комнатам которые освободятся
+    var a = null;
+    var resultMassive = [];
+    sortSwapsByFloor.forEach(function (swap) {
+      if (swap.event !== a) {
+        a = swap.event;
+        resultMassive.push([swap]);
+      } else {
+        resultMassive[resultMassive.length - 1].push(swap);
+      }
+    });
+    console.log(sortSwapsByFloor);
+    // создаем требуемый формат ответа
+    resultMassive.forEach(function (swaps) {
+      _result.push({
+        date: {
+          start: date.start,
+          end: date.end
+        },
+        room: swaps[0].roomEvent,
+        swap: swaps.map(function (element) {
+          return { event: element.event, room: element.room };
+        })
+      });
+    });
+    if (_result.length !== 0) {
+      //TODO:[A.Ivankov] поменять на валидное условие отвта
+      return _result;
+    } else {
+      // блок подбора времни по времени освобождения переговоро
+      var timeDiff = Date.parse(date.end) - Date.parse(date.start);
+      var endTime = new Date(Date.parse(date.start));
+      endTime.setUTCHours(23);
+      endTime.setUTCMinutes(0);
+      var eventsWithNewTime = [];
+      roomsWithEvents.forEach(function (room) {
+        var events = room.events;
+        var eventsAfterStart = events.filter(function (event) {
+          return Date.parse(event.date.end) > Date.parse(date.start);
+        });
+        eventsAfterStart.forEach(function (eventAfterStart) {
+          var newDate = {
+            start: Date.parse(eventAfterStart.date.end),
+            end: Date.parse(eventAfterStart.date.end) + timeDiff,
+            room: eventAfterStart.room,
+            validEvent: false
+          };
+          events.forEach(function (eventValidation) {
+            console.log(eventValidation);
+            var dateStartValid = newDate.start >= Date.parse(eventValidation.date.end);
+            var dateEndValid = newDate.end <= Date.parse(eventValidation.date.start);
+            if ((dateEndValid || dateStartValid) && newDate.end < endTime.valueOf()) {
+              newDate.dateValid = true;
+            }
+          });
+          eventsWithNewTime.push(newDate);
+        });
+      });
+      // фильтр по ближайшей освободившейся переговрке
+      // eventsWithNewTime.filter(event => event.validEvent === true);
+      eventsWithNewTime.sort(function (a, b) {
+        return a.start - b.start;
+      });
+      var recommendation = [];
+      eventsWithNewTime.forEach(function (event) {
+        recommendation.push({
+          date: {
+            start: new Date(event.start).toISOString(),
+            end: new Date(event.end).toISOString()
+          },
+          room: event.room,
+          swap: []
+        });
+      });
+      return recommendation;
+    }
   }
 };
 

@@ -155,8 +155,8 @@ module.exports.addMeeting = async function (req, res) {
   let db = {};
   let members;
   let date = {
-    start: '2018-01-27T12:00:00.000Z',
-    end: '2018-01-27T22:20:04.454Z'
+    start: '2018-01-27T12:10:00.000Z',
+    end: '2018-01-27T13:40:00.454Z'
   };
   members = [
     {
