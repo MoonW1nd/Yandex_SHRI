@@ -36,8 +36,8 @@
 		height: 28px;
 		position: relative;
 		display: flex;
-		padding-left: 27px;
-		padding-right: 23px;
+		padding-left: 26px;
+		padding-right: 24px;
 	}
 
 	&__name {
@@ -57,8 +57,8 @@
 	}
 }
 
-@media (max-width: 1250px) {
-	.table-meeting-room__time-line {
-		padding-right: 20px;
-	}
-}
+//@media (max-width: 1250px) {
+//	.table-meeting-room__time-line {
+//		padding-right: 20px;
+//	}
+//}

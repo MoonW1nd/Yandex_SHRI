@@ -23,7 +23,7 @@ mixin sectionMeeting (members={}, title, selectMembers=[], event={})
 						.input-block
 							label.input-block__label(for='input-start-time') Начало
 							-if (event.dateStart != null) {
-							input#input-start-time.timepicker.input-block__input.input-block__input_time(type='time' name='startTime' autocomplete='off', value=`${(event.dateStart.getHours()<10?'0':'') + event.dateStart.getHours()}:${(event.dateStart.getMinutes()<10?'0':'') + event.dateStart.getMinutes()}`)
+							input#input-start-time.timepicker.input-block__input.input-block__input_time(type='time' name='startTime' autocomplete='off', value=`${(event.dateStart.getUTCHours()<10?'0':'') + event.dateStart.getUTCHours()}:${(event.dateStart.getUTCMinutes()<10?'0':'') + event.dateStart.getUTCMinutes()}`)
 							-} else {
 							input#input-start-time.timepicker.input-block__input.input-block__input_time(type='time' name='startTime' autocomplete='off')
 							-}
@@ -31,7 +31,7 @@ mixin sectionMeeting (members={}, title, selectMembers=[], event={})
 						.input-block
 							label.input-block__label(for='input-stop-time') Конец
 							-if (event.dateEnd != null) {
-							input#input-stop-time.timepicker.input-block__input.input-block__input_time(type='time', name='endTime' autocomplete='off', value=`${(event.dateEnd.getHours()<10?'0':'') + event.dateEnd.getHours()}:${(event.dateEnd.getMinutes()<10?'0':'') + event.dateEnd.getMinutes()}`)
+							input#input-stop-time.timepicker.input-block__input.input-block__input_time(type='time', name='endTime' autocomplete='off', value=`${(event.dateEnd.getUTCHours()<10?'0':'') + event.dateEnd.getUTCHours()}:${(event.dateEnd.getUTCMinutes()<10?'0':'') + event.dateEnd.getUTCMinutes()}`)
 							-} else {
 							input#input-stop-time.timepicker.input-block__input.input-block__input_time(type='time', name='endTime' autocomplete='off')
 							-}
@@ -74,15 +74,16 @@ mixin sectionMeeting (members={}, title, selectMembers=[], event={})
 									input.member-list__checkbox(type='checkbox' name='member' value=`${member.id}`)
 							-}
 
-				- if(event.room != null) {
+				- if(event.room != null) {UTC
 				.offer-meeting-room
 					label.offer-meeting-room__label(for='offer-rooms')  Ваша переговорка
 					ul#offer-rooms.offer-meeting-room__list
 						li.offer-meeting-room__element.active
-							.offer-meeting-room__time= `${(event.dateStart.getHours()<10?'0':'') + event.dateStart.getHours()}:${(event.dateStart.getMinutes()<10?'0':'') + event.dateStart.getMinutes()}—${(event.dateEnd.getHours()<10?'0':'') + event.dateEnd.getHours()}:${(event.dateEnd.getMinutes()<10?'0':'') + event.dateEnd.getMinutes()}`
+							.offer-meeting-room__time= `${(event.dateStart.getUTCHours()<10?'0':'') + event.dateStart.getUTCHours()}:${(event.dateStart.getMinutes()<10?'0':'') + event.dateStart.getUTCMinutes()}—${(event.dateEnd.getUTCHours()<10?'0':'') + event.dateEnd.getUTCHours()}:${(event.dateEnd.getUTCMinutes()<10?'0':'') + event.dateEnd.getUTCMinutes()}`
 							.offer-meeting-room__room= `${event.room.title} • ${event.room.floor} этаж`
 							button.button-delete(type='button')
-								img(src='/dist/assets/close.svg', alt='close')
+								img(src='/dist/assets/close-white.svg', alt='close')
+							input.member-list__checkbox(type='checkbox' name='room' value=`${event.room.id}`)
 				-} else {
 				.offer-meeting-room.hidden
 					label.offer-meeting-room__label(for='offer-rooms')  Ваша переговорка

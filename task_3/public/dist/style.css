@@ -378,8 +378,8 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
     position: relative;
     display: -ms-flexbox;
     display: flex;
-    padding-left: 27px;
-    padding-right: 23px; }
+    padding-left: 26px;
+    padding-right: 24px; }
   .table-meeting-room__name {
     font-family: "HelveticaNeue-Medium", sans-serif;
     font-weight: bold;
@@ -391,10 +391,6 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
     padding-left: 24px;
     position: relative;
     top: 4px; }
-
-@media (max-width: 1250px) {
-  .table-meeting-room__time-line {
-    padding-right: 20px; } }
 
 .meeting-room__wash-room .time_8-00 {
   -ms-flex-positive: 185;

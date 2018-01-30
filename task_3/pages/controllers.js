@@ -152,57 +152,6 @@ module.exports.index = async function(req, res) {
 };
 
 module.exports.addMeeting = async function (req, res) {
-  // let db = {};
-  // let members;
-  // let date = {
-  //   start: '2018-01-27T12:10:00.000Z',
-  //   end: '2018-01-27T13:40:00.454Z'
-  // };
-  // members = [
-  //   {
-  //     login: 'alt-j',
-  //     avatar: 'https://avatars1.githubusercontent.com/u/3763844?s=400&v=4',
-  //     floor: 3
-  //   },
-  //   {
-  //     login: 'yeti-or',
-  //     avatar: 'https://avatars0.githubusercontent.com/u/1813468?s=460&v=4',
-  //     floor: 2
-  //   }
-  // ];
-  // // find date
-  // let users = await graphql(schema, queryUsers);
-  // let rooms = await graphql(schema, queryRooms);
-  // let events = await graphql(schema, queryEvents);
-  // db.persons = [];
-  // users.data.users.forEach(user => {
-  //   db.persons.push({
-  //     login: user.login,
-  //     floor: user.homeFloor,
-  //     avatar: user.avatarUrl
-  //   });
-  // });
-  // db.rooms = rooms.data.rooms;
-  // db.events = [];
-  // events.data.events.forEach((event) => {
-  //   event.users.forEach( (user, i) => {
-  //     event.users[i] = user.login;
-  //   });
-  //   event.room = parseInt(event.room.id);
-  //   db.events.push({
-  //     id: event.id,
-  //     title: event.title,
-  //     date: {
-  //       start: event.dateStart,
-  //       end: event.dateEnd
-  //     },
-  //     members: event.users,
-  //     room: event.room
-  //   });
-  // });
-  // let result = getRecommendation(date, members, db);
-  // res.json(getRecommendation(date, members, db));
-  // res.json(req.body.response);
   graphql(schema, queryUsers).then( data => {
     const members = data.data.users;
     // res.json(data.data.users);
@@ -216,6 +165,7 @@ module.exports.createNewMeeting = function (req, res, next) {
   if (!Array.isArray(req.body.member)) {
     req.body.member = [req.body.member];
   }
+  res.json(req.body);
   let mutationQuery = `mutation create {
     createEvent(input: {
       title: "${req.body.title}",
@@ -233,8 +183,8 @@ module.exports.createNewMeeting = function (req, res, next) {
   });
 };
 
-module.exports.editMeeting = async function (req, res, next) {
-  const queryEevent = `{
+module.exports.editMeeting = async function (req, res) {
+  const queryEvent = `{
     event(id: ${parseInt(req.params.id, 10)}) {
       title
       dateStart
@@ -246,12 +196,13 @@ module.exports.editMeeting = async function (req, res, next) {
         avatarUrl
       }
       room {
+        id
         title
         floor
       }
     }
   }`;
-  let eventData = await graphql(schema, queryEevent);
+  let eventData = await graphql(schema, queryEvent);
   let members = await graphql(schema, queryUsers);
   members = members.data.users;
   eventData = eventData.data.event;
@@ -259,8 +210,82 @@ module.exports.editMeeting = async function (req, res, next) {
   eventData.dateEnd = new Date(eventData.dateEnd);
   const selectMembers = [];
   eventData.users.forEach((user) => selectMembers.push(user.id));
+  eventData.id = req.params.id;
   res.render('edit-meeting', { title: 'Редактирование встречи', siteName, members, eventData, selectMembers });
-  // res.json(members);
+};
+
+module.exports.updateMeeting = async function (req, res) {
+  let timeStart = getCorrectTimeFormat(req.body.date, req.body.startTime);
+  let timeEnd = getCorrectTimeFormat(req.body.date, req.body.endTime);
+  if (!Array.isArray(req.body.member)) {
+    req.body.member = [req.body.member];
+  }
+  const queryEvent = `{
+    event(id: ${parseInt(req.params.id, 10)}) {
+      title
+      dateStart
+      dateEnd
+      users {
+        id
+      }
+      room {
+        id
+      }
+    }
+  }`;
+  let currentEventData = await graphql(schema, queryEvent);
+  currentEventData = currentEventData.data.event;
+  // processing update query
+  let titleCondition = currentEventData.title === req.body.title;
+  let startTimeCondition = Date.parse(currentEventData.dateStart) === Date.parse(timeStart);
+  let endTimeCondition = Date.parse(currentEventData.dateEnd) === Date.parse(timeEnd);
+  console.log(titleCondition, startTimeCondition, endTimeCondition)
+  if (!(titleCondition && startTimeCondition && endTimeCondition)) {
+    let updateQuery = `mutation updateEvent {
+      updateEvent (id: "${req.params.id}"
+        input: {
+          title: "${req.body.title}"
+          dateStart: "${timeStart.toISOString()}"
+          dateEnd: "${timeEnd.toISOString()}"
+        }
+      ) {
+        id
+      }
+    }`;
+    console.log('change event')
+    // await graphql(schema, updateQuery);
+  }
+  // processing Users
+  let addUsers = [];
+  let removeUsers = [];
+  let currentUsersId = currentEventData.users.map( user => user.id);
+  currentUsersId.forEach(user => {
+    if(req.body.member.indexOf(user) === -1) {
+     removeUsers.push(user); //TODO:[A.Ivankov] вставить сразу запросы
+    }
+  });
+  req.body.member.forEach(user => {
+    if(currentUsersId.indexOf(user) === -1) {
+      addUsers.push(user); //TODO:[A.Ivankov] вставить сразу запросы
+    }
+  });
+  console.log(addUsers, removeUsers);
+  
+  req.body.startTime = timeStart;
+  req.body.endTime = timeEnd;
+  res.json(req.body);
+  // await graphql(schema, removeMeetingQuery);
+};
+
+module.exports.removeMeeting = async function (req, res) {
+  let idEvent = req.params.id;
+  const removeMeetingQuery = `mutation removeEvent {
+    removeEvent (id: "${idEvent}") {
+      id
+    }
+  }`;
+  await graphql(schema, removeMeetingQuery);
+  res.redirect('/');
 };
 
 function validateDate(event) {

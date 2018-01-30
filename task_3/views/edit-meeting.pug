@@ -13,8 +13,8 @@ block body
 				|  удалена безвозвратно
 			.modal__buttons-layout
 				button.button-cancel(type='button', onclick="$('body').removeClass('dimmed')") Отмена
-				button.button-cancel(type='button', onclick="$('body').removeClass('dimmed')") Удалить
-		form.add-meeting-ui(action='/', method='POST')
+				button.button-cancel(type='button', onclick=`location.href="/edit-event/${eventData.id}/remove"`) Удалить
+		form.add-meeting-ui(action=`/edit-event/${eventData.id}`, method='POST')
 			main.add-meeting-ui__main
 				+sectionMeeting(members, 'Редактирование встречи', selectMembers, eventData)
 				button.button-cancel.button-remove(type='button', onclick="$('body').addClass('dimmed')") Удалить встречу

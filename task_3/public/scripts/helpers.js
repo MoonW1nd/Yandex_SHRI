@@ -123,6 +123,7 @@ $('.member-list__element').on('click', (event) => {
   let login = target.data('name');
   $(`.add-member-list__element[data-name=${login}]`).removeClass('hidden')
     .find('.member-list__checkbox')[0].checked = true;
+  validationDateAndSendQuery()
 });
 
 // обработчик удаления людей из списка
@@ -132,7 +133,10 @@ $('.button-delete_add-member').on('click', (event) => {
   $(`.member-list__element[data-name=${login}]`).removeClass('hidden');
   target.parents('.add-member-list__element').addClass('hidden')
     .find('.member-list__checkbox')[0].checked = false;
+  validationDateAndSendQuery()
 });
+
+
 
 // Событие для элемента ввода
 $('#input-members').keyup(function() {
@@ -177,10 +181,11 @@ $(document).ready(() => {
   // validation date
   $('#input-stop-time, #input-start-time').keyup(validationDateAndSendQuery);
   $('#datepickers-container .datepicker').on('click', validationDateAndSendQuery);
-  console.log( $('#datepickers-container .datepicker'));
-  
+  $('.button-delete').on('click', function (event) {
+    $(event.target).parents(".offer-meeting-room__element .active").remove();
+    validationDateAndSendQuery()
+  });
 });
-
 
 function validationDateAndSendQuery() {
   let startTime = $('#input-start-time').val();
@@ -224,11 +229,13 @@ function validationDateAndSendQuery() {
           let blockRecommendation = $('<li class="offer-meeting-room__element"/>').append(
             $('<div class="offer-meeting-room__time">').html(`${(recommend.date.start.getUTCHours()<10?'0':'') + recommend.date.start.getUTCHours()}:${(recommend.date.start.getUTCMinutes()<10?'0':'') + recommend.date.start.getUTCMinutes()}—${(recommend.date.end.getUTCHours()<10?'0':'') + recommend.date.end.getUTCHours()}:${(recommend.date.end.getUTCMinutes()<10?'0':'') + recommend.date.end.getUTCMinutes()}`),
             $('<div class="offer-meeting-room__room">').html(`${roomData[0].title} • ${roomData[0].floor} этаж`),
+            $(`<input class="member-list__checkbox" type="checkbox" name="room" value="${roomData[0].id}"/>`),
             $('<button class="button-delete" type="button">').append(
-                $('<img src="/dist/assets/close.svg", alt="close"/>')
+                $('<img src="/dist/assets/close-white.svg", alt="close"/>')
               )
           );
           $('#offer-rooms').append(blockRecommendation);
+          blockRecommendation.on('click', selectOffer)
         })
       });
     }
@@ -244,6 +251,18 @@ function validationTimeRule(time) {
     return true
   }
   return false
+}
+
+// отработвка выбора переговорки
+function selectOffer(event) {
+  let targetElement = $(event.target);
+  targetElement.addClass('active');
+  targetElement.find('.member-list__checkbox')[0].checked = true;
+  targetElement.parent().find('.offer-meeting-room__element:not(.active)').remove()
+  $('.button-delete').on('click', function (event) {
+    $(event.target).parents(".offer-meeting-room__element .active").remove();
+    validationDateAndSendQuery()
+  });
 }
 
 async function query(members, date) {
