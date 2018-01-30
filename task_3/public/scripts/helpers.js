@@ -1,3 +1,4 @@
+import { getRecommendation } from './getRecomendation';
 // index helpers
 $('.time-piece.active').on('click', () => $('body').addClass('dimmed'));
 let timeLines = $('.meeting-ui__time-line');
@@ -172,7 +173,210 @@ $(document).ready(() => {
     dropdown: false,
     scrollbar: false
   });
+  
+  // validation date
+  $('#input-stop-time, #input-start-time').keyup(validationDateAndSendQuery);
+  $('#datepickers-container .datepicker').on('click', validationDateAndSendQuery);
+  console.log( $('#datepickers-container .datepicker'));
+  
 });
 
+
+function validationDateAndSendQuery() {
+  let startTime = $('#input-start-time').val();
+  let stopTime = $('#input-stop-time').val();
+  let startTimeValid = validationTimeRule(startTime);
+  let stopTimeValid = validationTimeRule(stopTime)
+  console.log(startTimeValid, stopTimeValid);
+  if (startTimeValid && stopTimeValid) {
+    startTime = startTime.split(':');
+    stopTime = stopTime.split(':');
+    let starTimeCount = parseInt(startTime[0], 10)*60 + parseInt(startTime[1], 10);
+    let stopTimeCount = parseInt(stopTime[0], 10)*60 + parseInt(stopTime[1], 10);
+    if (starTimeCount < stopTimeCount && $('#input-date').val().length > 0) {
+      let timeStart = getCorrectTimeFormat($('#input-date').val(), $('#input-start-time').val()).toISOString();
+      let timeEnd = getCorrectTimeFormat($('#input-date').val(), $('#input-stop-time').val()).toISOString();
+      let members = [];
+      $('.member-list__checkbox').each((i, box) => {
+        if(box.checked) {
+          let login = $(box).parents('.add-member-list__element').data('name');
+          let memberListElement = $(`.member-list__element[data-name=${login}]`);
+          let avatar = memberListElement.find('.avatar-round').attr('src');
+          let floor = parseInt(memberListElement.find('.member__floor').text(), 10);
+          members.push({
+            login,
+            avatar,
+            floor
+          })
+        }
+      });
+      let date = {
+        start: timeStart,
+        end: timeEnd
+      };
+      query(members, date).then( data => {
+        $('#offer-rooms').html('');
+        let rooms = data[1].data.rooms;
+        data[0].forEach(recommend => {
+          recommend.date.start = new Date(Date.parse(recommend.date.start));
+          recommend.date.end = new Date(Date.parse(recommend.date.end));
+          let roomData = rooms.filter( room => room.id === recommend.room);
+          let blockRecommendation = $('<li class="offer-meeting-room__element"/>').append(
+            $('<div class="offer-meeting-room__time">').html(`${(recommend.date.start.getUTCHours()<10?'0':'') + recommend.date.start.getUTCHours()}:${(recommend.date.start.getUTCMinutes()<10?'0':'') + recommend.date.start.getUTCMinutes()}—${(recommend.date.end.getUTCHours()<10?'0':'') + recommend.date.end.getUTCHours()}:${(recommend.date.end.getUTCMinutes()<10?'0':'') + recommend.date.end.getUTCMinutes()}`),
+            $('<div class="offer-meeting-room__room">').html(`${roomData[0].title} • ${roomData[0].floor} этаж`),
+            $('<button class="button-delete" type="button">').append(
+                $('<img src="/dist/assets/close.svg", alt="close"/>')
+              )
+          );
+          $('#offer-rooms').append(blockRecommendation);
+        })
+      });
+    }
+  }
+}
+
+function validationTimeRule(time) {
+  time = time.split(':');
+  if (parseInt(time[0], 10) >= 8 && parseInt(time[0], 10) <= 23) {
+    if (parseInt(time[0], 10) === 23 && parseInt(time[1], 10) > 0) {
+      return false;
+    }
+    return true
+  }
+  return false
+}
+
+async function query(members, date) {
+  let db = {};
+  // let members;
+  // members = [
+  //   {
+  //     login: 'alt-j',
+  //     avatar: 'https://avatars1.githubusercontent.com/u/3763844?s=400&v=4',
+  //     floor: 3
+  //   },
+  //   {
+  //     login: 'yeti-or',
+  //     avatar: 'https://avatars0.githubusercontent.com/u/1813468?s=460&v=4',
+  //     floor: 2
+  //   }
+  // ];
+  const queryUsers = `{
+    users{
+      id
+      login
+      homeFloor
+      avatarUrl
+    }
+  }`;
+  const queryRooms = '{\n' +
+    '  rooms {\n' +
+    '    id\n' +
+    '    title\n' +
+    '    capacity\n' +
+    '    floor\n' +
+    '  }\n' +
+    '}';
+  const queryEvents = '{\n' +
+    '  events {\n' +
+    '    id\n' +
+    '    title\n' +
+    '    dateStart\n' +
+    '    dateEnd\n' +
+    '    users {\n' +
+    '      id\n' +
+    '      login\n' +
+    '      homeFloor\n' +
+    '      avatarUrl\n' +
+    '    }\n' +
+    '    room {\n' +
+    '      id\n' +
+    '      title\n' +
+    '      capacity\n' +
+    '      floor\n' +
+    '    }\n' +
+    '  }\n' +
+    '}';
+  let users = await request({query: queryUsers });
+  let rooms = await request({query: queryRooms });
+  let events = await request({query: queryEvents });
+  // console.log(users, events, rooms);
+  db.persons = [];
+  users.data.users.forEach(user => {
+    db.persons.push({
+      login: user.login,
+      floor: user.homeFloor,
+      avatar: user.avatarUrl
+    });
+  });
+  db.rooms = rooms.data.rooms;
+  db.events = [];
+  events.data.events.forEach((event) => {
+    event.users.forEach( (user, i) => {
+      event.users[i] = user.login;
+    });
+    event.room = parseInt(event.room.id);
+    db.events.push({
+      id: event.id,
+      title: event.title,
+      date: {
+        start: event.dateStart,
+        end: event.dateEnd
+      },
+      members: event.users,
+      room: event.room
+    });
+  });
+  return [getRecommendation(date, members, db), rooms]
+}
+
+function request(query) {
+  return new Promise(function(resolve, reject) {
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
+    xhr.onreadystatechange = function(e) {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          resolve(xhr.response)
+        } else {
+          reject(xhr.status)
+        }
+      }
+    };
+    xhr.ontimeout = function () {
+      reject('timeout')
+    };
+    xhr.open("POST", "/graphql");
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("Accept", "application/json");
+    xhr.send(JSON.stringify(query));
+  })
+}
+
+function getCorrectTimeFormat(date, time) {
+  let dateParts = date.split(' ');
+  let timeParts = time.split(':');
+  let numberMonth = [
+    'января',
+    'февраля',
+    'марта',
+    'апреля',
+    'мая',
+    'июня',
+    'июля',
+    'августа',
+    'сентября',
+    'октября',
+    'ноября',
+    'декабря'
+  ].indexOf(dateParts[1].toLowerCase());
+  return new Date(Date.UTC(
+    dateParts[2],
+    numberMonth,
+    dateParts[0],
+    timeParts[0],
+    timeParts[1]
+  ));
+}
 //TODO:[A.Ivankov] валидация времени
 // TODO:[A.Ivankov] сделать выбор с помощью стрелок и enter

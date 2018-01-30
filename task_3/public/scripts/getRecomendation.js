@@ -1,4 +1,4 @@
-module.exports.getRecommendation = function getRecommendation(date, members, db) {
+export function getRecommendation(date, members, db) {
   
   // sort rooms by floors
   let floors = [];

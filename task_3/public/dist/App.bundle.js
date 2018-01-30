@@ -130,6 +130,8 @@ if ($('#calendar').length !== 0) {
 "use strict";
 
 
+var _getRecomendation = __webpack_require__(10);
+
 // index helpers
 $('.time-piece.active').on('click', function () {
   return $('body').addClass('dimmed');
@@ -291,8 +293,154 @@ $(document).ready(function () {
     dropdown: false,
     scrollbar: false
   });
+
+  // validation date
+  $('#input-stop-time, #input-start-time').keyup(validationDateAndSendQuery);
+  $('#datepickers-container .datepicker').on('click', validationDateAndSendQuery);
+  console.log($('#datepickers-container .datepicker'));
 });
 
+function validationDateAndSendQuery() {
+  var startTime = $('#input-start-time').val();
+  var stopTime = $('#input-stop-time').val();
+  var startTimeValid = validationTimeRule(startTime);
+  var stopTimeValid = validationTimeRule(stopTime);
+  console.log(startTimeValid, stopTimeValid);
+  if (startTimeValid && stopTimeValid) {
+    startTime = startTime.split(':');
+    stopTime = stopTime.split(':');
+    var starTimeCount = parseInt(startTime[0], 10) * 60 + parseInt(startTime[1], 10);
+    var stopTimeCount = parseInt(stopTime[0], 10) * 60 + parseInt(stopTime[1], 10);
+    if (starTimeCount < stopTimeCount && $('#input-date').val().length > 0) {
+      var timeStart = getCorrectTimeFormat($('#input-date').val(), $('#input-start-time').val()).toISOString();
+      var timeEnd = getCorrectTimeFormat($('#input-date').val(), $('#input-stop-time').val()).toISOString();
+      var members = [];
+      $('.member-list__checkbox').each(function (i, box) {
+        if (box.checked) {
+          var login = $(box).parents('.add-member-list__element').data('name');
+          var memberListElement = $('.member-list__element[data-name=' + login + ']');
+          var avatar = memberListElement.find('.avatar-round').attr('src');
+          var floor = parseInt(memberListElement.find('.member__floor').text(), 10);
+          members.push({
+            login: login,
+            avatar: avatar,
+            floor: floor
+          });
+        }
+      });
+      var date = {
+        start: timeStart,
+        end: timeEnd
+      };
+      query(members, date).then(function (data) {
+        $('#offer-rooms').html('');
+        var rooms = data[1].data.rooms;
+        data[0].forEach(function (recommend) {
+          recommend.date.start = new Date(Date.parse(recommend.date.start));
+          recommend.date.end = new Date(Date.parse(recommend.date.end));
+          var roomData = rooms.filter(function (room) {
+            return room.id === recommend.room;
+          });
+          console.log(roomData);
+          var blockRecommendation = $('<li class="offer-meeting-room__element"/>').append($('<div class="offer-meeting-room__time">').html((recommend.date.start.getUTCHours() < 10 ? '0' : '') + recommend.date.start.getUTCHours() + ':' + ((recommend.date.start.getUTCMinutes() < 10 ? '0' : '') + recommend.date.start.getUTCMinutes()) + '\u2014' + ((recommend.date.end.getUTCHours() < 10 ? '0' : '') + recommend.date.end.getUTCHours()) + ':' + ((recommend.date.end.getUTCMinutes() < 10 ? '0' : '') + recommend.date.end.getUTCMinutes())), $('<div class="offer-meeting-room__room">').html(roomData[0].title + '\xA0\u2022\xA0' + roomData[0].floor + ' \u044D\u0442\u0430\u0436'), $('<button class="button-delete" type="button">').append($('<img src="/dist/assets/close.svg", alt="close"/>')));
+          $('#offer-rooms').append(blockRecommendation);
+        });
+      });
+    }
+  }
+}
+
+function validationTimeRule(time) {
+  time = time.split(':');
+  if (parseInt(time[0], 10) >= 8 && parseInt(time[0], 10) <= 23) {
+    if (parseInt(time[0], 10) === 23 && parseInt(time[1], 10) > 0) {
+      return false;
+    }
+    return true;
+  }
+  return false;
+}
+
+async function query(members, date) {
+  var db = {};
+  // let members;
+  // members = [
+  //   {
+  //     login: 'alt-j',
+  //     avatar: 'https://avatars1.githubusercontent.com/u/3763844?s=400&v=4',
+  //     floor: 3
+  //   },
+  //   {
+  //     login: 'yeti-or',
+  //     avatar: 'https://avatars0.githubusercontent.com/u/1813468?s=460&v=4',
+  //     floor: 2
+  //   }
+  // ];
+  var queryUsers = '{\n    users{\n      id\n      login\n      homeFloor\n      avatarUrl\n    }\n  }';
+  var queryRooms = '{\n' + '  rooms {\n' + '    id\n' + '    title\n' + '    capacity\n' + '    floor\n' + '  }\n' + '}';
+  var queryEvents = '{\n' + '  events {\n' + '    id\n' + '    title\n' + '    dateStart\n' + '    dateEnd\n' + '    users {\n' + '      id\n' + '      login\n' + '      homeFloor\n' + '      avatarUrl\n' + '    }\n' + '    room {\n' + '      id\n' + '      title\n' + '      capacity\n' + '      floor\n' + '    }\n' + '  }\n' + '}';
+  var users = await request({ query: queryUsers });
+  var rooms = await request({ query: queryRooms });
+  var events = await request({ query: queryEvents });
+  // console.log(users, events, rooms);
+  db.persons = [];
+  users.data.users.forEach(function (user) {
+    db.persons.push({
+      login: user.login,
+      floor: user.homeFloor,
+      avatar: user.avatarUrl
+    });
+  });
+  db.rooms = rooms.data.rooms;
+  db.events = [];
+  events.data.events.forEach(function (event) {
+    event.users.forEach(function (user, i) {
+      event.users[i] = user.login;
+    });
+    event.room = parseInt(event.room.id);
+    db.events.push({
+      id: event.id,
+      title: event.title,
+      date: {
+        start: event.dateStart,
+        end: event.dateEnd
+      },
+      members: event.users,
+      room: event.room
+    });
+  });
+  return [(0, _getRecomendation.getRecommendation)(date, members, db), rooms];
+}
+
+function request(query) {
+  return new Promise(function (resolve, reject) {
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
+    xhr.onreadystatechange = function (e) {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          resolve(xhr.response);
+        } else {
+          reject(xhr.status);
+        }
+      }
+    };
+    xhr.ontimeout = function () {
+      reject('timeout');
+    };
+    xhr.open("POST", "/graphql");
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("Accept", "application/json");
+    xhr.send(JSON.stringify(query));
+  });
+}
+
+function getCorrectTimeFormat(date, time) {
+  var dateParts = date.split(' ');
+  var timeParts = time.split(':');
+  var numberMonth = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'].indexOf(dateParts[1].toLowerCase());
+  return new Date(Date.UTC(dateParts[2], numberMonth, dateParts[0], timeParts[0], timeParts[1]));
+}
 //TODO:[A.Ivankov] валидация времени
 // TODO:[A.Ivankov] сделать выбор с помощью стрелок и enter
 
@@ -311,11 +459,11 @@ $(document).ready(function () {
 
 __webpack_require__(2);
 
+__webpack_require__(10);
+
 __webpack_require__(1);
 
 __webpack_require__(0);
-
-__webpack_require__(11);
 
 /***/ }),
 /* 4 */,
@@ -324,14 +472,18 @@ __webpack_require__(11);
 /* 7 */,
 /* 8 */,
 /* 9 */,
-/* 10 */,
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports.getRecommendation = function getRecommendation(date, members, db) {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getRecommendation = getRecommendation;
+function getRecommendation(date, members, db) {
+
   // sort rooms by floors
   var floors = [];
   var rooms = JSON.parse(JSON.stringify(db.rooms));
@@ -370,10 +522,8 @@ module.exports.getRecommendation = function getRecommendation(date, members, db)
       return a.capacity - b.capacity;
     });
     floor.rooms = JSON.parse(JSON.stringify(recommendedRooms));
-    // console.log(recommendedRooms);
     // проверка по времени
-    var copyEvents = db.events.slice();
-    // console.log(copyEvents);
+    var copyEvents = db.events.slice(); //TODO:[A.Ivankov] !wtf?
     recommendedRooms.forEach(function (room) {
       var eventsInRoom = copyEvents.filter(function (event) {
         return event.room === parseInt(room.id, 10);
@@ -396,7 +546,6 @@ module.exports.getRecommendation = function getRecommendation(date, members, db)
   var roomsWithEvents = JSON.parse(JSON.stringify(rooms));
   // set recommended rooms id
 
-  // console.log(allRecommendation);
   allRecommendation = allRecommendation.filter(function (room) {
     return room.dateValid;
   });
@@ -422,12 +571,8 @@ module.exports.getRecommendation = function getRecommendation(date, members, db)
       var secondCondition = Date.parse(date.start) <= Date.parse(event.date.start) && Date.parse(date.end) >= Date.parse(event.date.end);
 
       var thirdCondition = Date.parse(date.start) >= Date.parse(event.date.start) && Date.parse(date.end) <= Date.parse(event.date.end);
-      // console.log(date, event.title);
-      // console.log(firstCondition, secondCondition, thirdCondition);
-      // console.log((firstCondition || secondCondition || thirdCondition))
       return firstCondition || secondCondition || thirdCondition;
     });
-    // console.log(copyEvents);
     // проходимся по всем пересекающимся с нужным времем event'ам
     copyEvents.forEach(function (event) {
       // берем комнаты и проходимся по всем ивентам в комнатах
@@ -474,7 +619,6 @@ module.exports.getRecommendation = function getRecommendation(date, members, db)
     });
     var _result = [];
     var allSwaps = [];
-    // return(rooms);
     // создвем мвссив для ответа
     rooms.forEach(function (room) {
       if (room.swap != null) {
@@ -511,7 +655,6 @@ module.exports.getRecommendation = function getRecommendation(date, members, db)
         resultMassive[resultMassive.length - 1].push(swap);
       }
     });
-    console.log(sortSwapsByFloor);
     // создаем требуемый формат ответа
     resultMassive.forEach(function (swaps) {
       _result.push({
@@ -526,7 +669,6 @@ module.exports.getRecommendation = function getRecommendation(date, members, db)
       });
     });
     if (_result.length !== 0) {
-      //TODO:[A.Ivankov] поменять на валидное условие отвта
       return _result;
     } else {
       // блок подбора времни по времени освобождения переговоро
