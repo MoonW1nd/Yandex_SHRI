@@ -7,7 +7,7 @@ block body
 		+header(false)
 		form.add-meeting-ui(action='/', method='POST')
 			main.add-meeting-ui__main
-				+sectionMeeting(members, 'Новая встреча')
+				+sectionMeeting(members, 'Новая встреча',null, eventData)
 			footer.add-meeting-ui__footer.footer_add-meeting
 				button.button-cancel(type='button', onclick='location.href="/"') Отмена
 				button.add-button(type='submit') Создать встречу

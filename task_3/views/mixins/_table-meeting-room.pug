@@ -1,4 +1,4 @@
-mixin table-meeting-room(floor = {})
+mixin table-meeting-room(floor = {}, targetDate={})
 	table.table-meeting-room
 		tr
 			th.table-meeting-room__first-column
@@ -15,14 +15,14 @@ mixin table-meeting-room(floor = {})
 						-if (room.timeLine !== undefined) {
 							each event in room.timeLine
 								- if (event.id === 'helper') {
-								.time-piece.active(style=`flex-grow: ${event.flexGrow}`, data-dateStart= event.dateStart, data-dateEnd= event.dateEnd)
+								.time-piece.active(style=`flex-grow: ${event.flexGrow}`, data-dateStart= event.dateStart, data-dateEnd= event.dateEnd, data-roomid= room.id, onclick=`location.href="/add-meeting?dateStart=${event.dateStart.toISOString()}&dateEnd=${event.dateEnd.toISOString()}&roomId=${room.id}"`)
 								- } else {
 								.time-piece.placed(style=`flex-grow: ${event.flexGrow}`)
 									.meeting-info.hidden(id=`${event.id}`)
 										.meeting-info__title= event.title
 										.meeting-info__time-place= `${event.dateStart.getUTCDate()} `
 											span.month-UTC= event.dateStart.getUTCMonth()
-											span=`, ${event.dateStart.getUTCHours()}:${(event.dateStart.getMinutes()<10?'0':'') + event.dateStart.getMinutes()} — ${event.dateEnd.getUTCHours()}:${(event.dateEnd.getMinutes()<10?'0':'') + event.dateEnd.getMinutes()} · ${event.room.title}`
+											span=`, ${event.dateStart.getUTCHours()}:${(event.dateStart.getUTCMinutes()<10?'0':'') + event.dateStart.getUTCMinutes()} — ${event.dateEnd.getUTCHours()}:${(event.dateEnd.getUTCMinutes()<10?'0':'') + event.dateEnd.getUTCMinutes()} · ${event.room.title}`
 										.meeting-info__avatar-wrapper
 											img.avatar-round(src=`${event.users[0].avatarUrl}` alt="avatar image")
 											p.members=`${event.users[0].login}`
@@ -34,6 +34,5 @@ mixin table-meeting-room(floor = {})
 										.meeting-info__corner
 								-}
 						-} else {
-						.time-piece.active(style=`flex-grow: 900`)
+						.time-piece.active(style=`flex-grow: 900` onclick=`location.href="/add-meeting?dateStart=fullTime&roomId=${room.id}&targetDate=${targetDate.toISOString()}"`)
 						-}
-							//.time-piece= event.dateStart.slice(10,12)

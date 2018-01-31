@@ -3,6 +3,17 @@ export function getRecommendation(date, members, db) {
   // sort rooms by floors
   let floors = [];
   let rooms = JSON.parse(JSON.stringify(db.rooms));
+  let startEventDate = Date.parse(date.start);
+  startEventDate = new Date(startEventDate);
+  let needDate = new Date(
+    startEventDate.getUTCFullYear(),
+    startEventDate.getUTCMonth(),
+    startEventDate.getUTCDate()
+    );
+  let needDateTrigerStart = needDate.getTime();
+  let needDateTrigerEnd = needDate.getTime() + 86400000;
+  // фильтруем по дате
+  db.events = db.events.filter(event => needDateTrigerStart < Date.parse(event.date.start) < needDateTrigerEnd);
   rooms.forEach( room => {
     if(floors.indexOf(room.floor) === -1) {
       floors.push(room.floor);
@@ -31,8 +42,7 @@ export function getRecommendation(date, members, db) {
     recommendedRooms.sort((a, b) => a.capacity - b.capacity);
     floor.rooms = JSON.parse(JSON.stringify(recommendedRooms));
     // проверка по времени
-    // console.log(recommendedRooms);
-    let copyEvents = JSON.parse(JSON.stringify(db.events)); //TODO:[A.Ivankov] !wtf?
+    let copyEvents = JSON.parse(JSON.stringify(db.events));
     recommendedRooms.forEach( room => {
       let eventsInRoom = copyEvents.filter(event => event.room === parseInt(room.id, 10));
       room.dateValid = true;
@@ -206,7 +216,6 @@ export function getRecommendation(date, members, db) {
         })
       });
       // фильтр по ближайшей освободившейся переговрке
-      // eventsWithNewTime.filter(event => event.validEvent === true);
       eventsWithNewTime.sort((a, b) => a.start - b.start);
       let recommendation = [];
       eventsWithNewTime.forEach( event => {

@@ -1,7 +1,6 @@
 const { graphql } = require('graphql');
 const schema = require('../graphql/schema').graphqlSchema;
 const siteName = 'Yandex Переговорки';
-const { getRecommendation } = require('./getRecomendation');
 const queryUsers = `{
     users{
       id
@@ -46,6 +45,9 @@ module.exports.index = async function(req, res) {
   
   rooms.sort((a,b) => a.floor - b.floor);
   distributeRoomsByFloors(rooms, floors);
+  
+  let targetDate = Date.now();
+  targetDate = new Date(targetDate);
 
   await graphql(schema, queryEvents).then( data => {
     const events = data.data.events;
@@ -81,7 +83,7 @@ module.exports.index = async function(req, res) {
               flexGrow: (900 - event.flexGrow - getStartDiff(event)),
               dateStart: event.dateEnd,
               dateEnd: getExtremeDate(event, 'end')
-            } //TODO:[A.Ivankov] возможно не стоит добавлять если flex grow === 0
+            }
           ]; //init timeLine
           
         } else {
@@ -104,7 +106,6 @@ module.exports.index = async function(req, res) {
         let lastEvent = eventsInTimeLine[eventsInTimeLine.length-1];
         if (getDiffTwoEvents(lastEvent, event) !== 0) {
           event.flexGrow = getFlexGrow(event);
-          // TODO:[A.Ivankov] если последний элемент не  хэлпер тогда мы до сюда вообще не должны дойти так как это будет событие которое завершпется ровно в 23:00
           let sumFlexGrow = timeLine
             .map(elem => elem.flexGrow)
             .reduce((sum, current) => sum + current);
@@ -113,7 +114,7 @@ module.exports.index = async function(req, res) {
               id: 'helper',
               dateStart: lastEvent.dateEnd,
               dateEnd: event.dateStart,
-              flexGrow: getDiffTwoEvents(lastEvent, event) // TODO:[A.Ivankov] optimization - save in constant
+              flexGrow: getDiffTwoEvents(lastEvent, event)
             },
             event,
             {
@@ -143,19 +144,56 @@ module.exports.index = async function(req, res) {
     addedEvent = addedEvent.data.event;
     addedEvent.dateStart = new Date(addedEvent.dateStart);
     addedEvent.dateEnd = new Date(addedEvent.dateEnd);
-    res.render('main', { title: 'Календарь', siteName, rooms, floors, addedEvent });
+    res.render('main', { title: 'Календарь', siteName, rooms, floors, targetDate, addedEvent });
   } else {
     // res.json(floors);
-    res.render('main', { title: 'Календарь', siteName, rooms, floors, addedEvent: null });
+    res.render('main', { title: 'Календарь', siteName, rooms, floors, targetDate, addedEvent: null });
   }
   // res.json(floors);
 };
 
 module.exports.addMeeting = async function (req, res) {
+  let eventData;
+  if(req.query != null) {
+    let dateStart = Date.parse(req.query.dateStart);
+    let dateEnd = Date.parse(req.query.dateEnd);
+    if (req.query.dateStart === 'fullTime') {
+      let date = Date.parse(req.query.targetDate);
+      date = new Date(date);
+      dateStart = new Date(Date.UTC(
+        date.getUTCFullYear(),
+        date.getUTCMonth(),
+        date.getUTCDate(),
+        8,
+        0
+      ));
+      console.log(dateStart);
+      dateStart = dateStart.getTime();
+      dateEnd = dateStart + 3600000
+    }
+    let roomId = req.query.roomId;
+    const roomQuery = `{
+      room(id: "${roomId}") {
+        id
+        title
+        floor
+      }
+    }`;
+    // делает время решичтрации встречи час
+    if((dateEnd - dateStart) > 3600000) {
+      dateEnd = dateStart + 3600000
+    }
+    let room = await graphql(schema, roomQuery);
+    room = room.data.room;
+    eventData = {
+      dateStart: new Date(dateStart),
+      dateEnd: new Date(dateEnd),
+      room
+    };
+  }
   graphql(schema, queryUsers).then( data => {
     const members = data.data.users;
-    // res.json(data.data.users);
-    res.render('add-meeting', { title: 'Создание встречи', siteName, members});
+    res.render('add-meeting', { title: 'Создание встречи', siteName, members, eventData});
   });
 };
 
@@ -270,13 +308,8 @@ module.exports.updateMeeting = async function (req, res) {
   if(req.body.swapEvent != null && req.body.swapRoom != null) {
     await changeRoom(req.body.swapEvent, req.body.swapRoom)
   }
-  
-  
-  // req.body.startTime = timeStart;
-  // req.body.endTime = timeEnd;
-  // res.json(req.body);
+
   res.redirect(`/`);
-  // await graphql(schema, removeMeetingQuery);
 };
 
 module.exports.removeMeeting = async function (req, res) {

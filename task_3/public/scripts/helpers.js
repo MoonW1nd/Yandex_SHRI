@@ -1,7 +1,7 @@
 import { getRecommendation } from './getRecomendation';
 
 // index helpers scroll behavior
-$('.time-piece.active').on('click', () => $('body').addClass('dimmed'));
+// $('.time-piece.active').on('click', () => $('body').addClass('dimmed'));
 let timeLines = $('.meeting-ui__time-line');
 let lastScrollLeft = $('.meeting-ui').scrollLeft();
 let calendarElem = $('.calendar');
@@ -113,6 +113,23 @@ function getLetterMonthRu(month) {
     'декабря'
   ][month]
 }
+// функция замены числового месяца на слово
+function getLetterMonthShortRu(month) {
+  return [
+    'янв',
+    'фев',
+    'мaр',
+    'апр',
+    'мая',
+    'июн',
+    'июл',
+    'авг',
+    'сен',
+    'окт',
+    'ноя',
+    'дек'
+  ][month]
+}
 
 // обработчики клика для добавления людей
 $('.member-list__element').on('click', (event) => {
@@ -162,31 +179,34 @@ jQuery.expr[':'].Contains = function(a,i,m) {
 $(document).ready(() => {
   // инициализация календаря для инпута с выборо даты
   let blockInputData = $('.input-block__input_data');
-  blockInputData.addClass('datepicker-here');
-  blockInputData.datepicker();
+  if (blockInputData.length !== 0 ) {
+    blockInputData.addClass('datepicker-here');
+    blockInputData.datepicker();
   
-  // предотвращение изменения даты в формате не подходящем нам
-  blockInputData.keydown(function(e){
-    e.preventDefault();
-  });
-  let inputDate = $('#input-date.needModifyData');
-  let dateInInput = Date.parse(inputDate.data('value'));
-  dateInInput = new Date(dateInInput);
-  let resultString = `${dateInInput.getUTCDate()} ${getLetterMonthRu(dateInInput.getUTCMonth())} ${dateInInput.getUTCFullYear()}`;
-  // настройки календаря
-  inputDate.val(resultString);
-  $('.timepicker').timepicker({
-    timeFormat: 'HH:mm',
-    interval: 15,
-    minTime: '8',
-    maxTime: '23',
-    defaultTime: '',
-    startTime: '',
-    dynamic: false,
-    dropdown: false,
-    scrollbar: false
-  });
-  
+    // предотвращение изменения даты в формате не подходящем нам
+    blockInputData.keydown(function(e){
+      e.preventDefault();
+    });
+    let inputDate = $('#input-date.needModifyData');
+    let dateInInput = Date.parse(inputDate.data('value'));
+    dateInInput = new Date(dateInInput);
+    let resultString = `${dateInInput.getUTCDate()} ${getLetterMonthRu(dateInInput.getUTCMonth())} ${dateInInput.getUTCFullYear()}`;
+    // настройки календаря
+    inputDate.val(resultString);
+    $('.timepicker').timepicker({
+      timeFormat: 'HH:mm',
+      interval: 15,
+      minTime: '8',
+      maxTime: '23',
+      defaultTime: '',
+      startTime: '',
+      dynamic: false,
+      dropdown: false,
+      scrollbar: false
+    });
+  }
+  let shortDateValue = $('.month-short-need-replace:first').text();
+  $('.month-short-need-replace').text(getLetterMonthShortRu(shortDateValue));
   // validation date
   $('#input-stop-time, #input-start-time').keyup(validationDateAndSendQuery);
   $('#datepickers-container .datepicker').on('click', validationDateAndSendQuery);

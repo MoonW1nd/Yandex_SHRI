@@ -26,7 +26,10 @@ block body
 				button.button-arrow
 					img.button-arrow__image.button-arrow__image_left(src='/dist/assets/arrow-left.svg', alt='arrow left')
 				.wrapper-date
-					p.day-switcher__date 14 дек · Сегодня
+					p.day-switcher__date
+						span=`${targetDate.getUTCDate()} `
+						span.month-short-need-replace=`${targetDate.getUTCMonth()}`
+						span= ` · ${targetDate.getUTCFullYear()}`
 				button.button-arrow
 					img.button-arrow__image.button-arrow__image_right(src='/dist/assets/arrow-right.svg', alt='arrow right')
 			section.calendar.hidden
@@ -65,7 +68,10 @@ block body
 					button.button-arrow
 						img.button-arrow__image.button-arrow__image_left(src='/dist/assets/arrow-left.svg', alt='arrow left')
 					.wrapper-date
-						p.day-switcher__date 14 дек · Сегодня
+						p.day-switcher__date
+						span=`${targetDate.getUTCDate()} `
+						span.month-short-need-replace=`${targetDate.getUTCMonth()}`
+						span= ` · ${targetDate.getUTCFullYear()}`
 					button.button-arrow
 						img.button-arrow__image.button-arrow__image_right(src='/dist/assets/arrow-right.svg', alt='arrow right')
 				.time-line
@@ -87,6 +93,5 @@ block body
 								.background-meeting-rooms__time-line
 						- }
 				each floor in floors
-					+table-meeting-room(floor)
-	script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+					+table-meeting-room(floor, targetDate)
 	script(src='/dist/App.bundle.js')

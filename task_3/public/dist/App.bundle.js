@@ -82,6 +82,15 @@ function getRecommendation(date, members, db) {
   // sort rooms by floors
   var floors = [];
   var rooms = JSON.parse(JSON.stringify(db.rooms));
+  var startEventDate = Date.parse(date.start);
+  startEventDate = new Date(startEventDate);
+  var needDate = new Date(startEventDate.getUTCFullYear(), startEventDate.getUTCMonth(), startEventDate.getUTCDate());
+  var needDateTrigerStart = needDate.getTime();
+  var needDateTrigerEnd = needDate.getTime() + 86400000;
+  // фильтруем по дате
+  db.events = db.events.filter(function (event) {
+    return needDateTrigerStart < Date.parse(event.date.start) < needDateTrigerEnd;
+  });
   rooms.forEach(function (room) {
     if (floors.indexOf(room.floor) === -1) {
       floors.push(room.floor);
@@ -118,8 +127,7 @@ function getRecommendation(date, members, db) {
     });
     floor.rooms = JSON.parse(JSON.stringify(recommendedRooms));
     // проверка по времени
-    // console.log(recommendedRooms);
-    var copyEvents = JSON.parse(JSON.stringify(db.events)); //TODO:[A.Ivankov] !wtf?
+    var copyEvents = JSON.parse(JSON.stringify(db.events));
     recommendedRooms.forEach(function (room) {
       var eventsInRoom = copyEvents.filter(function (event) {
         return event.room === parseInt(room.id, 10);
@@ -305,7 +313,6 @@ function getRecommendation(date, members, db) {
         });
       });
       // фильтр по ближайшей освободившейся переговрке
-      // eventsWithNewTime.filter(event => event.validEvent === true);
       eventsWithNewTime.sort(function (a, b) {
         return a.start - b.start;
       });
@@ -392,9 +399,7 @@ if ($('#calendar').length !== 0) {
 var _getRecomendation = __webpack_require__(0);
 
 // index helpers scroll behavior
-$('.time-piece.active').on('click', function () {
-  return $('body').addClass('dimmed');
-});
+// $('.time-piece.active').on('click', () => $('body').addClass('dimmed'));
 var timeLines = $('.meeting-ui__time-line');
 var lastScrollLeft = $('.meeting-ui').scrollLeft();
 var calendarElem = $('.calendar');
@@ -493,6 +498,10 @@ if (regExp.test(window.navigator.userAgent)) {
 function getLetterMonthRu(month) {
   return ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'][month];
 }
+// функция замены числового месяца на слово
+function getLetterMonthShortRu(month) {
+  return ['янв', 'фев', 'мaр', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'][month];
+}
 
 // обработчики клика для добавления людей
 $('.member-list__element').on('click', function (event) {
@@ -538,31 +547,34 @@ jQuery.expr[':'].Contains = function (a, i, m) {
 $(document).ready(function () {
   // инициализация календаря для инпута с выборо даты
   var blockInputData = $('.input-block__input_data');
-  blockInputData.addClass('datepicker-here');
-  blockInputData.datepicker();
+  if (blockInputData.length !== 0) {
+    blockInputData.addClass('datepicker-here');
+    blockInputData.datepicker();
 
-  // предотвращение изменения даты в формате не подходящем нам
-  blockInputData.keydown(function (e) {
-    e.preventDefault();
-  });
-  var inputDate = $('#input-date.needModifyData');
-  var dateInInput = Date.parse(inputDate.data('value'));
-  dateInInput = new Date(dateInInput);
-  var resultString = dateInInput.getUTCDate() + ' ' + getLetterMonthRu(dateInInput.getUTCMonth()) + ' ' + dateInInput.getUTCFullYear();
-  // настройки календаря
-  inputDate.val(resultString);
-  $('.timepicker').timepicker({
-    timeFormat: 'HH:mm',
-    interval: 15,
-    minTime: '8',
-    maxTime: '23',
-    defaultTime: '',
-    startTime: '',
-    dynamic: false,
-    dropdown: false,
-    scrollbar: false
-  });
-
+    // предотвращение изменения даты в формате не подходящем нам
+    blockInputData.keydown(function (e) {
+      e.preventDefault();
+    });
+    var inputDate = $('#input-date.needModifyData');
+    var dateInInput = Date.parse(inputDate.data('value'));
+    dateInInput = new Date(dateInInput);
+    var resultString = dateInInput.getUTCDate() + ' ' + getLetterMonthRu(dateInInput.getUTCMonth()) + ' ' + dateInInput.getUTCFullYear();
+    // настройки календаря
+    inputDate.val(resultString);
+    $('.timepicker').timepicker({
+      timeFormat: 'HH:mm',
+      interval: 15,
+      minTime: '8',
+      maxTime: '23',
+      defaultTime: '',
+      startTime: '',
+      dynamic: false,
+      dropdown: false,
+      scrollbar: false
+    });
+  }
+  var shortDateValue = $('.month-short-need-replace:first').text();
+  $('.month-short-need-replace').text(getLetterMonthShortRu(shortDateValue));
   // validation date
   $('#input-stop-time, #input-start-time').keyup(validationDateAndSendQuery);
   $('#datepickers-container .datepicker').on('click', validationDateAndSendQuery);
