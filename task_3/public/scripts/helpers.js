@@ -6,6 +6,7 @@ let timeLines = $('.meeting-ui__time-line');
 let lastScrollLeft = $('.meeting-ui').scrollLeft();
 let calendarElem = $('.calendar');
 
+
 $('.month-UTC').each((i, elem) => $(elem).text(getLetterMonthRu($(elem).text())));
 $(window).scroll(
   () => {
@@ -35,7 +36,6 @@ $('.meeting-ui').scroll(
       } else {
         $(".table-meeting-room__floor-name-swipe").addClass('hidden')
       }
-      console.log(lastScrollLeft);
     }
   }
 );
@@ -52,7 +52,7 @@ $('.time-piece.placed').on('click', (event) => {
   let rightTrigger = ((offset + widthElem / 2) + meetingInfoWidth / 2);
   let leftTrigger = ((offset + widthElem / 2) - meetingInfoWidth / 2);
   let cornerOffset;
-  
+  console.log(target);
   target.find('.meeting-info').toggleClass('hidden');
   if (!((rightTrigger < width) && (leftTrigger > 0))) {
     if (rightTrigger < width) {
@@ -74,17 +74,12 @@ $('.time-piece.placed').on('click', (event) => {
       $('.meeting-info__corner').css('left', `${meetingInfoWidth/2}px`);
     }
   } else {
-    console.log("true")
+    console.log("true");
     $('.meeting-info').css('left', `${widthElem/2}px`);
     $('.meeting-info__corner').css('left', `${meetingInfoWidth/2}px`);
   }
 });
 
-// fix styles TODO:[A.Ivankov] вынести в стили
-// let reg = /Firefox/ig;
-// if (reg.test(window.navigator.userAgent)) {
-// 	$('.input-block__input_time').css('padding', '0')
-// }
 
 // fix for pages edit and add
 $('.input-block__input_members').focus(() => {
@@ -159,7 +154,6 @@ $('.button-delete_add-member').on('click', (event) => {
   target.parents('.add-member-list__element').addClass('hidden')
     .find('.member-list__checkbox')[0].checked = false;
   // для того чтобы не сбрасывала выбранную комнату
-  console.log($('.offer-meeting-room__element.active').length === 0);
   if($('.offer-meeting-room__element.active').length === 0) {
     validationDateAndSendQuery()
   }
@@ -214,6 +208,7 @@ $(document).ready(() => {
       scrollbar: false
     });
   }
+  // helpers only index page
   if($('main').hasClass('meeting-ui')) {
     let startEventDate = Date.now();
     startEventDate = new Date(startEventDate);
@@ -226,15 +221,109 @@ $(document).ready(() => {
       0
     );
     
+    // button add movement
+    $('.time-piece.active').on('mousemove', (e)=> {
+      var x  = (e.offsetX || e.pageX - $(e.target).offset().left);
+      parseInt($(e.target).css('width'), 10)
+      if(x >= 35 && x <= parseInt($(e.target).css('width'), 10) - 35) {
+        $(e.target).find('.button-add').css({transform: "translateX("+ (x - 35) + "px)"})
+      }
+    });
+
+    // for time line movement
     let needDateTrigerStart = needDate.getTime();
-    let needDateTrigerEnd = needDate.getTime() + 3599985;
+    let needDateTrigerEnd = needDate.getTime() + 54000000;
     let timeIndicatorHandler = $('.time-indicator__position-handler');
     let timeIndicatorHelper = $('.time-indicator__position-handler-helper');
     setTimeout(() => timeIndicatorHandler.parent().removeClass('hidden'), 1000);
+    
+    let timeLines = $('.table-meeting-room__time-line');
+    let flexGrowNow = Math.floor((Date.now() - needDateTrigerStart) / 1000 / 60);
+    // добавление элемегта с пройденым временем
+    timeLines.each((i, timeline) => {
+      let sumTime = 0;
+      let timeLast = 0;
+      $(timeline).find('.time-piece').each((i, elem) => {
+        let time = $(elem).css('flex-grow');
+        timeLast = sumTime;
+        sumTime = sumTime + parseInt(time, 10);
+        if (sumTime < flexGrowNow) {
+          $(elem).data({
+            startFg: timeLast,
+            endFg: sumTime,
+            helper: $(elem).hasClass('active'),
+            disabled: true,
+            initialDiff: 1,
+            disableBlock: false
+          });
+          $(elem).addClass('disabled')
+        } else if ($(elem).hasClass('active')) {
+          $(elem).data({
+            startFg: timeLast,
+            endFg: sumTime,
+            helper: $(elem).hasClass('active'),
+            disabled: false,
+            initialDiff: flexGrowNow - timeLast,
+            disableBlock: false
+          });
+        } else {
+          $(elem).data({
+            startFg: timeLast,
+            endFg: sumTime,
+            helper: $(elem).hasClass('active'),
+            disabled: false,
+            initialDiff: 1,
+            disableBlock: false
+          });
+        }
+      });
+      $(timeline).data({
+        currentHelper: $($(timeline).find('.time-piece.active')[0]),
+        index: 0,
+        currentTime: 0
+      });
+    });
     // обновление состояния каждую сек
+    let lastFlexGrow = null;
+    let flexGrowIncrise = true;
     setInterval(function () {
       if (needDateTrigerStart < Date.now() < needDateTrigerEnd) {
         let flexGrow = Math.floor((Date.now() - needDateTrigerStart) / 1000 / 60);
+        if (lastFlexGrow !== flexGrow) {
+          lastFlexGrow = flexGrow;
+          flexGrowIncrise = true;
+        }
+        // disable statement
+        if (flexGrowIncrise) {
+          flexGrowIncrise = false;
+          timeLines.each((i, timeline) => {
+            let helper = $(timeline).data().currentHelper;
+            let dataTL = $(timeline).data();
+    
+            if (!helper.data().disabled && (helper.data().startFg <= flexGrow < helper.data().endFg)) {
+              if (helper.data().disableBlock === false) {
+                helper.before('<div class="disabled id-'+ dataTL.index +'">');
+                helper.data().disableBlock = $(timeline).find('.disabled.id-'+ dataTL.index);
+                helper.data().disableBlock.css('flex-grow', helper.data().initialDiff);
+                let fg = parseInt(helper.css('flex-grow'));
+                helper.css('flex-grow', fg - helper.data().initialDiff);
+              } else {
+                let fgDB = parseInt(helper.data().disableBlock.css('flex-grow'));
+                helper.data().disableBlock.css('flex-grow', fgDB + 1);
+                let fg = parseInt(helper.css('flex-grow'));
+                helper.css('flex-grow', fg - 1);
+                if(fg ===1 ) {
+                  helper.data().disabled = true
+                }
+              }
+            } else {
+              dataTL.index++;
+              $(timeline).data().currentHelper = $($(timeline).find('.time-piece.active')[dataTL.index])
+            }
+          });
+        }
+        
+        // time-trigger movement implementation
         let helperFlexGrow = 900 - flexGrow;
         timeIndicatorHandler.css('flex-grow', `${flexGrow}`);
         timeIndicatorHelper.css('flex-grow', `${helperFlexGrow}`);
@@ -261,15 +350,16 @@ function validationDateAndSendQuery() {
   // время находится в промежутке от 8 до 23
   let startTimeValid = validationTimeRule(startTime);
   let stopTimeValid = validationTimeRule(stopTime);
-  if (startTimeValid && stopTimeValid) {
+  let timeStart = getCorrectTimeFormat(inputDate.val(), startTime).toISOString();
+  let timeEnd = getCorrectTimeFormat(inputDate.val(), stopTime).toISOString();
+  let conditionDateNow = (Date.parse(timeStart) > Date.now() && Date.parse(timeEnd) > Date.now());
+  if (startTimeValid && stopTimeValid && conditionDateNow) {
     // время старта больше времени конца и дата установлена
     startTime = startTime.split(':');
     stopTime = stopTime.split(':');
     let starTimeCount = parseInt(startTime[0], 10)*60 + parseInt(startTime[1], 10);
     let stopTimeCount = parseInt(stopTime[0], 10)*60 + parseInt(stopTime[1], 10);
     if (starTimeCount < stopTimeCount && inputDate.val().length > 0) {
-      let timeStart = getCorrectTimeFormat(inputDate.val(), startTime).toISOString();
-      let timeEnd = getCorrectTimeFormat(inputDate.val(), stopTime).toISOString()
       // находим участников
       let members = [];
       $('.member-list__checkbox').each((i, box) => {
@@ -294,7 +384,6 @@ function validationDateAndSendQuery() {
       // запрос рекомендаций
       query(members, date).then( data => {
         $('#offer-rooms').html('');
-        console.log(data);
         //добаление html на основе ответа
         let rooms = data[1].data.rooms;
         data[0].forEach(recommend => {
@@ -326,6 +415,8 @@ function validationDateAndSendQuery() {
         })
       });
     }
+  } else {
+    $('#offer-rooms').html('');
   }
 }
 

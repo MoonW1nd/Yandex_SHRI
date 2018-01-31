@@ -92,6 +92,7 @@ block body
 							.background-meeting-rooms__time-line-wrapper
 								.background-meeting-rooms__time-line
 						- }
-				each floor in floors
-					+table-meeting-room(floor, targetDate)
+				.table_meeting-room__all-wrapper
+					each floor in floors
+						+table-meeting-room(floor, targetDate)
 	script(src='/dist/App.bundle.js')

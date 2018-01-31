@@ -432,7 +432,6 @@ $('.meeting-ui').scroll(function () {
     } else {
       $(".table-meeting-room__floor-name-swipe").addClass('hidden');
     }
-    console.log(lastScrollLeft);
   }
 });
 
@@ -450,7 +449,7 @@ $('.time-piece.placed').on('click', function (event) {
   var rightTrigger = offset + widthElem / 2 + meetingInfoWidth / 2;
   var leftTrigger = offset + widthElem / 2 - meetingInfoWidth / 2;
   var cornerOffset = void 0;
-
+  console.log(target);
   target.find('.meeting-info').toggleClass('hidden');
   if (!(rightTrigger < width && leftTrigger > 0)) {
     if (rightTrigger < width) {
@@ -477,12 +476,6 @@ $('.time-piece.placed').on('click', function (event) {
     $('.meeting-info__corner').css('left', meetingInfoWidth / 2 + 'px');
   }
 });
-
-// fix styles TODO:[A.Ivankov] вынести в стили
-// let reg = /Firefox/ig;
-// if (reg.test(window.navigator.userAgent)) {
-// 	$('.input-block__input_time').css('padding', '0')
-// }
 
 // fix for pages edit and add
 $('.input-block__input_members').focus(function () {
@@ -529,7 +522,6 @@ $('.button-delete_add-member').on('click', function (event) {
   $('.member-list__element[data-name=' + login + ']').removeClass('hidden');
   target.parents('.add-member-list__element').addClass('hidden').find('.member-list__checkbox')[0].checked = false;
   // для того чтобы не сбрасывала выбранную комнату
-  console.log($('.offer-meeting-room__element.active').length === 0);
   if ($('.offer-meeting-room__element.active').length === 0) {
     validationDateAndSendQuery();
   }
@@ -581,22 +573,117 @@ $(document).ready(function () {
       scrollbar: false
     });
   }
+  // helpers only index page
   if ($('main').hasClass('meeting-ui')) {
     var startEventDate = Date.now();
     startEventDate = new Date(startEventDate);
     var needDate = new Date(startEventDate.getFullYear(), startEventDate.getMonth(), startEventDate.getDate(), 8, 0, 0);
 
+    // button add movement
+    $('.time-piece.active').on('mousemove', function (e) {
+      var x = e.offsetX || e.pageX - $(e.target).offset().left;
+      parseInt($(e.target).css('width'), 10);
+      if (x >= 35 && x <= parseInt($(e.target).css('width'), 10) - 35) {
+        $(e.target).find('.button-add').css({ transform: "translateX(" + (x - 35) + "px)" });
+      }
+    });
+
+    // for time line movement
     var needDateTrigerStart = needDate.getTime();
-    var needDateTrigerEnd = needDate.getTime() + 3599985;
+    var needDateTrigerEnd = needDate.getTime() + 54000000;
     var timeIndicatorHandler = $('.time-indicator__position-handler');
     var timeIndicatorHelper = $('.time-indicator__position-handler-helper');
     setTimeout(function () {
       return timeIndicatorHandler.parent().removeClass('hidden');
     }, 1000);
+
+    var _timeLines = $('.table-meeting-room__time-line');
+    var flexGrowNow = Math.floor((Date.now() - needDateTrigerStart) / 1000 / 60);
+    // добавление элемегта с пройденым временем
+    _timeLines.each(function (i, timeline) {
+      var sumTime = 0;
+      var timeLast = 0;
+      $(timeline).find('.time-piece').each(function (i, elem) {
+        var time = $(elem).css('flex-grow');
+        timeLast = sumTime;
+        sumTime = sumTime + parseInt(time, 10);
+        if (sumTime < flexGrowNow) {
+          $(elem).data({
+            startFg: timeLast,
+            endFg: sumTime,
+            helper: $(elem).hasClass('active'),
+            disabled: true,
+            initialDiff: 1,
+            disableBlock: false
+          });
+          $(elem).addClass('disabled');
+        } else if ($(elem).hasClass('active')) {
+          $(elem).data({
+            startFg: timeLast,
+            endFg: sumTime,
+            helper: $(elem).hasClass('active'),
+            disabled: false,
+            initialDiff: flexGrowNow - timeLast,
+            disableBlock: false
+          });
+        } else {
+          $(elem).data({
+            startFg: timeLast,
+            endFg: sumTime,
+            helper: $(elem).hasClass('active'),
+            disabled: false,
+            initialDiff: 1,
+            disableBlock: false
+          });
+        }
+      });
+      $(timeline).data({
+        currentHelper: $($(timeline).find('.time-piece.active')[0]),
+        index: 0,
+        currentTime: 0
+      });
+    });
     // обновление состояния каждую сек
+    var lastFlexGrow = null;
+    var flexGrowIncrise = true;
     setInterval(function () {
       if (needDateTrigerStart < Date.now() < needDateTrigerEnd) {
         var flexGrow = Math.floor((Date.now() - needDateTrigerStart) / 1000 / 60);
+        if (lastFlexGrow !== flexGrow) {
+          lastFlexGrow = flexGrow;
+          flexGrowIncrise = true;
+        }
+        // disable statement
+        if (flexGrowIncrise) {
+          flexGrowIncrise = false;
+          _timeLines.each(function (i, timeline) {
+            var helper = $(timeline).data().currentHelper;
+            var dataTL = $(timeline).data();
+
+            if (!helper.data().disabled && helper.data().startFg <= flexGrow < helper.data().endFg) {
+              if (helper.data().disableBlock === false) {
+                helper.before('<div class="disabled id-' + dataTL.index + '">');
+                helper.data().disableBlock = $(timeline).find('.disabled.id-' + dataTL.index);
+                helper.data().disableBlock.css('flex-grow', helper.data().initialDiff);
+                var fg = parseInt(helper.css('flex-grow'));
+                helper.css('flex-grow', fg - helper.data().initialDiff);
+              } else {
+                var fgDB = parseInt(helper.data().disableBlock.css('flex-grow'));
+                helper.data().disableBlock.css('flex-grow', fgDB + 1);
+                var _fg = parseInt(helper.css('flex-grow'));
+                helper.css('flex-grow', _fg - 1);
+                if (_fg === 1) {
+                  helper.data().disabled = true;
+                }
+              }
+            } else {
+              dataTL.index++;
+              $(timeline).data().currentHelper = $($(timeline).find('.time-piece.active')[dataTL.index]);
+            }
+          });
+        }
+
+        // time-trigger movement implementation
         var helperFlexGrow = 900 - flexGrow;
         timeIndicatorHandler.css('flex-grow', '' + flexGrow);
         timeIndicatorHelper.css('flex-grow', '' + helperFlexGrow);
@@ -623,15 +710,16 @@ function validationDateAndSendQuery() {
   // время находится в промежутке от 8 до 23
   var startTimeValid = validationTimeRule(startTime);
   var stopTimeValid = validationTimeRule(stopTime);
-  if (startTimeValid && stopTimeValid) {
+  var timeStart = getCorrectTimeFormat(inputDate.val(), startTime).toISOString();
+  var timeEnd = getCorrectTimeFormat(inputDate.val(), stopTime).toISOString();
+  var conditionDateNow = Date.parse(timeStart) > Date.now() && Date.parse(timeEnd) > Date.now();
+  if (startTimeValid && stopTimeValid && conditionDateNow) {
     // время старта больше времени конца и дата установлена
     startTime = startTime.split(':');
     stopTime = stopTime.split(':');
     var starTimeCount = parseInt(startTime[0], 10) * 60 + parseInt(startTime[1], 10);
     var stopTimeCount = parseInt(stopTime[0], 10) * 60 + parseInt(stopTime[1], 10);
     if (starTimeCount < stopTimeCount && inputDate.val().length > 0) {
-      var timeStart = getCorrectTimeFormat(inputDate.val(), startTime).toISOString();
-      var timeEnd = getCorrectTimeFormat(inputDate.val(), stopTime).toISOString();
       // находим участников
       var members = [];
       $('.member-list__checkbox').each(function (i, box) {
@@ -656,7 +744,6 @@ function validationDateAndSendQuery() {
       // запрос рекомендаций
       query(members, date).then(function (data) {
         $('#offer-rooms').html('');
-        console.log(data);
         //добаление html на основе ответа
         var rooms = data[1].data.rooms;
         data[0].forEach(function (recommend) {
@@ -683,6 +770,8 @@ function validationDateAndSendQuery() {
         });
       });
     }
+  } else {
+    $('#offer-rooms').html('');
   }
 }
 

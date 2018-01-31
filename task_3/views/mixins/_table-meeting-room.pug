@@ -17,6 +17,7 @@ mixin table-meeting-room(floor = {}, targetDate={})
 							each event in room.timeLine
 								- if (event.id === 'helper') {
 								.time-piece.active(style=`flex-grow: ${event.flexGrow}`, data-dateStart= event.dateStart, data-dateEnd= event.dateEnd, data-roomid= room.id, onclick=`location.href="/add-meeting?dateStart=${event.dateStart.toISOString()}&dateEnd=${event.dateEnd.toISOString()}&roomId=${room.id}"`)
+									button.button-add +
 								- } else {
 								.time-piece.placed(style=`flex-grow: ${event.flexGrow}`)
 									.meeting-info.hidden(id=`${event.id}`)
@@ -36,4 +37,5 @@ mixin table-meeting-room(floor = {}, targetDate={})
 								-}
 						-} else {
 						.time-piece.active(style=`flex-grow: 900` onclick=`location.href="/add-meeting?dateStart=fullTime&roomId=${room.id}&targetDate=${targetDate.toISOString()}"`)
+							button.button-add +
 						-}

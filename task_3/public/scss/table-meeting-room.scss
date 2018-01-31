@@ -6,6 +6,7 @@
 	border-spacing: 0 24px;
 	margin-bottom: -34px;
 
+
 	&__wrapper.disabled {
 		color: $text-color-disabled;
 		pointer-events: none;
@@ -73,6 +74,11 @@
 			visibility: hidden;
 		}
 	}
+}
+.table_meeting-room__all-wrapper {
+	overflow: hidden;
+	min-width: 1250px;
+	height: 100vh;
 }
 
 //@media (max-width: 1250px) {

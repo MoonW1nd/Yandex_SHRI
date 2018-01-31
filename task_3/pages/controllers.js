@@ -50,7 +50,25 @@ module.exports.index = async function(req, res) {
   targetDate = new Date(targetDate);
 
   await graphql(schema, queryEvents).then( data => {
-    const events = data.data.events;
+    let events = data.data.events;
+    // определяем пароги времени для сортировки
+    let startEventDate = Date.now();
+    startEventDate = new Date(startEventDate);
+    let needDate = new Date(
+      startEventDate.getFullYear(),
+      startEventDate.getMonth(),
+      startEventDate.getDate(),
+      8,
+      0,
+      0
+    );
+    let needDateTrigerStart = needDate.getTime();
+    let needDateTrigerEnd = needDate.getTime() + 54000000;
+    
+    //только сегодняшняя дата
+    events = events.filter(event => {
+      return (needDateTrigerStart <= Date.parse(event.dateStart) && needDateTrigerEnd >= Date.parse(event.dateEnd));
+    });
     // сортировка по времени начала ивентовб для грамотной работы алгоритма
     events.sort((a, b) => new Date(a.dateStart).getTime() - new Date(b.dateStart).getTime());
     
@@ -169,6 +187,9 @@ module.exports.addMeeting = async function (req, res) {
       );
       console.log(dateStart);
       dateStart = dateStart.getTime();
+      if (Date.now() > dateStart ) {
+        dateStart = Date.now();
+      }
       dateEnd = dateStart + 3600000
     }
     let roomId = req.query.roomId;
@@ -203,7 +224,6 @@ module.exports.createNewMeeting = function (req, res, next) {
   if (!Array.isArray(req.body.member)) {
     req.body.member = [req.body.member];
   }
-  res.json(req.body);
   let mutationQuery = `mutation create {
     createEvent(input: {
       title: "${req.body.title}",

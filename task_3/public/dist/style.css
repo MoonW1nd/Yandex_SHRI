@@ -295,23 +295,27 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
   .time-piece.active {
     background-color: #FFFFFF;
     cursor: pointer; }
-    .time-piece.active:hover:after {
-      content: '+';
+    .time-piece.active .button-add {
       position: absolute;
       bottom: 0;
       top: 0;
       width: 57px;
       border-radius: 2px;
       font-size: 21px;
-      line-height: 28px;
+      line-height: 23px;
       text-align: center;
       color: #FFFFFF;
-      background-color: #0070E0; }
+      background-color: #0070E0;
+      visibility: hidden;
+      pointer-events: none; }
+    .time-piece.active.disabled {
+      background-color: #d5dfe9;
+      pointer-events: none; }
+  .time-piece.active:hover .button-add {
+    visibility: visible; }
   .time-piece.placed:hover {
     background: #98A9B9;
     cursor: pointer; }
-  .time-piece.pressed {
-    background-color: #98A9B9; }
 
 .background-meeting-rooms {
   position: absolute;
@@ -408,6 +412,11 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
     opacity: 0; }
     .table-meeting-room__floor-name-swipe.hidden {
       visibility: hidden; }
+
+.table_meeting-room__all-wrapper {
+  overflow: hidden;
+  min-width: 1250px;
+  height: 100vh; }
 
 .meeting-room__wash-room .time_8-00 {
   -ms-flex-positive: 185;
@@ -594,7 +603,6 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
   background-color: #FFFFFF;
   box-sizing: border-box;
   padding: 16px;
-  pointer-events: none;
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.3); }
   .meeting-info.hidden {
     visibility: hidden;

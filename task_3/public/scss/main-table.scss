@@ -34,29 +34,36 @@ tr {
 		//	background-color: $text-color-hover;
 		//	border-radius: 2px;
 		//}
-		&:hover:after {
-			content: '+';
+		.button-add {
 			position: absolute;
 			bottom: 0;
 			top: 0;
 			width: 57px;
 			border-radius: 2px;
 			font-size: 21px;
-			line-height: 28px;
+			line-height: 23px;
 			text-align: center;
 			color: $text-color-white;
 			background-color: $text-color-hover;
+			visibility: hidden;
+			pointer-events: none;
+		}
+
+		&.disabled {
+			background-color: #d5dfe9;
+			pointer-events: none;
+		}
+	}
+
+	&.active:hover {
+		.button-add {
+			visibility: visible;
 		}
 	}
 
 	&.placed:hover {
 		background: $meeting-room-color-hover;
 		cursor: pointer;
-	}
-
-	//TODO:[A.Ivankov] remove after
-	&.pressed {
-		background-color: $meeting-room-color-hover;
 	}
 }
 
