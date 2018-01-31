@@ -118,25 +118,27 @@ function getRecommendation(date, members, db) {
     });
     floor.rooms = JSON.parse(JSON.stringify(recommendedRooms));
     // проверка по времени
-    var copyEvents = db.events.slice(); //TODO:[A.Ivankov] !wtf?
+    // console.log(recommendedRooms);
+    var copyEvents = JSON.parse(JSON.stringify(db.events)); //TODO:[A.Ivankov] !wtf?
     recommendedRooms.forEach(function (room) {
       var eventsInRoom = copyEvents.filter(function (event) {
         return event.room === parseInt(room.id, 10);
       });
-      room.dateValid = false;
+      room.dateValid = true;
       room.events = eventsInRoom;
 
       // validation date
       eventsInRoom.forEach(function (eventInRoom) {
         var dateStartValid = Date.parse(date.start) >= Date.parse(eventInRoom.date.end);
         var dateEndValid = Date.parse(date.end) <= Date.parse(eventInRoom.date.start);
-        if (dateEndValid || dateStartValid) {
-          room.dateValid = true;
+        if (!(dateEndValid || dateStartValid)) {
+          room.dateValid = false;
         }
       });
     });
     allRecommendation = allRecommendation.concat(recommendedRooms);
   });
+  console.log(allRecommendation);
   //копируем для будующих операций
   var roomsWithEvents = JSON.parse(JSON.stringify(rooms));
   // set recommended rooms id
@@ -225,7 +227,7 @@ function getRecommendation(date, members, db) {
       var room = db.rooms.filter(function (room) {
         return parseInt(swap.roomEvent, 10) === parseInt(room.id, 10);
       });
-      console.log(room);
+      // console.log(room);
       if (room[0] != null) {
         swap.floorEvent = room[0].floor;
       }
@@ -235,21 +237,28 @@ function getRecommendation(date, members, db) {
     // сортировка комнат по наименьшему количеству пройденных этажей
     floors.forEach(function (floor) {
       var swaps = allSwaps.filter(function (swap) {
-        return floor.floorNumber === swap.floorEvent;
+        return String(floor.floorNumber) === String(swap.floorEvent);
       });
-      sortSwapsByFloor = sortSwapsByFloor.concat(swaps);
+      // соединяем возможные переносы по комнатам которые освободятся
+      sortSwapsByFloor.push(swaps);
     });
-    // соединяем возможные переносы по комнатам которые освободятся
-    var a = null;
+    // сортируем по освобождающимяся комнатам
     var resultMassive = [];
-    sortSwapsByFloor.forEach(function (swap) {
-      if (swap.event !== a) {
-        a = swap.event;
-        resultMassive.push([swap]);
-      } else {
-        resultMassive[resultMassive.length - 1].push(swap);
-      }
+    sortSwapsByFloor.forEach(function (floorSwaps) {
+      floorSwaps.sort(function (a, b) {
+        return a.roomEvent - b.roomEvent;
+      });
+      var trigger = null;
+      floorSwaps.forEach(function (swap) {
+        if (swap.roomEvent !== trigger) {
+          trigger = swap.roomEvent;
+          resultMassive.push([swap]);
+        } else {
+          resultMassive[resultMassive.length - 1].push(swap);
+        }
+      });
     });
+
     // создаем требуемый формат ответа
     resultMassive.forEach(function (swaps) {
       _result.push({
@@ -382,14 +391,14 @@ if ($('#calendar').length !== 0) {
 
 var _getRecomendation = __webpack_require__(0);
 
-// index helpers
+// index helpers scroll behavior
 $('.time-piece.active').on('click', function () {
   return $('body').addClass('dimmed');
 });
 var timeLines = $('.meeting-ui__time-line');
 var lastScrollLeft = $('.meeting-ui').scrollLeft();
 var calendarElem = $('.calendar');
-var meetingInfo = $('.meeting-info');
+
 $('.month-UTC').each(function (i, elem) {
   return $(elem).text(getLetterMonthRu($(elem).text()));
 });
@@ -403,6 +412,7 @@ $(window).scroll(function () {
 
   });
 });
+
 $('.meeting-ui').scroll(function () {
   if (lastScrollLeft !== $('.meeting-ui').scrollLeft()) {
     $('.time-piece.placed .meeting-info').addClass('hidden');
@@ -414,6 +424,8 @@ $('.meeting-ui').scroll(function () {
     lastScrollLeft = $('.meeting-ui').scrollLeft();
   }
 });
+
+// helpers for position information about Event
 $('.day-switcher__date').on('click', function () {
   return calendarElem.toggleClass('hidden');
 });
@@ -422,7 +434,6 @@ $('.time-piece.placed').on('click', function (event) {
   var width = window.innerWidth;
   var offset = target.offset().left;
   var widthElem = parseInt(target.css('width'), 10);
-  console.log(widthElem);
   var meetingInfoWidth = parseInt(target.find('.meeting-info').css('width'), 10);
   var needOffset = void 0;
   var rightTrigger = offset + widthElem / 2 + meetingInfoWidth / 2;
@@ -466,16 +477,12 @@ $('.time-piece.placed').on('click', function (event) {
 $('.input-block__input_members').focus(function () {
   $('.member-list').fadeIn(500);
 });
+
 $('.input-block__input_members').focusout(function () {
   $('.member-list').fadeOut(500);
 });
-// $(".input-block__input_data").on("change", function() {
-//   this.setAttribute(
-//     "data-date",
-//     moment(this.value, "YYYY-MM-DD")
-//       .format( this.getAttribute("data-date-format") )
-//   )
-// }).trigger("change");
+
+// stiles for firefox browser
 var regExp = /Firefox/ig;
 if (regExp.test(window.navigator.userAgent)) {
   $('.input-block__input_time').css('padding', '0');
@@ -494,7 +501,10 @@ $('.member-list__element').on('click', function (event) {
   target.addClass('hidden');
   var login = target.data('name');
   $('.add-member-list__element[data-name=' + login + ']').removeClass('hidden').find('.member-list__checkbox')[0].checked = true;
-  validationDateAndSendQuery();
+  // для того чтобы не сбрасывала выбранную комнату
+  if ($('.offer-meeting-room__element.active').length === 0) {
+    validationDateAndSendQuery();
+  }
 });
 
 // обработчик удаления людей из списка
@@ -503,7 +513,11 @@ $('.button-delete_add-member').on('click', function (event) {
   var login = target.parents('.add-member-list__element').data('name');
   $('.member-list__element[data-name=' + login + ']').removeClass('hidden');
   target.parents('.add-member-list__element').addClass('hidden').find('.member-list__checkbox')[0].checked = false;
-  validationDateAndSendQuery();
+  // для того чтобы не сбрасывала выбранную комнату
+  console.log($('.offer-meeting-room__element.active').length === 0);
+  if ($('.offer-meeting-room__element.active').length === 0) {
+    validationDateAndSendQuery();
+  }
 });
 
 // Событие для элемента ввода
@@ -522,18 +536,21 @@ jQuery.expr[':'].Contains = function (a, i, m) {
 };
 
 $(document).ready(function () {
-  // инициализация календаря
-  $('.input-block__input_data').addClass('datepicker-here');
-  $('.input-block__input_data').datepicker();
+  // инициализация календаря для инпута с выборо даты
+  var blockInputData = $('.input-block__input_data');
+  blockInputData.addClass('datepicker-here');
+  blockInputData.datepicker();
 
   // предотвращение изменения даты в формате не подходящем нам
-  $('.input-block__input_data').keydown(function (e) {
+  blockInputData.keydown(function (e) {
     e.preventDefault();
   });
-  var dateInInput = Date.parse($('#input-date.needModifyData').data('value'));
+  var inputDate = $('#input-date.needModifyData');
+  var dateInInput = Date.parse(inputDate.data('value'));
   dateInInput = new Date(dateInInput);
   var resultString = dateInInput.getUTCDate() + ' ' + getLetterMonthRu(dateInInput.getUTCMonth()) + ' ' + dateInInput.getUTCFullYear();
-  $('#input-date.needModifyData').val(resultString);
+  // настройки календаря
+  inputDate.val(resultString);
   $('.timepicker').timepicker({
     timeFormat: 'HH:mm',
     interval: 15,
@@ -549,7 +566,7 @@ $(document).ready(function () {
   // validation date
   $('#input-stop-time, #input-start-time').keyup(validationDateAndSendQuery);
   $('#datepickers-container .datepicker').on('click', validationDateAndSendQuery);
-  $('.button-delete').on('click', function (event) {
+  $('.offer-meeting-room__element.active .button-delete').on('click', function (event) {
     $(event.target).parents(".offer-meeting-room__element .active").remove();
     validationDateAndSendQuery();
   });
@@ -558,17 +575,20 @@ $(document).ready(function () {
 function validationDateAndSendQuery() {
   var startTime = $('#input-start-time').val();
   var stopTime = $('#input-stop-time').val();
+  var inputDate = $('#input-date');
+  // время находится в промежутке от 8 до 23
   var startTimeValid = validationTimeRule(startTime);
   var stopTimeValid = validationTimeRule(stopTime);
-  console.log(startTimeValid, stopTimeValid);
   if (startTimeValid && stopTimeValid) {
+    // время старта больше времени конца и дата установлена
     startTime = startTime.split(':');
     stopTime = stopTime.split(':');
     var starTimeCount = parseInt(startTime[0], 10) * 60 + parseInt(startTime[1], 10);
     var stopTimeCount = parseInt(stopTime[0], 10) * 60 + parseInt(stopTime[1], 10);
-    if (starTimeCount < stopTimeCount && $('#input-date').val().length > 0) {
-      var timeStart = getCorrectTimeFormat($('#input-date').val(), $('#input-start-time').val()).toISOString();
-      var timeEnd = getCorrectTimeFormat($('#input-date').val(), $('#input-stop-time').val()).toISOString();
+    if (starTimeCount < stopTimeCount && inputDate.val().length > 0) {
+      var timeStart = getCorrectTimeFormat(inputDate.val(), startTime).toISOString();
+      var timeEnd = getCorrectTimeFormat(inputDate.val(), stopTime).toISOString();
+      // находим участников
       var members = [];
       $('.member-list__checkbox').each(function (i, box) {
         if (box.checked) {
@@ -583,21 +603,36 @@ function validationDateAndSendQuery() {
           });
         }
       });
+      // задем дату
       var date = {
         start: timeStart,
         end: timeEnd
       };
+      var _regExp = /edit-event/ig;
+      // запрос рекомендаций
       query(members, date).then(function (data) {
         $('#offer-rooms').html('');
+        console.log(data);
+        //добаление html на основе ответа
         var rooms = data[1].data.rooms;
         data[0].forEach(function (recommend) {
+          // для корректной работы замены
+          if (_regExp.test(location.href)) {
+            recommend.swap = recommend.swap.filter(function (swap) {
+              return String(swap.event) !== String($('#offer-rooms').data('eventid'));
+            });
+          }
+          if (recommend.swap.length === 0) {
+            recommend.swap.push({ event: null, room: null });
+          }
           recommend.date.start = new Date(Date.parse(recommend.date.start));
           recommend.date.end = new Date(Date.parse(recommend.date.end));
           var roomData = rooms.filter(function (room) {
-            return room.id === recommend.room;
+            return String(room.id) === String(recommend.room);
           });
-          var blockRecommendation = $('<li class="offer-meeting-room__element"/>').append($('<div class="offer-meeting-room__time">').html((recommend.date.start.getUTCHours() < 10 ? '0' : '') + recommend.date.start.getUTCHours() + ':' + ((recommend.date.start.getUTCMinutes() < 10 ? '0' : '') + recommend.date.start.getUTCMinutes()) + '\u2014' + ((recommend.date.end.getUTCHours() < 10 ? '0' : '') + recommend.date.end.getUTCHours()) + ':' + ((recommend.date.end.getUTCMinutes() < 10 ? '0' : '') + recommend.date.end.getUTCMinutes())), $('<div class="offer-meeting-room__room">').html(roomData[0].title + '\xA0\u2022\xA0' + roomData[0].floor + ' \u044D\u0442\u0430\u0436'), $('<input class="member-list__checkbox" type="checkbox" name="room" value="' + roomData[0].id + '"/>'), $('<button class="button-delete" type="button">').append($('<img src="/dist/assets/close-white.svg", alt="close"/>')));
+          var blockRecommendation = $('<li class="offer-meeting-room__element"/>').append($('<div class="offer-meeting-room__time">').html((recommend.date.start.getUTCHours() < 10 ? '0' : '') + recommend.date.start.getUTCHours() + ':' + ((recommend.date.start.getUTCMinutes() < 10 ? '0' : '') + recommend.date.start.getUTCMinutes()) + '\u2014' + ((recommend.date.end.getUTCHours() < 10 ? '0' : '') + recommend.date.end.getUTCHours()) + ':' + ((recommend.date.end.getUTCMinutes() < 10 ? '0' : '') + recommend.date.end.getUTCMinutes())), $('<div class="offer-meeting-room__room">').html(roomData[0].title + '\xA0\u2022\xA0' + roomData[0].floor + ' \u044D\u0442\u0430\u0436'), $('<input class="member-list__checkbox" type="checkbox" name="room" value="' + roomData[0].id + '"/>'), $('<input type="hidden" name="swapEvent" value="' + recommend.swap[0].event + '">'), $('<input type="hidden" name="swapRoom" value="' + recommend.swap[0].room + '">'), $('<button class="button-delete" type="button">').append($('<img src="/dist/assets/close-white.svg", alt="close"/>')));
           $('#offer-rooms').append(blockRecommendation);
+          // обработчик для выбора переговорки
           blockRecommendation.on('click', selectOffer);
         });
       });
@@ -605,8 +640,11 @@ function validationDateAndSendQuery() {
   }
 }
 
+// валидация времени
 function validationTimeRule(time) {
-  time = time.split(':');
+  if (!Array.isArray(time)) {
+    time = time.split(':');
+  }
   if (parseInt(time[0], 10) >= 8 && parseInt(time[0], 10) <= 23) {
     if (parseInt(time[0], 10) === 23 && parseInt(time[1], 10) > 0) {
       return false;
@@ -618,31 +656,21 @@ function validationTimeRule(time) {
 
 // отработвка выбора переговорки
 function selectOffer(event) {
+  event.stopPropagation();
   var targetElement = $(event.target);
   targetElement.addClass('active');
   targetElement.find('.member-list__checkbox')[0].checked = true;
   targetElement.parent().find('.offer-meeting-room__element:not(.active)').remove();
-  $('.button-delete').on('click', function (event) {
-    $(event.target).parents(".offer-meeting-room__element .active").remove();
+  $('.offer-meeting-room__element.active .button-delete').on('click', function (event) {
+    event.stopPropagation();
+    $(event.target).parents(".offer-meeting-room__element.active").remove();
     validationDateAndSendQuery();
   });
 }
 
+// запрос рекоменованных переговорок
 async function query(members, date) {
   var db = {};
-  // let members;
-  // members = [
-  //   {
-  //     login: 'alt-j',
-  //     avatar: 'https://avatars1.githubusercontent.com/u/3763844?s=400&v=4',
-  //     floor: 3
-  //   },
-  //   {
-  //     login: 'yeti-or',
-  //     avatar: 'https://avatars0.githubusercontent.com/u/1813468?s=460&v=4',
-  //     floor: 2
-  //   }
-  // ];
   var queryUsers = '{\n    users{\n      id\n      login\n      homeFloor\n      avatarUrl\n    }\n  }';
   var queryRooms = '{\n' + '  rooms {\n' + '    id\n' + '    title\n' + '    capacity\n' + '    floor\n' + '  }\n' + '}';
   var queryEvents = '{\n' + '  events {\n' + '    id\n' + '    title\n' + '    dateStart\n' + '    dateEnd\n' + '    users {\n' + '      id\n' + '      login\n' + '      homeFloor\n' + '      avatarUrl\n' + '    }\n' + '    room {\n' + '      id\n' + '      title\n' + '      capacity\n' + '      floor\n' + '    }\n' + '  }\n' + '}';
@@ -679,6 +707,7 @@ async function query(members, date) {
   return [(0, _getRecomendation.getRecommendation)(date, members, db), rooms];
 }
 
+// xhr graphql
 function request(query) {
   return new Promise(function (resolve, reject) {
     var xhr = new XMLHttpRequest();
@@ -702,9 +731,13 @@ function request(query) {
   });
 }
 
+// получение корректоного формата даты и времени
 function getCorrectTimeFormat(date, time) {
+  if (!Array.isArray(time)) {
+    time = time.split(':');
+  }
   var dateParts = date.split(' ');
-  var timeParts = time.split(':');
+  var timeParts = time;
   var numberMonth = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'].indexOf(dateParts[1].toLowerCase());
   return new Date(Date.UTC(dateParts[2], numberMonth, dateParts[0], timeParts[0], timeParts[1]));
 }

@@ -44,8 +44,12 @@
 		}
 	}
 	&__room {
+		pointer-events: none;
 		font-size: $fs-small;
 		margin-left: 10px;
+	}
+	&__time {
+		pointer-events: none;
 	}
 	.button-delete {
 		visibility: hidden;

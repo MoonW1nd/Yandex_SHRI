@@ -31,23 +31,25 @@ export function getRecommendation(date, members, db) {
     recommendedRooms.sort((a, b) => a.capacity - b.capacity);
     floor.rooms = JSON.parse(JSON.stringify(recommendedRooms));
     // проверка по времени
-    let copyEvents = db.events.slice(); //TODO:[A.Ivankov] !wtf?
+    // console.log(recommendedRooms);
+    let copyEvents = JSON.parse(JSON.stringify(db.events)); //TODO:[A.Ivankov] !wtf?
     recommendedRooms.forEach( room => {
       let eventsInRoom = copyEvents.filter(event => event.room === parseInt(room.id, 10));
-      room.dateValid = false;
+      room.dateValid = true;
       room.events = eventsInRoom;
       
       // validation date
       eventsInRoom.forEach((eventInRoom) => {
         let dateStartValid = Date.parse(date.start) >= Date.parse(eventInRoom.date.end);
         let dateEndValid = Date.parse(date.end) <= Date.parse(eventInRoom.date.start);
-        if(dateEndValid || dateStartValid) {
-          room.dateValid = true;
+        if(!(dateEndValid || dateStartValid)) {
+          room.dateValid = false;
         }
       });
     });
     allRecommendation = allRecommendation.concat(recommendedRooms);
   });
+  console.log(allRecommendation)
   //копируем для будующих операций
   let roomsWithEvents = JSON.parse(JSON.stringify(rooms));
   // set recommended rooms id
@@ -130,7 +132,7 @@ export function getRecommendation(date, members, db) {
     // return allSwaps
     allSwaps.forEach( swap => {
       let room = db.rooms.filter(room => parseInt(swap.roomEvent, 10) === parseInt(room.id, 10));
-      console.log(room);
+      // console.log(room);
       if(room[0] != null) {
         swap.floorEvent = room[0].floor;
       }
@@ -139,20 +141,27 @@ export function getRecommendation(date, members, db) {
     let sortSwapsByFloor = [];
     // сортировка комнат по наименьшему количеству пройденных этажей
     floors.forEach(floor => {
-      let swaps = allSwaps.filter(swap => floor.floorNumber === swap.floorEvent);
-      sortSwapsByFloor = sortSwapsByFloor.concat(swaps);
-    });
+      let swaps = allSwaps.filter(swap => {
+        return String(floor.floorNumber) === String(swap.floorEvent)
+      });
     // соединяем возможные переносы по комнатам которые освободятся
-    let a = null;
-    let resultMassive = [];
-    sortSwapsByFloor.forEach( swap => {
-      if(swap.event !== a) {
-        a = swap.event;
-        resultMassive.push([swap])
-      } else {
-        resultMassive[resultMassive.length - 1].push(swap);
-      }
+      sortSwapsByFloor.push(swaps);
     });
+    // сортируем по освобождающимяся комнатам
+    let resultMassive = [];
+    sortSwapsByFloor.forEach( floorSwaps => {
+      floorSwaps.sort( (a, b) => a.roomEvent - b.roomEvent);
+      let trigger = null;
+      floorSwaps.forEach( swap => {
+        if(swap.roomEvent !== trigger) {
+          trigger = swap.roomEvent;
+          resultMassive.push([swap])
+        } else {
+          resultMassive[resultMassive.length - 1].push(swap);
+        }
+      })
+    });
+    
     // создаем требуемый формат ответа
     resultMassive.forEach((swaps) => {
       result.push({

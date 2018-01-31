@@ -1,10 +1,11 @@
 import { getRecommendation } from './getRecomendation';
-// index helpers
+
+// index helpers scroll behavior
 $('.time-piece.active').on('click', () => $('body').addClass('dimmed'));
 let timeLines = $('.meeting-ui__time-line');
 let lastScrollLeft = $('.meeting-ui').scrollLeft();
 let calendarElem = $('.calendar');
-let meetingInfo = $('.meeting-info');
+
 $('.month-UTC').each((i, elem) => $(elem).text(getLetterMonthRu($(elem).text())));
 $(window).scroll(
   () => {
@@ -18,6 +19,7 @@ $(window).scroll(
     });
   }
 );
+
 $('.meeting-ui').scroll(
   () => {
     if (lastScrollLeft !== $('.meeting-ui').scrollLeft()) {
@@ -31,13 +33,14 @@ $('.meeting-ui').scroll(
     }
   }
 );
+
+// helpers for position information about Event
 $('.day-switcher__date').on('click', () => calendarElem.toggleClass('hidden'));
 $('.time-piece.placed').on('click', (event) => {
   let target = $(event.target);
   let width = window.innerWidth;
   let offset = target.offset().left;
   let widthElem = parseInt(target.css('width'), 10);
-  console.log(widthElem);
   let meetingInfoWidth = parseInt(target.find('.meeting-info').css('width'), 10);
   let needOffset;
   let rightTrigger = ((offset + widthElem / 2) + meetingInfoWidth / 2);
@@ -81,16 +84,12 @@ $('.time-piece.placed').on('click', (event) => {
 $('.input-block__input_members').focus(() => {
   $('.member-list').fadeIn(500);
 });
+
 $('.input-block__input_members').focusout(() => {
   $('.member-list').fadeOut(500);
 });
-// $(".input-block__input_data").on("change", function() {
-//   this.setAttribute(
-//     "data-date",
-//     moment(this.value, "YYYY-MM-DD")
-//       .format( this.getAttribute("data-date-format") )
-//   )
-// }).trigger("change");
+
+// stiles for firefox browser
 let regExp = /Firefox/ig;
 if (regExp.test(window.navigator.userAgent)) {
   $('.input-block__input_time').css('padding', '0');
@@ -123,7 +122,10 @@ $('.member-list__element').on('click', (event) => {
   let login = target.data('name');
   $(`.add-member-list__element[data-name=${login}]`).removeClass('hidden')
     .find('.member-list__checkbox')[0].checked = true;
-  validationDateAndSendQuery()
+  // для того чтобы не сбрасывала выбранную комнату
+  if($('.offer-meeting-room__element.active').length === 0) {
+    validationDateAndSendQuery()
+  }
 });
 
 // обработчик удаления людей из списка
@@ -133,7 +135,11 @@ $('.button-delete_add-member').on('click', (event) => {
   $(`.member-list__element[data-name=${login}]`).removeClass('hidden');
   target.parents('.add-member-list__element').addClass('hidden')
     .find('.member-list__checkbox')[0].checked = false;
-  validationDateAndSendQuery()
+  // для того чтобы не сбрасывала выбранную комнату
+  console.log($('.offer-meeting-room__element.active').length === 0);
+  if($('.offer-meeting-room__element.active').length === 0) {
+    validationDateAndSendQuery()
+  }
 });
 
 
@@ -154,18 +160,21 @@ jQuery.expr[':'].Contains = function(a,i,m) {
 };
 
 $(document).ready(() => {
-  // инициализация календаря
-  $('.input-block__input_data').addClass('datepicker-here');
-  $('.input-block__input_data').datepicker();
+  // инициализация календаря для инпута с выборо даты
+  let blockInputData = $('.input-block__input_data');
+  blockInputData.addClass('datepicker-here');
+  blockInputData.datepicker();
   
   // предотвращение изменения даты в формате не подходящем нам
-  $('.input-block__input_data').keydown(function(e){
+  blockInputData.keydown(function(e){
     e.preventDefault();
   });
-  let dateInInput = Date.parse($('#input-date.needModifyData').data('value'));
+  let inputDate = $('#input-date.needModifyData');
+  let dateInInput = Date.parse(inputDate.data('value'));
   dateInInput = new Date(dateInInput);
   let resultString = `${dateInInput.getUTCDate()} ${getLetterMonthRu(dateInInput.getUTCMonth())} ${dateInInput.getUTCFullYear()}`;
-  $('#input-date.needModifyData').val(resultString);
+  // настройки календаря
+  inputDate.val(resultString);
   $('.timepicker').timepicker({
     timeFormat: 'HH:mm',
     interval: 15,
@@ -181,7 +190,7 @@ $(document).ready(() => {
   // validation date
   $('#input-stop-time, #input-start-time').keyup(validationDateAndSendQuery);
   $('#datepickers-container .datepicker').on('click', validationDateAndSendQuery);
-  $('.button-delete').on('click', function (event) {
+  $('.offer-meeting-room__element.active .button-delete').on('click', function (event) {
     $(event.target).parents(".offer-meeting-room__element .active").remove();
     validationDateAndSendQuery()
   });
@@ -190,17 +199,20 @@ $(document).ready(() => {
 function validationDateAndSendQuery() {
   let startTime = $('#input-start-time').val();
   let stopTime = $('#input-stop-time').val();
+  let inputDate = $('#input-date');
+  // время находится в промежутке от 8 до 23
   let startTimeValid = validationTimeRule(startTime);
-  let stopTimeValid = validationTimeRule(stopTime)
-  console.log(startTimeValid, stopTimeValid);
+  let stopTimeValid = validationTimeRule(stopTime);
   if (startTimeValid && stopTimeValid) {
+    // время старта больше времени конца и дата установлена
     startTime = startTime.split(':');
     stopTime = stopTime.split(':');
     let starTimeCount = parseInt(startTime[0], 10)*60 + parseInt(startTime[1], 10);
     let stopTimeCount = parseInt(stopTime[0], 10)*60 + parseInt(stopTime[1], 10);
-    if (starTimeCount < stopTimeCount && $('#input-date').val().length > 0) {
-      let timeStart = getCorrectTimeFormat($('#input-date').val(), $('#input-start-time').val()).toISOString();
-      let timeEnd = getCorrectTimeFormat($('#input-date').val(), $('#input-stop-time').val()).toISOString();
+    if (starTimeCount < stopTimeCount && inputDate.val().length > 0) {
+      let timeStart = getCorrectTimeFormat(inputDate.val(), startTime).toISOString();
+      let timeEnd = getCorrectTimeFormat(inputDate.val(), stopTime).toISOString()
+      // находим участников
       let members = [];
       $('.member-list__checkbox').each((i, box) => {
         if(box.checked) {
@@ -215,26 +227,41 @@ function validationDateAndSendQuery() {
           })
         }
       });
+      // задем дату
       let date = {
         start: timeStart,
         end: timeEnd
       };
+      let regExp = /edit-event/ig;
+      // запрос рекомендаций
       query(members, date).then( data => {
         $('#offer-rooms').html('');
+        console.log(data);
+        //добаление html на основе ответа
         let rooms = data[1].data.rooms;
         data[0].forEach(recommend => {
+          // для корректной работы замены
+          if (regExp.test(location.href)) {
+            recommend.swap = recommend.swap.filter(swap => String(swap.event) !== String($('#offer-rooms').data('eventid')));
+          }
+          if(recommend.swap.length === 0) {
+            recommend.swap.push({event: null, room: null});
+          }
           recommend.date.start = new Date(Date.parse(recommend.date.start));
           recommend.date.end = new Date(Date.parse(recommend.date.end));
-          let roomData = rooms.filter( room => room.id === recommend.room);
+          let roomData = rooms.filter( room => String(room.id) === String(recommend.room));
           let blockRecommendation = $('<li class="offer-meeting-room__element"/>').append(
             $('<div class="offer-meeting-room__time">').html(`${(recommend.date.start.getUTCHours()<10?'0':'') + recommend.date.start.getUTCHours()}:${(recommend.date.start.getUTCMinutes()<10?'0':'') + recommend.date.start.getUTCMinutes()}—${(recommend.date.end.getUTCHours()<10?'0':'') + recommend.date.end.getUTCHours()}:${(recommend.date.end.getUTCMinutes()<10?'0':'') + recommend.date.end.getUTCMinutes()}`),
             $('<div class="offer-meeting-room__room">').html(`${roomData[0].title} • ${roomData[0].floor} этаж`),
             $(`<input class="member-list__checkbox" type="checkbox" name="room" value="${roomData[0].id}"/>`),
+            $(`<input type="hidden" name="swapEvent" value="${recommend.swap[0].event}">`),
+            $(`<input type="hidden" name="swapRoom" value="${recommend.swap[0].room}">`),
             $('<button class="button-delete" type="button">').append(
                 $('<img src="/dist/assets/close-white.svg", alt="close"/>')
               )
           );
           $('#offer-rooms').append(blockRecommendation);
+          // обработчик для выбора переговорки
           blockRecommendation.on('click', selectOffer)
         })
       });
@@ -242,8 +269,11 @@ function validationDateAndSendQuery() {
   }
 }
 
+// валидация времени
 function validationTimeRule(time) {
-  time = time.split(':');
+  if (!Array.isArray(time)){
+    time = time.split(':');
+  }
   if (parseInt(time[0], 10) >= 8 && parseInt(time[0], 10) <= 23) {
     if (parseInt(time[0], 10) === 23 && parseInt(time[1], 10) > 0) {
       return false;
@@ -255,31 +285,21 @@ function validationTimeRule(time) {
 
 // отработвка выбора переговорки
 function selectOffer(event) {
+  event.stopPropagation();
   let targetElement = $(event.target);
   targetElement.addClass('active');
   targetElement.find('.member-list__checkbox')[0].checked = true;
-  targetElement.parent().find('.offer-meeting-room__element:not(.active)').remove()
-  $('.button-delete').on('click', function (event) {
-    $(event.target).parents(".offer-meeting-room__element .active").remove();
+  targetElement.parent().find('.offer-meeting-room__element:not(.active)').remove();
+  $('.offer-meeting-room__element.active .button-delete').on('click', function (event) {
+    event.stopPropagation();
+    $(event.target).parents(".offer-meeting-room__element.active").remove();
     validationDateAndSendQuery()
   });
 }
 
+// запрос рекоменованных переговорок
 async function query(members, date) {
   let db = {};
-  // let members;
-  // members = [
-  //   {
-  //     login: 'alt-j',
-  //     avatar: 'https://avatars1.githubusercontent.com/u/3763844?s=400&v=4',
-  //     floor: 3
-  //   },
-  //   {
-  //     login: 'yeti-or',
-  //     avatar: 'https://avatars0.githubusercontent.com/u/1813468?s=460&v=4',
-  //     floor: 2
-  //   }
-  // ];
   const queryUsers = `{
     users{
       id
@@ -349,6 +369,8 @@ async function query(members, date) {
   return [getRecommendation(date, members, db), rooms]
 }
 
+
+// xhr graphql
 function request(query) {
   return new Promise(function(resolve, reject) {
     const xhr = new XMLHttpRequest();
@@ -372,9 +394,13 @@ function request(query) {
   })
 }
 
+// получение корректоного формата даты и времени
 function getCorrectTimeFormat(date, time) {
+  if (!Array.isArray(time)){
+    time = time.split(':');
+  }
   let dateParts = date.split(' ');
-  let timeParts = time.split(':');
+  let timeParts = time;
   let numberMonth = [
     'января',
     'февраля',

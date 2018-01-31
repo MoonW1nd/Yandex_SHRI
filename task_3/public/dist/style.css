@@ -808,8 +808,12 @@ tr:hover .table-meeting-room__wrapper:not(.disabled) .table-meeting-room__name {
         cursor: pointer; }
 
 .offer-meeting-room__room {
+  pointer-events: none;
   font-size: 0.73em;
   margin-left: 10px; }
+
+.offer-meeting-room__time {
+  pointer-events: none; }
 
 .offer-meeting-room .button-delete {
   visibility: hidden; }

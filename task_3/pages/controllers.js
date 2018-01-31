@@ -186,6 +186,7 @@ module.exports.createNewMeeting = function (req, res, next) {
 module.exports.editMeeting = async function (req, res) {
   const queryEvent = `{
     event(id: ${parseInt(req.params.id, 10)}) {
+      id
       title
       dateStart
       dateEnd
@@ -233,47 +234,48 @@ module.exports.updateMeeting = async function (req, res) {
       }
     }
   }`;
-  let currentEventData = await graphql(schema, queryEvent);
-  currentEventData = currentEventData.data.event;
+  let lastEventData = await graphql(schema, queryEvent);
+  lastEventData = lastEventData.data.event;
   // processing update query
-  let titleCondition = currentEventData.title === req.body.title;
-  let startTimeCondition = Date.parse(currentEventData.dateStart) === Date.parse(timeStart);
-  let endTimeCondition = Date.parse(currentEventData.dateEnd) === Date.parse(timeEnd);
-  console.log(titleCondition, startTimeCondition, endTimeCondition)
+  let titleCondition = lastEventData.title === req.body.title;
+  let startTimeCondition = Date.parse(lastEventData.dateStart) === Date.parse(timeStart);
+  let endTimeCondition = Date.parse(lastEventData.dateEnd) === Date.parse(timeEnd);
+  console.log(titleCondition, startTimeCondition, endTimeCondition);
   if (!(titleCondition && startTimeCondition && endTimeCondition)) {
-    let updateQuery = `mutation updateEvent {
-      updateEvent (id: "${req.params.id}"
-        input: {
-          title: "${req.body.title}"
-          dateStart: "${timeStart.toISOString()}"
-          dateEnd: "${timeEnd.toISOString()}"
-        }
-      ) {
-        id
-      }
-    }`;
-    console.log('change event')
-    // await graphql(schema, updateQuery);
+    await updateEvent(req.params.id, req.body.title, timeStart.toISOString(), timeEnd.toISOString());
   }
   // processing Users
-  let addUsers = [];
-  let removeUsers = [];
-  let currentUsersId = currentEventData.users.map( user => user.id);
+  let currentUsersId = lastEventData.users.map( user => user.id);
+  let promises = [];
+  
   currentUsersId.forEach(user => {
     if(req.body.member.indexOf(user) === -1) {
-     removeUsers.push(user); //TODO:[A.Ivankov] вставить сразу запросы
+      promises.push(removeUserFromEvent(req.params.id, user));
     }
   });
   req.body.member.forEach(user => {
     if(currentUsersId.indexOf(user) === -1) {
-      addUsers.push(user); //TODO:[A.Ivankov] вставить сразу запросы
+      promises.push(addUserToEvent(req.params.id, user));
     }
   });
-  console.log(addUsers, removeUsers);
+  await Promise.all(promises);
   
-  req.body.startTime = timeStart;
-  req.body.endTime = timeEnd;
-  res.json(req.body);
+  // room changes
+  let roomCondition = String(req.body.room) === String(lastEventData.room.id);
+  if(!roomCondition) {
+    await changeRoom(req.params.id, req.body.room);
+  }
+  
+  // swap event if need
+  if(req.body.swapEvent != null && req.body.swapRoom != null) {
+    await changeRoom(req.body.swapEvent, req.body.swapRoom)
+  }
+  
+  
+  // req.body.startTime = timeStart;
+  // req.body.endTime = timeEnd;
+  // res.json(req.body);
+  res.redirect(`/`);
   // await graphql(schema, removeMeetingQuery);
 };
 
@@ -287,6 +289,56 @@ module.exports.removeMeeting = async function (req, res) {
   await graphql(schema, removeMeetingQuery);
   res.redirect('/');
 };
+
+
+async function updateEvent(idEvent, titleEvent, timeStartISO, timeEndISO) {
+  let updateQuery = `mutation updateEvent {
+      updateEvent (id: "${idEvent}"
+        input: {
+          title: "${titleEvent}"
+          dateStart: "${timeStartISO}"
+          dateEnd: "${timeEndISO}"
+        }
+      ) {
+        id
+      }
+    }`;
+  await graphql(schema, updateQuery);
+}
+
+async function removeUserFromEvent(idEvent, idUser) {
+  const removeUserFromEvent = `mutation removeUserFromEvent {
+    removeUserFromEvent (
+      id: "${idEvent}"
+      userId: "${idUser}") {
+      id
+    }
+  }`;
+  let result = await graphql(schema, removeUserFromEvent);
+  console.log(result);
+}
+
+async function changeRoom(idEvent, idRoom) {
+  const changeRoomQuery = `mutation changeEventRoom {
+      changeEventRoom (
+        id: "${idEvent}"
+        roomId: "${idRoom}") {
+        id
+      }
+    }`;
+  await graphql(schema, changeRoomQuery);
+}
+
+async function addUserToEvent(idEvent, idUser) {
+  const addUserToEvent = `mutation addUserToEvent {
+    addUserToEvent (
+      id: "${idEvent}"
+      userId: "${idUser}") {
+      id
+    }
+  }`;
+  await graphql(schema, addUserToEvent);
+}
 
 function validateDate(event) {
   let validDate = true;

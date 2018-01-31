@@ -74,10 +74,10 @@ mixin sectionMeeting (members={}, title, selectMembers=[], event={})
 									input.member-list__checkbox(type='checkbox' name='member' value=`${member.id}`)
 							-}
 
-				- if(event.room != null) {UTC
+				- if(event.room != null) {
 				.offer-meeting-room
 					label.offer-meeting-room__label(for='offer-rooms')  Ваша переговорка
-					ul#offer-rooms.offer-meeting-room__list
+					ul#offer-rooms.offer-meeting-room__list(data-eventId= event.id)
 						li.offer-meeting-room__element.active
 							.offer-meeting-room__time= `${(event.dateStart.getUTCHours()<10?'0':'') + event.dateStart.getUTCHours()}:${(event.dateStart.getMinutes()<10?'0':'') + event.dateStart.getUTCMinutes()}—${(event.dateEnd.getUTCHours()<10?'0':'') + event.dateEnd.getUTCHours()}:${(event.dateEnd.getUTCMinutes()<10?'0':'') + event.dateEnd.getUTCMinutes()}`
 							.offer-meeting-room__room= `${event.room.title} • ${event.room.floor} этаж`
