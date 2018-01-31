@@ -23,7 +23,7 @@ mixin sectionMeeting (members={}, title, selectMembers=[], event={})
 						.input-block
 							label.input-block__label(for='input-start-time') Начало
 							-if (event.dateStart != null) {
-							input#input-start-time.timepicker.input-block__input.input-block__input_time(type='time' name='startTime' autocomplete='off', value=`${(event.dateStart.getUTCHours()<10?'0':'') + event.dateStart.getUTCHours()}:${(event.dateStart.getUTCMinutes()<10?'0':'') + event.dateStart.getUTCMinutes()}`)
+							input#input-start-time.timepicker.input-block__input.input-block__input_time(type='time' name='startTime' autocomplete='off', value=`${(event.dateStart.getHours()<10?'0':'') + event.dateStart.getHours()}:${(event.dateStart.getMinutes()<10?'0':'') + event.dateStart.getMinutes()}`)
 							-} else {
 							input#input-start-time.timepicker.input-block__input.input-block__input_time(type='time' name='startTime' autocomplete='off')
 							-}
@@ -31,7 +31,7 @@ mixin sectionMeeting (members={}, title, selectMembers=[], event={})
 						.input-block
 							label.input-block__label(for='input-stop-time') Конец
 							-if (event.dateEnd != null) {
-							input#input-stop-time.timepicker.input-block__input.input-block__input_time(type='time', name='endTime' autocomplete='off', value=`${(event.dateEnd.getUTCHours()<10?'0':'') + event.dateEnd.getUTCHours()}:${(event.dateEnd.getUTCMinutes()<10?'0':'') + event.dateEnd.getUTCMinutes()}`)
+							input#input-stop-time.timepicker.input-block__input.input-block__input_time(type='time', name='endTime' autocomplete='off', value=`${(event.dateEnd.getHours()<10?'0':'') + event.dateEnd.getHours()}:${(event.dateEnd.getMinutes()<10?'0':'') + event.dateEnd.getMinutes()}`)
 							-} else {
 							input#input-stop-time.timepicker.input-block__input.input-block__input_time(type='time', name='endTime' autocomplete='off')
 							-}
@@ -79,7 +79,7 @@ mixin sectionMeeting (members={}, title, selectMembers=[], event={})
 					label.offer-meeting-room__label(for='offer-rooms')  Ваша переговорка
 					ul#offer-rooms.offer-meeting-room__list(data-eventId= event.id)
 						li.offer-meeting-room__element.active
-							.offer-meeting-room__time= `${(event.dateStart.getUTCHours()<10?'0':'') + event.dateStart.getUTCHours()}:${(event.dateStart.getMinutes()<10?'0':'') + event.dateStart.getUTCMinutes()}—${(event.dateEnd.getUTCHours()<10?'0':'') + event.dateEnd.getUTCHours()}:${(event.dateEnd.getUTCMinutes()<10?'0':'') + event.dateEnd.getUTCMinutes()}`
+							.offer-meeting-room__time= `${(event.dateStart.getHours()<10?'0':'') + event.dateStart.getHours()}:${(event.dateStart.getMinutes()<10?'0':'') + event.dateStart.getMinutes()}—${(event.dateEnd.getHours()<10?'0':'') + event.dateEnd.getHours()}:${(event.dateEnd.getMinutes()<10?'0':'') + event.dateEnd.getMinutes()}`
 							.offer-meeting-room__room= `${event.room.title} • ${event.room.floor} этаж`
 							button.button-delete(type='button')
 								img(src='/dist/assets/close-white.svg', alt='close')

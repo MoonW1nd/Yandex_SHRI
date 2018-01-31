@@ -12,6 +12,7 @@ mixin table-meeting-room(floor = {}, targetDate={})
 						.table-meeting-room__count= `${room.capacity} человек`
 				td
 					.table-meeting-room__time-line
+						.table-meeting-room__floor-name-swipe= room.title
 						-if (room.timeLine !== undefined) {
 							each event in room.timeLine
 								- if (event.id === 'helper') {
@@ -20,9 +21,9 @@ mixin table-meeting-room(floor = {}, targetDate={})
 								.time-piece.placed(style=`flex-grow: ${event.flexGrow}`)
 									.meeting-info.hidden(id=`${event.id}`)
 										.meeting-info__title= event.title
-										.meeting-info__time-place= `${event.dateStart.getUTCDate()} `
-											span.month-UTC= event.dateStart.getUTCMonth()
-											span=`, ${event.dateStart.getUTCHours()}:${(event.dateStart.getUTCMinutes()<10?'0':'') + event.dateStart.getUTCMinutes()} — ${event.dateEnd.getUTCHours()}:${(event.dateEnd.getUTCMinutes()<10?'0':'') + event.dateEnd.getUTCMinutes()} · ${event.room.title}`
+										.meeting-info__time-place= `${event.dateStart.getDate()} `
+											span.month-UTC= event.dateStart.getMonth()
+											span=`, ${event.dateStart.getHours()}:${(event.dateStart.getMinutes()<10?'0':'') + event.dateStart.getMinutes()} — ${event.dateEnd.getHours()}:${(event.dateEnd.getMinutes()<10?'0':'') + event.dateEnd.getMinutes()} · ${event.room.title}`
 										.meeting-info__avatar-wrapper
 											img.avatar-round(src=`${event.users[0].avatarUrl}` alt="avatar image")
 											p.members=`${event.users[0].login}`

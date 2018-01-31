@@ -84,7 +84,7 @@ function getRecommendation(date, members, db) {
   var rooms = JSON.parse(JSON.stringify(db.rooms));
   var startEventDate = Date.parse(date.start);
   startEventDate = new Date(startEventDate);
-  var needDate = new Date(startEventDate.getUTCFullYear(), startEventDate.getUTCMonth(), startEventDate.getUTCDate());
+  var needDate = new Date(startEventDate.getFullYear(), startEventDate.getMonth(), startEventDate.getDate());
   var needDateTrigerStart = needDate.getTime();
   var needDateTrigerEnd = needDate.getTime() + 86400000;
   // фильтруем по дате
@@ -286,8 +286,8 @@ function getRecommendation(date, members, db) {
       // блок подбора времни по времени освобождения переговоро
       var timeDiff = Date.parse(date.end) - Date.parse(date.start);
       var endTime = new Date(Date.parse(date.start));
-      endTime.setUTCHours(23);
-      endTime.setUTCMinutes(0);
+      endTime.setHours(23);
+      endTime.setMinutes(0);
       var eventsWithNewTime = [];
       roomsWithEvents.forEach(function (room) {
         var events = room.events;
@@ -427,11 +427,17 @@ $('.meeting-ui').scroll(function () {
       transform: 'translate(0, ' + $(window).scrollTop() + 'px)'
     });
     lastScrollLeft = $('.meeting-ui').scrollLeft();
+    if (lastScrollLeft > 250) {
+      $(".table-meeting-room__floor-name-swipe").removeClass('hidden').css('left', lastScrollLeft - 238 + 'px').css('opacity', '1');
+    } else {
+      $(".table-meeting-room__floor-name-swipe").addClass('hidden');
+    }
+    console.log(lastScrollLeft);
   }
 });
 
 // helpers for position information about Event
-$('.day-switcher__date').on('click', function () {
+$('.wrapper-date').on('click', function () {
   return calendarElem.toggleClass('hidden');
 });
 $('.time-piece.placed').on('click', function (event) {
@@ -556,12 +562,14 @@ $(document).ready(function () {
       e.preventDefault();
     });
     var inputDate = $('#input-date.needModifyData');
-    var dateInInput = Date.parse(inputDate.data('value'));
-    dateInInput = new Date(dateInInput);
-    var resultString = dateInInput.getUTCDate() + ' ' + getLetterMonthRu(dateInInput.getUTCMonth()) + ' ' + dateInInput.getUTCFullYear();
-    // настройки календаря
-    inputDate.val(resultString);
+    if (inputDate.data('value') != null && inputDate.data('value').length !== 0) {
+      var dateInInput = Date.parse(inputDate.data('value'));
+      dateInInput = new Date(dateInInput);
+      var resultString = dateInInput.getDate() + ' ' + getLetterMonthRu(dateInInput.getMonth()) + ' ' + dateInInput.getFullYear();
+      inputDate.val(resultString);
+    }
     $('.timepicker').timepicker({
+      // настройки календаря
       timeFormat: 'HH:mm',
       interval: 15,
       minTime: '8',
@@ -572,6 +580,30 @@ $(document).ready(function () {
       dropdown: false,
       scrollbar: false
     });
+  }
+  if ($('main').hasClass('meeting-ui')) {
+    var startEventDate = Date.now();
+    startEventDate = new Date(startEventDate);
+    var needDate = new Date(startEventDate.getFullYear(), startEventDate.getMonth(), startEventDate.getDate(), 8, 0, 0);
+
+    var needDateTrigerStart = needDate.getTime();
+    var needDateTrigerEnd = needDate.getTime() + 3599985;
+    var timeIndicatorHandler = $('.time-indicator__position-handler');
+    var timeIndicatorHelper = $('.time-indicator__position-handler-helper');
+    setTimeout(function () {
+      return timeIndicatorHandler.parent().removeClass('hidden');
+    }, 1000);
+    // обновление состояния каждую сек
+    setInterval(function () {
+      if (needDateTrigerStart < Date.now() < needDateTrigerEnd) {
+        var flexGrow = Math.floor((Date.now() - needDateTrigerStart) / 1000 / 60);
+        var helperFlexGrow = 900 - flexGrow;
+        timeIndicatorHandler.css('flex-grow', '' + flexGrow);
+        timeIndicatorHelper.css('flex-grow', '' + helperFlexGrow);
+        var time = new Date(Date.now());
+        timeIndicatorHandler.find('.time-indicator__time p').text((time.getHours() < 10 ? '0' : '') + time.getHours() + ':' + ((time.getMinutes() < 10 ? '0' : '') + time.getMinutes()));
+      }
+    }, 1000);
   }
   var shortDateValue = $('.month-short-need-replace:first').text();
   $('.month-short-need-replace').text(getLetterMonthShortRu(shortDateValue));
@@ -642,8 +674,10 @@ function validationDateAndSendQuery() {
           var roomData = rooms.filter(function (room) {
             return String(room.id) === String(recommend.room);
           });
-          var blockRecommendation = $('<li class="offer-meeting-room__element"/>').append($('<div class="offer-meeting-room__time">').html((recommend.date.start.getUTCHours() < 10 ? '0' : '') + recommend.date.start.getUTCHours() + ':' + ((recommend.date.start.getUTCMinutes() < 10 ? '0' : '') + recommend.date.start.getUTCMinutes()) + '\u2014' + ((recommend.date.end.getUTCHours() < 10 ? '0' : '') + recommend.date.end.getUTCHours()) + ':' + ((recommend.date.end.getUTCMinutes() < 10 ? '0' : '') + recommend.date.end.getUTCMinutes())), $('<div class="offer-meeting-room__room">').html(roomData[0].title + '\xA0\u2022\xA0' + roomData[0].floor + ' \u044D\u0442\u0430\u0436'), $('<input class="member-list__checkbox" type="checkbox" name="room" value="' + roomData[0].id + '"/>'), $('<input type="hidden" name="swapEvent" value="' + recommend.swap[0].event + '">'), $('<input type="hidden" name="swapRoom" value="' + recommend.swap[0].room + '">'), $('<button class="button-delete" type="button">').append($('<img src="/dist/assets/close-white.svg", alt="close"/>')));
+          var blockRecommendation = $('<li class="offer-meeting-room__element"/>').append($('<div class="offer-meeting-room__time">').html((recommend.date.start.getHours() < 10 ? '0' : '') + recommend.date.start.getHours() + ':' + ((recommend.date.start.getMinutes() < 10 ? '0' : '') + recommend.date.start.getMinutes()) + '\u2014' + ((recommend.date.end.getHours() < 10 ? '0' : '') + recommend.date.end.getHours()) + ':' + ((recommend.date.end.getMinutes() < 10 ? '0' : '') + recommend.date.end.getMinutes())), $('<div class="offer-meeting-room__room">').html(roomData[0].title + '\xA0\u2022\xA0' + roomData[0].floor + ' \u044D\u0442\u0430\u0436'), $('<input class="member-list__checkbox" type="checkbox" name="room" value="' + roomData[0].id + '"/>'), $('<input type="hidden" name="swapEvent" value="' + recommend.swap[0].event + '">'), $('<input type="hidden" name="swapRoom" value="' + recommend.swap[0].room + '">'), $('<button class="button-delete" type="button">').append($('<img src="/dist/assets/close-white.svg", alt="close"/>')));
           $('#offer-rooms').append(blockRecommendation);
+          $('#offer-rooms').parent().removeClass('hidden');
+          $('.offer-meeting-room__label').text("Рекомендованные переговорки");
           // обработчик для выбора переговорки
           blockRecommendation.on('click', selectOffer);
         });
@@ -672,6 +706,7 @@ function selectOffer(event) {
   var targetElement = $(event.target);
   targetElement.addClass('active');
   targetElement.find('.member-list__checkbox')[0].checked = true;
+  $('.offer-meeting-room__label').text("Ваша переговорка");
   targetElement.parent().find('.offer-meeting-room__element:not(.active)').remove();
   $('.offer-meeting-room__element.active .button-delete').on('click', function (event) {
     event.stopPropagation();
@@ -751,7 +786,7 @@ function getCorrectTimeFormat(date, time) {
   var dateParts = date.split(' ');
   var timeParts = time;
   var numberMonth = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'].indexOf(dateParts[1].toLowerCase());
-  return new Date(Date.UTC(dateParts[2], numberMonth, dateParts[0], timeParts[0], timeParts[1]));
+  return new Date(dateParts[2], numberMonth, dateParts[0], timeParts[0], timeParts[1]);
 }
 //TODO:[A.Ivankov] валидация времени
 // TODO:[A.Ivankov] сделать выбор с помощью стрелок и enter

@@ -7,6 +7,14 @@
 		@extend .input-block__label;
 	}
 
+	&.hidden {
+		visibility: hidden;
+	}
+
+	&__list {
+		width: 420px;
+	}
+
 	&__element {
 		width: 420px;
 		height: 37px;

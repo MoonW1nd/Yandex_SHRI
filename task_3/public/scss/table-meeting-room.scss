@@ -53,7 +53,25 @@
 		padding-left: 24px;
 		position: relative;
 		top: 4px;
+	}
 
+	&__floor-name-swipe {
+		position: absolute;
+		top: 0;
+		left: 12px;
+		padding: 6px 8px;
+		font-size: $fs-small;
+		background-color: $text-color-white;
+		box-shadow: 0 0 25px rgba(0, 0, 0, .3);
+		border-radius: 4px;
+		z-index: 4;
+		font-weight: bold;
+		visibility: hidden;
+		opacity: 0;
+
+		&.hidden {
+			visibility: hidden;
+		}
 	}
 }
 

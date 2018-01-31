@@ -6,9 +6,9 @@ export function getRecommendation(date, members, db) {
   let startEventDate = Date.parse(date.start);
   startEventDate = new Date(startEventDate);
   let needDate = new Date(
-    startEventDate.getUTCFullYear(),
-    startEventDate.getUTCMonth(),
-    startEventDate.getUTCDate()
+    startEventDate.getFullYear(),
+    startEventDate.getMonth(),
+    startEventDate.getDate()
     );
   let needDateTrigerStart = needDate.getTime();
   let needDateTrigerEnd = needDate.getTime() + 86400000;
@@ -191,8 +191,8 @@ export function getRecommendation(date, members, db) {
       // блок подбора времни по времени освобождения переговоро
       let timeDiff = Date.parse(date.end) - Date.parse(date.start);
       let endTime = new Date(Date.parse(date.start));
-      endTime.setUTCHours(23);
-      endTime.setUTCMinutes(0);
+      endTime.setHours(23);
+      endTime.setMinutes(0);
       let eventsWithNewTime = [];
       roomsWithEvents.forEach( room => {
         let events = room.events;

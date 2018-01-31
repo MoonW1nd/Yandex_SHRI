@@ -16,9 +16,9 @@ block body
 				tspan.modal__image(xmlns='http://www.w3.org/2000/svg', x='0.5', y='40') 🎉
 				.modal__title Встреча создана!
 				.modal__info
-					p=`${(addedEvent.dateStart.getUTCDate()<10?'0':'') + addedEvent.dateStart.getUTCDate()} `
-						span.month-UTC= addedEvent.dateStart.getUTCMonth()
-						span=`, ${(addedEvent.dateStart.getUTCHours()<10?'0':'') + addedEvent.dateStart.getUTCHours()}:${(addedEvent.dateStart.getMinutes()<10?'0':'') + addedEvent.dateStart.getMinutes()} — ${(addedEvent.dateEnd.getUTCHours()<10?'0':'') + addedEvent.dateEnd.getUTCHours()}:${(addedEvent.dateEnd.getMinutes()<10?'0':'') + addedEvent.dateEnd.getMinutes()}`
+					p=`${(addedEvent.dateStart.getDate()<10?'0':'') + addedEvent.dateStart.getDate()} `
+						span.month-UTC= addedEvent.dateStart.getMonth()
+						span=`, ${(addedEvent.dateStart.getHours()<10?'0':'') + addedEvent.dateStart.getHours()}:${(addedEvent.dateStart.getMinutes()<10?'0':'') + addedEvent.dateStart.getMinutes()} — ${(addedEvent.dateEnd.getHours()<10?'0':'') + addedEvent.dateEnd.getHours()}:${(addedEvent.dateEnd.getMinutes()<10?'0':'') + addedEvent.dateEnd.getMinutes()}`
 					p= `${addedEvent.room.title} • ${addedEvent.room.floor} этаж`
 				button.button-ok(onclick="$('body').removeClass('dimmed')") Хорошо
 			-}
@@ -27,9 +27,9 @@ block body
 					img.button-arrow__image.button-arrow__image_left(src='/dist/assets/arrow-left.svg', alt='arrow left')
 				.wrapper-date
 					p.day-switcher__date
-						span=`${targetDate.getUTCDate()} `
-						span.month-short-need-replace=`${targetDate.getUTCMonth()}`
-						span= ` · ${targetDate.getUTCFullYear()}`
+						span=`${targetDate.getDate()} `
+						span.month-short-need-replace=`${targetDate.getMonth()}`
+						span= ` · ${targetDate.getFullYear()}`
 				button.button-arrow
 					img.button-arrow__image.button-arrow__image_right(src='/dist/assets/arrow-right.svg', alt='arrow right')
 			section.calendar.hidden
@@ -57,10 +57,10 @@ block body
 					tbody
 			section.meeting-ui__time-line.meeting-ui__time-line_time-indicator
 				.day-switcher
-				.time-indicator
+				.time-indicator.hidden
 					.time-indicator__position-handler
 						.time-indicator__time
-							p 11:05
+							p
 						.time-indicator__line
 					.time-indicator__position-handler-helper
 			section.meeting-ui__time-line
@@ -69,9 +69,9 @@ block body
 						img.button-arrow__image.button-arrow__image_left(src='/dist/assets/arrow-left.svg', alt='arrow left')
 					.wrapper-date
 						p.day-switcher__date
-						span=`${targetDate.getUTCDate()} `
-						span.month-short-need-replace=`${targetDate.getUTCMonth()}`
-						span= ` · ${targetDate.getUTCFullYear()}`
+						span=`${targetDate.getDate()} `
+						span.month-short-need-replace=`${targetDate.getMonth()}`
+						span= ` · ${targetDate.getFullYear()}`
 					button.button-arrow
 						img.button-arrow__image.button-arrow__image_right(src='/dist/assets/arrow-right.svg', alt='arrow right')
 				.time-line

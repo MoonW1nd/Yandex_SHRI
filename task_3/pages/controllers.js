@@ -160,13 +160,13 @@ module.exports.addMeeting = async function (req, res) {
     if (req.query.dateStart === 'fullTime') {
       let date = Date.parse(req.query.targetDate);
       date = new Date(date);
-      dateStart = new Date(Date.UTC(
-        date.getUTCFullYear(),
-        date.getUTCMonth(),
-        date.getUTCDate(),
+      dateStart = new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
         8,
         0
-      ));
+      );
       console.log(dateStart);
       dateStart = dateStart.getTime();
       dateEnd = dateStart + 3600000
@@ -401,21 +401,20 @@ function getEndDiff(event) {
 
 function getExtremeDate(event, extreme) {
   if (extreme === 'start') {
-    return new Date(Date.UTC(
-      event.dateStart.getUTCFullYear(),
-      event.dateStart.getUTCMonth(),
-      event.dateStart.getUTCDate(),
+    return new Date(
+      event.dateStart.getFullYear(),
+      event.dateStart.getMonth(),
+      event.dateStart.getDate(),
       8,
-      0
-    ));
+      0);
   } else if (extreme === 'end') {
-    return new Date(Date.UTC(
-      event.dateStart.getUTCFullYear(),
-      event.dateStart.getUTCMonth(),
-      event.dateStart.getUTCDate(),
+    return new Date(
+      event.dateStart.getFullYear(),
+      event.dateStart.getMonth(),
+      event.dateStart.getDate(),
       23,
       0
-    ));
+    );
   } else {
    console.log('error in getExtremeDate')
   }
@@ -443,13 +442,13 @@ function getCorrectTimeFormat(date, time) {
       'ноября',
       'декабря'
     ].indexOf(dateParts[1].toLowerCase());
-  return new Date(Date.UTC(
+  return new Date(
     dateParts[2],
     numberMonth,
     dateParts[0],
     timeParts[0],
     timeParts[1]
-  ));
+  );
 }
 
 function distributeRoomsByFloors(rooms, floors) {
