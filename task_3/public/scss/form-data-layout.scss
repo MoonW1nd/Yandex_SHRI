@@ -1,15 +1,15 @@
-@import "variables";
+@import 'variables';
 
 .form-data-layout {
-	display: flex;
-	max-width: 904px;
-	flex-direction: column;
-	align-items: flex-start;
-	flex-wrap: wrap;
+  display: flex;
+  max-width: 904px;
+  flex-direction: column;
+  align-items: flex-start;
+  flex-wrap: wrap;
 
-	&__inputs-layout,
-	&__time-set-layout {
-		display: flex;
-		flex-wrap: wrap;
-	}
+  &__inputs-layout,
+  &__time-set-layout {
+    display: flex;
+    flex-wrap: wrap;
+  }
 }

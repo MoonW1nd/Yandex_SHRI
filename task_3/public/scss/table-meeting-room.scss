@@ -1,84 +1,83 @@
-@import "variables";
+@import 'variables';
 
 .table-meeting-room {
-	width: 100vw;
-	min-width: $min-width-time-line + $min-width-title;
-	border-spacing: 0 24px;
-	margin-bottom: -34px;
+  width: 100vw;
+  min-width: $min-width-time-line + $min-width-title;
+  border-spacing: 0 24px;
+  margin-bottom: -34px;
 
+  &__wrapper.disabled {
+    color: $text-color-disabled;
+    pointer-events: none;
+  }
 
-	&__wrapper.disabled {
-		color: $text-color-disabled;
-		pointer-events: none;
-	}
+  &__first-column {
+    width: 20vw;
+    min-width: $min-width-title;
+    font-size: $fs-small;
+    font-family: $ff-bold;
+    font-weight: bold;
+    color: $text-color-disabled;
+    text-align: left;
+    padding-left: 24px;
+    box-sizing: border-box;
+    position: relative;
+    top: 15px;
+  }
 
-	&__first-column {
-		width: 20vw;
-		min-width: $min-width-title;
-		font-size: $fs-small;
-		font-family: $ff-bold;
-		font-weight: bold;
-		color: $text-color-disabled;
-		text-align: left;
-		padding-left: 24px;
-		box-sizing: border-box;
-		position: relative;
-		top: 15px;
-	}
+  &__second-column {
+    width: 80vw;
+    box-sizing: border-box;
+    min-width: $min-width-time-line;
+  }
 
-	&__second-column {
-		width: 80vw;
-		box-sizing: border-box;
-		min-width: $min-width-time-line;
-	}
+  &__time-line {
+    background-color: $meeting-room-color-normal;
+    height: 28px;
+    position: relative;
+    display: flex;
+    padding-left: 26px;
+    padding-right: 24px;
+  }
 
-	&__time-line {
-		background-color: $meeting-room-color-normal;
-		height: 28px;
-		position: relative;
-		display: flex;
-		padding-left: 26px;
-		padding-right: 24px;
-	}
+  &__name {
+    font-family: $ff-medium;
+    font-weight: bold;
+    padding-left: 24px;
+    position: relative;
+    bottom: 2px;
+  }
 
-	&__name {
-		font-family: $ff-medium;
-		font-weight: bold;
-		padding-left: 24px;
-		position: relative;
-		bottom: 2px;
-	}
+  &__count {
+    font-size: $fs-small;
+    padding-left: 24px;
+    position: relative;
+    top: 4px;
+  }
 
-	&__count {
-		font-size: $fs-small;
-		padding-left: 24px;
-		position: relative;
-		top: 4px;
-	}
+  &__floor-name-swipe {
+    position: absolute;
+    top: 0;
+    left: 12px;
+    padding: 6px 8px;
+    font-size: $fs-small;
+    background-color: $text-color-white;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    z-index: 4;
+    font-weight: bold;
+    visibility: hidden;
+    opacity: 0;
 
-	&__floor-name-swipe {
-		position: absolute;
-		top: 0;
-		left: 12px;
-		padding: 6px 8px;
-		font-size: $fs-small;
-		background-color: $text-color-white;
-		box-shadow: 0 0 25px rgba(0, 0, 0, .3);
-		border-radius: 4px;
-		z-index: 4;
-		font-weight: bold;
-		visibility: hidden;
-		opacity: 0;
-
-		&.hidden {
-			visibility: hidden;
-		}
-	}
+    &.hidden {
+      visibility: hidden;
+    }
+  }
 }
 .table_meeting-room__all-wrapper {
-	overflow: hidden;
-	min-width: 1250px;
-	height: 100vh;
+  overflow: hidden;
+  min-width: 1250px;
+  height: 100vh;
 }
 
 //@media (max-width: 1250px) {

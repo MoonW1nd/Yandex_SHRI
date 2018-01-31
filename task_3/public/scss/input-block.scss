@@ -1,59 +1,58 @@
-@import "variables";
+@import 'variables';
 
 .input-block {
-	margin-top: 24px;
-	display: flex;
-	flex-direction: column;
-	box-sizing: border-box;
-	padding: 0 16px;
-	position: relative;
-	//flex-basis: 420px;
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 0 16px;
+  position: relative;
+  //flex-basis: 420px;
 
-	&__label {
-		font-size: $ff-medium;
-		font-family: $ff-medium;
-		padding-bottom: 5px;
-		font-weight: 600;
-	}
+  &__label {
+    font-size: $ff-medium;
+    font-family: $ff-medium;
+    padding-bottom: 5px;
+    font-weight: 600;
+  }
 
-	&__input {
-		max-width: 420px;
-		width: 32.8vw;
-		min-width: 328px;
-		height: 38px;
-		border-radius: 4px;
-		border: 2px solid $button-color-disabled;
-		background: #ffffff !important;
-		outline: none;
-		font-size: $fs-medium;
-		box-sizing: border-box;
-		padding-left: 10px;
-	}
+  &__input {
+    max-width: 420px;
+    width: 32.8vw;
+    min-width: 328px;
+    height: 38px;
+    border-radius: 4px;
+    border: 2px solid $button-color-disabled;
+    background: #ffffff !important;
+    outline: none;
+    font-size: $fs-medium;
+    box-sizing: border-box;
+    padding-left: 10px;
+  }
 
-	&__input:focus {
-		color: #000000;
-		border: 2px solid $button-color-normal;
-	}
+  &__input:focus {
+    color: #000000;
+    border: 2px solid $button-color-normal;
+  }
 
-	&__icon_calendar {
-		position: absolute;
-		right: 30px;
-		bottom: 13px;
-		opacity: .5;
-	}
+  &__icon_calendar {
+    position: absolute;
+    right: 30px;
+    bottom: 13px;
+    opacity: 0.5;
+  }
 
-	&__input_data {
-		min-width: 238px;
-		max-width: 238px;
-		width: 18vw;
-	}
+  &__input_data {
+    min-width: 238px;
+    max-width: 238px;
+    width: 18vw;
+  }
 
-	&__input_time {
-		width: 72px;
-		min-width: 72px;
-	}
+  &__input_time {
+    width: 72px;
+    min-width: 72px;
+  }
 }
-
 
 //.input-block__input_data:before {
 //	content: attr(data-date);
@@ -64,7 +63,7 @@
 //}
 
 .input-block__input_data::-ms-clear {
-	display: none;
+  display: none;
 }
 
 .input-block__input_data::-webkit-datetime-edit,
@@ -72,15 +71,15 @@
 .input-block__input_data::-webkit-clear-button,
 .input-block__input_time::-webkit-inner-spin-button,
 .input-block__input_time::-webkit-clear-button {
-	display: none;
+  display: none;
 }
 
 .input-block__input_data::-webkit-calendar-picker-indicator,
 .input-block__input_data::-webkit-calendar-picker-indicator:hover {
-	position: absolute;
-	right: 30px;
-	color: transparent;
-	background-color: transparent;
-	opacity: 1;
-	cursor: pointer;
+  position: absolute;
+  right: 30px;
+  color: transparent;
+  background-color: transparent;
+  opacity: 1;
+  cursor: pointer;
 }

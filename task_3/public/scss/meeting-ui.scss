@@ -1,28 +1,28 @@
-@import "variables";
+@import 'variables';
 
 .meeting-ui {
-	position: relative;
-	overflow: hidden;
-	min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
 
-	&__time-line {
-		display: flex;
-		justify-content: space-between;
-		height: 45px;
-		min-width: $min-width-title + $min-width-time-line;
-		overflow: hidden;
-		width: 100vw;
-		position: absolute;
-		top: 70px;
-		z-index: 3;
-		background-color: $text-color-white;
-		border-bottom: $separator-block-setting;
+  &__time-line {
+    display: flex;
+    justify-content: space-between;
+    height: 45px;
+    min-width: $min-width-title + $min-width-time-line;
+    overflow: hidden;
+    width: 100vw;
+    position: absolute;
+    top: 70px;
+    z-index: 3;
+    background-color: $text-color-white;
+    border-bottom: $separator-block-setting;
 
-		&_time-indicator {
-			background-color: transparent;
-			z-index: 4;
-			overflow: visible;
-			pointer-events: none;
-		}
-	}
+    &_time-indicator {
+      background-color: transparent;
+      z-index: 4;
+      overflow: visible;
+      pointer-events: none;
+    }
+  }
 }

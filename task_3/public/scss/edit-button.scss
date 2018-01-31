@@ -1,26 +1,26 @@
-@import "variables";
+@import 'variables';
 
 .edit-button {
-	position: absolute;
-	width: 24px;
-	height: 24px;
-	right: 8px;
-	top: 8px;
-	border-radius: 50%;
-	background-color: $button-color-disabled;
-	cursor: pointer;
-	pointer-events: auto;
-	padding: 0;
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  right: 8px;
+  top: 8px;
+  border-radius: 50%;
+  background-color: $button-color-disabled;
+  cursor: pointer;
+  pointer-events: auto;
+  padding: 0;
 
-	img {
-		margin: 0 auto;
-	}
+  img {
+    margin: 0 auto;
+  }
 
-	&__pen {
-		opacity: .43;
+  &__pen {
+    opacity: 0.43;
 
-		&:hover {
-			opacity: 1;
-		}
-	}
+    &:hover {
+      opacity: 1;
+    }
+  }
 }

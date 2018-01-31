@@ -3,21 +3,21 @@ include mixins/_header
 include mixins/_section-meeting
 
 block body
-	body
-		+header(false)
-		form.add-meeting-ui(action='/', method='POST')
-			main.add-meeting-ui__main
-				+sectionMeeting(members, 'Новая встреча',null, eventData)
-			footer.add-meeting-ui__footer.footer_add-meeting
-				button.button-cancel(type='button', onclick='location.href="/"') Отмена
-				button.add-button(type='submit') Создать встречу
-	script(src='/dist/App.bundle.js')
+  body
+    +header(false)
+    form.add-meeting-ui(action='/', method='POST')
+      main.add-meeting-ui__main
+        +sectionMeeting(members, 'Новая встреча',null, eventData)
+      footer.add-meeting-ui__footer.footer_add-meeting.on_checkroom
+        button.button-cancel(type='button', onclick='location.href="/"') Отмена
+        button.add-button.disabled(type='submit') Создать встречу
+  script(src='/dist/App.bundle.js')
 
 
 block head
-	link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css")
-	link(rel="stylesheet" href="/dist/datepicker.min.css" type='text/css')
-	script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
-	script(src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js")
-	script(src='/dist/datepicker.min.js')
+  link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css")
+  link(rel="stylesheet" href="/dist/datepicker.min.css" type='text/css')
+  script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js")
+  script(src='/dist/datepicker.min.js')
 

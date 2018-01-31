@@ -1,54 +1,59 @@
-@import "variables";
+@import 'variables';
 
 .time-indicator {
-	display: flex;
-	flex: 1;
-	min-width: $min-width-time-line;
-	position: relative;
-	width: 80vw;
+  display: flex;
+  flex: 1;
+  min-width: $min-width-time-line;
+  position: relative;
+  width: 80vw;
 
-	&.hidden {
-		visibility: hidden;
-	}
+  &.hidden {
+    visibility: hidden;
+  }
 
-	&__position-handler {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-end;
-		height: 100vh;
-		pointer-events: none;
-		padding-top: 12px;
-		padding-left: 3px;
-		flex-grow: 185; // mock data
+  &__position-handler {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    height: 100vh;
+    pointer-events: none;
+    padding-top: 12px;
+    padding-left: 3px;
+    flex-grow: 185; // mock data
 
-		&-helper {
-			flex-grow: 715; //mock data
-		}
-	}
+    &.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
 
-	&__time {
-		width: 49px;
-		height: 20px;
-		background-color: $button-color-hover;
-		border-radius: 10px;
-		font-size: $fs-medium;
-		text-align: center;
-		font-family: $ff-medium;
-		color: $text-color-white;
-		position: relative;
-		top: 1px;
+    &-helper {
+      flex-grow: 715; //mock data
+    }
+  }
 
-		& p {
-			position: relative;
-			top: 4px;
-		}
-	}
+  &__time {
+    width: 49px;
+    height: 20px;
+    background-color: $button-color-hover;
+    border-radius: 10px;
+    font-size: $fs-medium;
+    text-align: center;
+    font-family: $ff-medium;
+    color: $text-color-white;
+    position: relative;
+    top: 1px;
 
-	&__line {
-		width: 1px;
-		height: 100vh;
-		background-color: $button-color-hover;
-		position: relative;
-		right: 24.5px;
-	}
+    & p {
+      position: relative;
+      top: 4px;
+    }
+  }
+
+  &__line {
+    width: 1px;
+    height: 100vh;
+    background-color: $button-color-hover;
+    position: relative;
+    right: 24.5px;
+  }
 }

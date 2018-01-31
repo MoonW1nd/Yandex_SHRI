@@ -3,32 +3,32 @@ include mixins/_header
 include mixins/_section-meeting
 
 block body
-	body
-		+header(false)
-		.modal.modal_remove-meeting
-			tspan.modal__image(xmlns='http://www.w3.org/2000/svg', x='0.5', y='40') 🙅🏻
-			.modal__title
-				| Встреча будет
-				br
-				|  удалена безвозвратно
-			.modal__buttons-layout
-				button.button-cancel(type='button', onclick="$('body').removeClass('dimmed')") Отмена
-				button.button-cancel(type='button', onclick=`location.href="/edit-event/${eventData.id}/remove"`) Удалить
-		form.add-meeting-ui(action=`/edit-event/${eventData.id}`, method='POST')
-			main.add-meeting-ui__main
-				+sectionMeeting(members, 'Редактирование встречи', selectMembers, eventData)
-				button.button-cancel.button-remove(type='button', onclick="$('body').addClass('dimmed')") Удалить встречу
-			footer.add-meeting-ui__footer.footer_edit
-				button.button-cancel.button-footer(type='button', onclick='location.href="/"') Отмена
-				button.button-cancel.button-remove(type='button', onclick="$('body').addClass('dimmed')") Удалить встречу
-				button.button-cancel.button-footer(type='submit', onclick='location.href="/"') Сохранить
+  body
+    +header(false)
+    .modal.modal_remove-meeting
+      tspan.modal__image(xmlns='http://www.w3.org/2000/svg', x='0.5', y='40') 🙅🏻
+      .modal__title
+        | Встреча будет
+        br
+        |  удалена безвозвратно
+      .modal__buttons-layout
+        button.button-cancel(type='button', onclick="$('body').removeClass('dimmed')") Отмена
+        button.button-cancel(type='button', onclick=`location.href="/edit-event/${eventData.id}/remove"`) Удалить
+    form.add-meeting-ui(action=`/edit-event/${eventData.id}`, method='POST')
+      main.add-meeting-ui__main
+        +sectionMeeting(members, 'Редактирование встречи', selectMembers, eventData)
+        button.button-cancel.button-remove(type='button', onclick="$('body').addClass('dimmed')") Удалить встречу
+      footer.add-meeting-ui__footer.footer_edit
+        button.button-cancel.button-footer(type='button', onclick='location.href="/"') Отмена
+        button.button-cancel.button-remove(type='button', onclick="$('body').addClass('dimmed')") Удалить встречу
+        button.button-cancel.button-footer(type='submit', onclick='location.href="/"') Сохранить
 
-	script(src='/dist/App.bundle.js')
+  script(src='/dist/App.bundle.js')
 
 
 block head
-	link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css")
-	link(rel="stylesheet" href="/dist/datepicker.min.css" type='text/css')
-	script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
-	script(src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js")
-	script(src='/dist/datepicker.min.js')
+  link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css")
+  link(rel="stylesheet" href="/dist/datepicker.min.css" type='text/css')
+  script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js")
+  script(src='/dist/datepicker.min.js')

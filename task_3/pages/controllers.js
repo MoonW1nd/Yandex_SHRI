@@ -9,7 +9,8 @@ const queryUsers = `{
       avatarUrl
     }
   }`;
-const queryRooms = '{\n' +
+const queryRooms =
+  '{\n' +
   '  rooms {\n' +
   '    id\n' +
   '    title\n' +
@@ -17,7 +18,8 @@ const queryRooms = '{\n' +
   '    floor\n' +
   '  }\n' +
   '}';
-const queryEvents = '{\n' +
+const queryEvents =
+  '{\n' +
   '  events {\n' +
   '    id\n' +
   '    title\n' +
@@ -42,19 +44,25 @@ module.exports.index = async function(req, res) {
   const floors = [];
   let roomsQueryData = await graphql(schema, queryRooms);
   const rooms = roomsQueryData.data.rooms;
-  
-  rooms.sort((a,b) => a.floor - b.floor);
-  distributeRoomsByFloors(rooms, floors);
-  
-  let targetDate = Date.now();
-  targetDate = new Date(targetDate);
 
-  await graphql(schema, queryEvents).then( data => {
+  rooms.sort((a, b) => a.floor - b.floor);
+  distributeRoomsByFloors(rooms, floors);
+
+  let targetDate;
+
+  await graphql(schema, queryEvents).then(data => {
     let events = data.data.events;
     // определяем пароги времени для сортировки
-    let startEventDate = Date.now();
+    let needDateTrigerStart, needDateTrigerEnd;
+    let startEventDate;
+    let needDate;
+    if (req.params.date != null) {
+      startEventDate = req.params.date;
+    } else {
+      startEventDate = Date.now();
+    }
     startEventDate = new Date(startEventDate);
-    let needDate = new Date(
+    targetDate = needDate = new Date(
       startEventDate.getFullYear(),
       startEventDate.getMonth(),
       startEventDate.getDate(),
@@ -62,20 +70,27 @@ module.exports.index = async function(req, res) {
       0,
       0
     );
-    let needDateTrigerStart = needDate.getTime();
-    let needDateTrigerEnd = needDate.getTime() + 54000000;
-    
+    needDateTrigerStart = needDate.getTime();
+    needDateTrigerEnd = needDate.getTime() + 54000000;
     //только сегодняшняя дата
     events = events.filter(event => {
-      return (needDateTrigerStart <= Date.parse(event.dateStart) && needDateTrigerEnd >= Date.parse(event.dateEnd));
+      return (
+        needDateTrigerStart <= Date.parse(event.dateStart) &&
+        needDateTrigerEnd >= Date.parse(event.dateEnd)
+      );
     });
     // сортировка по времени начала ивентовб для грамотной работы алгоритма
-    events.sort((a, b) => new Date(a.dateStart).getTime() - new Date(b.dateStart).getTime());
-    
-    events.forEach( event => {
+    events.sort(
+      (a, b) =>
+        new Date(a.dateStart).getTime() - new Date(b.dateStart).getTime()
+    );
+
+    events.forEach(event => {
       let eventFloor = event.room.floor;
-      let targetFloor = floors.filter((floor) => floor.number === eventFloor);
-      let targetRoom = targetFloor[0].rooms.filter(room => room.id === event.room.id);
+      let targetFloor = floors.filter(floor => floor.number === eventFloor);
+      let targetRoom = targetFloor[0].rooms.filter(
+        room => room.id === event.room.id
+      );
 
       // set date object ane init start and end time
       event.dateStart = new Date(event.dateStart);
@@ -83,14 +98,14 @@ module.exports.index = async function(req, res) {
 
       // проверям на корекность заданой даты
       validateDate(event);
-      
+
       //create field timeLine
       if (!Array.isArray(targetRoom[0].timeLine)) {
-        
         if (getStartDiff(event) !== 0) {
           event.flexGrow = getFlexGrow(event);
           targetRoom[0].timeLine = [
-            { id: 'helper',
+            {
+              id: 'helper',
               flexGrow: getStartDiff(event),
               dateStart: getExtremeDate(event, 'start'),
               dateEnd: event.dateStart
@@ -98,30 +113,30 @@ module.exports.index = async function(req, res) {
             event,
             {
               id: 'helper',
-              flexGrow: (900 - event.flexGrow - getStartDiff(event)),
+              flexGrow: 900 - event.flexGrow - getStartDiff(event),
               dateStart: event.dateEnd,
               dateEnd: getExtremeDate(event, 'end')
             }
           ]; //init timeLine
-          
         } else {
           event.flexGrow = getFlexGrow(event);
           targetRoom[0].timeLine = [
             event,
-            { id: 'helper',
-              flexGrow: (900 - event.flexGrow),
+            {
+              id: 'helper',
+              flexGrow: 900 - event.flexGrow,
               dateStart: event.dateEnd,
               dateEnd: getExtremeDate(event, 'end')
             }
           ];
         }
-        
       } else {
         let timeLine = targetRoom[0].timeLine;
         timeLine.pop(); // ремувим последнего helper'a
-        let eventsInTimeLine =
-          timeLine.slice().filter((event) => event.id !== 'helper');
-        let lastEvent = eventsInTimeLine[eventsInTimeLine.length-1];
+        let eventsInTimeLine = timeLine
+          .slice()
+          .filter(event => event.id !== 'helper');
+        let lastEvent = eventsInTimeLine[eventsInTimeLine.length - 1];
         if (getDiffTwoEvents(lastEvent, event) !== 0) {
           event.flexGrow = getFlexGrow(event);
           let sumFlexGrow = timeLine
@@ -162,17 +177,31 @@ module.exports.index = async function(req, res) {
     addedEvent = addedEvent.data.event;
     addedEvent.dateStart = new Date(addedEvent.dateStart);
     addedEvent.dateEnd = new Date(addedEvent.dateEnd);
-    res.render('main', { title: 'Календарь', siteName, rooms, floors, targetDate, addedEvent });
+    res.render('main', {
+      title: 'Календарь',
+      siteName,
+      rooms,
+      floors,
+      targetDate,
+      addedEvent
+    });
   } else {
     // res.json(floors);
-    res.render('main', { title: 'Календарь', siteName, rooms, floors, targetDate, addedEvent: null });
+    res.render('main', {
+      title: 'Календарь',
+      siteName,
+      rooms,
+      floors,
+      targetDate,
+      addedEvent: null
+    });
   }
   // res.json(floors);
 };
 
-module.exports.addMeeting = async function (req, res) {
+module.exports.addMeeting = async function(req, res) {
   let eventData;
-  if(req.query != null) {
+  if (req.query != null) {
     let dateStart = Date.parse(req.query.dateStart);
     let dateEnd = Date.parse(req.query.dateEnd);
     if (req.query.dateStart === 'fullTime') {
@@ -185,12 +214,11 @@ module.exports.addMeeting = async function (req, res) {
         8,
         0
       );
-      console.log(dateStart);
       dateStart = dateStart.getTime();
-      if (Date.now() > dateStart ) {
+      if (Date.now() > dateStart) {
         dateStart = Date.now();
       }
-      dateEnd = dateStart + 3600000
+      dateEnd = dateStart + 3600000;
     }
     let roomId = req.query.roomId;
     const roomQuery = `{
@@ -201,8 +229,8 @@ module.exports.addMeeting = async function (req, res) {
       }
     }`;
     // делает время решичтрации встречи час
-    if((dateEnd - dateStart) > 3600000) {
-      dateEnd = dateStart + 3600000
+    if (dateEnd - dateStart > 3600000) {
+      dateEnd = dateStart + 3600000;
     }
     let room = await graphql(schema, roomQuery);
     room = room.data.room;
@@ -212,13 +240,18 @@ module.exports.addMeeting = async function (req, res) {
       room
     };
   }
-  graphql(schema, queryUsers).then( data => {
+  graphql(schema, queryUsers).then(data => {
     const members = data.data.users;
-    res.render('add-meeting', { title: 'Создание встречи', siteName, members, eventData});
+    res.render('add-meeting', {
+      title: 'Создание встречи',
+      siteName,
+      members,
+      eventData
+    });
   });
 };
 
-module.exports.createNewMeeting = function (req, res, next) {
+module.exports.createNewMeeting = function(req, res, next) {
   let timeStart = getCorrectTimeFormat(req.body.date, req.body.startTime);
   let timeEnd = getCorrectTimeFormat(req.body.date, req.body.endTime);
   if (!Array.isArray(req.body.member)) {
@@ -233,7 +266,7 @@ module.exports.createNewMeeting = function (req, res, next) {
       id
     }
   }`;
-  graphql(schema, mutationQuery).then( data => {
+  graphql(schema, mutationQuery).then(data => {
     req.body.idNewMeeting = data.data.createEvent.id;
     req.body.isCreateMeting = true;
     // res.json(req.body);
@@ -241,7 +274,7 @@ module.exports.createNewMeeting = function (req, res, next) {
   });
 };
 
-module.exports.editMeeting = async function (req, res) {
+module.exports.editMeeting = async function(req, res) {
   const queryEvent = `{
     event(id: ${parseInt(req.params.id, 10)}) {
       id
@@ -268,12 +301,18 @@ module.exports.editMeeting = async function (req, res) {
   eventData.dateStart = new Date(eventData.dateStart);
   eventData.dateEnd = new Date(eventData.dateEnd);
   const selectMembers = [];
-  eventData.users.forEach((user) => selectMembers.push(user.id));
+  eventData.users.forEach(user => selectMembers.push(user.id));
   eventData.id = req.params.id;
-  res.render('edit-meeting', { title: 'Редактирование встречи', siteName, members, eventData, selectMembers });
+  res.render('edit-meeting', {
+    title: 'Редактирование встречи',
+    siteName,
+    members,
+    eventData,
+    selectMembers
+  });
 };
 
-module.exports.updateMeeting = async function (req, res) {
+module.exports.updateMeeting = async function(req, res) {
   let timeStart = getCorrectTimeFormat(req.body.date, req.body.startTime);
   let timeEnd = getCorrectTimeFormat(req.body.date, req.body.endTime);
   if (!Array.isArray(req.body.member)) {
@@ -296,43 +335,49 @@ module.exports.updateMeeting = async function (req, res) {
   lastEventData = lastEventData.data.event;
   // processing update query
   let titleCondition = lastEventData.title === req.body.title;
-  let startTimeCondition = Date.parse(lastEventData.dateStart) === Date.parse(timeStart);
-  let endTimeCondition = Date.parse(lastEventData.dateEnd) === Date.parse(timeEnd);
-  console.log(titleCondition, startTimeCondition, endTimeCondition);
+  let startTimeCondition =
+    Date.parse(lastEventData.dateStart) === Date.parse(timeStart);
+  let endTimeCondition =
+    Date.parse(lastEventData.dateEnd) === Date.parse(timeEnd);
   if (!(titleCondition && startTimeCondition && endTimeCondition)) {
-    await updateEvent(req.params.id, req.body.title, timeStart.toISOString(), timeEnd.toISOString());
+    await updateEvent(
+      req.params.id,
+      req.body.title,
+      timeStart.toISOString(),
+      timeEnd.toISOString()
+    );
   }
   // processing Users
-  let currentUsersId = lastEventData.users.map( user => user.id);
+  let currentUsersId = lastEventData.users.map(user => user.id);
   let promises = [];
-  
+
   currentUsersId.forEach(user => {
-    if(req.body.member.indexOf(user) === -1) {
+    if (req.body.member.indexOf(user) === -1) {
       promises.push(removeUserFromEvent(req.params.id, user));
     }
   });
   req.body.member.forEach(user => {
-    if(currentUsersId.indexOf(user) === -1) {
+    if (currentUsersId.indexOf(user) === -1) {
       promises.push(addUserToEvent(req.params.id, user));
     }
   });
   await Promise.all(promises);
-  
+
   // room changes
   let roomCondition = String(req.body.room) === String(lastEventData.room.id);
-  if(!roomCondition) {
+  if (!roomCondition) {
     await changeRoom(req.params.id, req.body.room);
   }
-  
+
   // swap event if need
-  if(req.body.swapEvent != null && req.body.swapRoom != null) {
-    await changeRoom(req.body.swapEvent, req.body.swapRoom)
+  if (req.body.swapEvent != null && req.body.swapRoom != null) {
+    await changeRoom(req.body.swapEvent, req.body.swapRoom);
   }
 
   res.redirect(`/`);
 };
 
-module.exports.removeMeeting = async function (req, res) {
+module.exports.removeMeeting = async function(req, res) {
   let idEvent = req.params.id;
   const removeMeetingQuery = `mutation removeEvent {
     removeEvent (id: "${idEvent}") {
@@ -342,7 +387,6 @@ module.exports.removeMeeting = async function (req, res) {
   await graphql(schema, removeMeetingQuery);
   res.redirect('/');
 };
-
 
 async function updateEvent(idEvent, titleEvent, timeStartISO, timeEndISO) {
   let updateQuery = `mutation updateEvent {
@@ -368,7 +412,6 @@ async function removeUserFromEvent(idEvent, idUser) {
     }
   }`;
   let result = await graphql(schema, removeUserFromEvent);
-  console.log(result);
 }
 
 async function changeRoom(idEvent, idRoom) {
@@ -406,17 +449,23 @@ function validateDate(event) {
 }
 
 function getFlexGrow(event) {
-  return Math.floor((event.dateEnd.getTime() - event.dateStart.getTime()) / 1000 / 60)
+  return Math.floor(
+    (event.dateEnd.getTime() - event.dateStart.getTime()) / 1000 / 60
+  );
 }
 
 function getStartDiff(event) {
   let openTime = getExtremeDate(event, 'start');
-  return Math.floor((event.dateStart.getTime() - openTime.getTime()) / 1000 / 60)
+  return Math.floor(
+    (event.dateStart.getTime() - openTime.getTime()) / 1000 / 60
+  );
 }
 
 function getEndDiff(event) {
   let closeTime = getExtremeDate(event, 'end');
-  return Math.floor((closeTime.getTime() - event.dateEnd.getTime()) / 1000 / 60)
+  return Math.floor(
+    (closeTime.getTime() - event.dateEnd.getTime()) / 1000 / 60
+  );
 }
 
 function getExtremeDate(event, extreme) {
@@ -426,7 +475,8 @@ function getExtremeDate(event, extreme) {
       event.dateStart.getMonth(),
       event.dateStart.getDate(),
       8,
-      0);
+      0
+    );
   } else if (extreme === 'end') {
     return new Date(
       event.dateStart.getFullYear(),
@@ -436,32 +486,34 @@ function getExtremeDate(event, extreme) {
       0
     );
   } else {
-   console.log('error in getExtremeDate')
+    console.log('error in getExtremeDate');
   }
 }
 
 // event on time < event two time
 function getDiffTwoEvents(eventOne, eventTwo) {
-  return Math.floor((eventTwo.dateStart.getTime() - eventOne.dateEnd.getTime()) / 1000 / 60)
+  return Math.floor(
+    (eventTwo.dateStart.getTime() - eventOne.dateEnd.getTime()) / 1000 / 60
+  );
 }
 
 function getCorrectTimeFormat(date, time) {
   let dateParts = date.split(' ');
   let timeParts = time.split(':');
   let numberMonth = [
-      'января',
-      'февраля',
-      'марта',
-      'апреля',
-      'мая',
-      'июня',
-      'июля',
-      'августа',
-      'сентября',
-      'октября',
-      'ноября',
-      'декабря'
-    ].indexOf(dateParts[1].toLowerCase());
+    'января',
+    'февраля',
+    'марта',
+    'апреля',
+    'мая',
+    'июня',
+    'июля',
+    'августа',
+    'сентября',
+    'октября',
+    'ноября',
+    'декабря'
+  ].indexOf(dateParts[1].toLowerCase());
   return new Date(
     dateParts[2],
     numberMonth,
@@ -473,15 +525,15 @@ function getCorrectTimeFormat(date, time) {
 
 function distributeRoomsByFloors(rooms, floors) {
   let previousFloor;
-  rooms.forEach((room) => {
+  rooms.forEach(room => {
     room.events = []; // create support field
     if (previousFloor !== room.floor) {
       const floor = {
         number: room.floor,
-        rooms: [room],
+        rooms: [room]
       };
       floors.push(floor);
-      previousFloor = room.floor
+      previousFloor = room.floor;
     } else {
       floors[[floors.length - 1]].rooms.push(room);
     }

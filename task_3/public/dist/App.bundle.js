@@ -78,7 +78,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getRecommendation = getRecommendation;
 function getRecommendation(date, members, db) {
-
   // sort rooms by floors
   var floors = [];
   var rooms = JSON.parse(JSON.stringify(db.rooms));
@@ -330,7 +329,7 @@ function getRecommendation(date, members, db) {
       return recommendation;
     }
   }
-};
+}
 
 /***/ }),
 /* 1 */
@@ -345,7 +344,7 @@ function calendar(id, year, month) {
       DNlast = new Date(D.getFullYear(), D.getMonth(), Dlast).getDay(),
       DNfirst = new Date(D.getFullYear(), D.getMonth(), 1).getDay(),
       calendar = '<tr>',
-      month = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+      month = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
   if (DNfirst !== 0) {
     for (var i = 1; i < DNfirst; i++) {
       calendar += '<td>';
@@ -378,14 +377,14 @@ function calendar(id, year, month) {
 }
 
 if ($('#calendar').length !== 0) {
-  calendar("calendar", new Date().getFullYear(), new Date().getMonth());
+  calendar('calendar', new Date().getFullYear(), new Date().getMonth());
   // переключатель минус месяц
   document.querySelector('#table-arrow-left').onclick = function () {
-    calendar("calendar", document.querySelector('#calendar thead td:nth-child(2)').dataset.year, parseFloat(document.querySelector('#calendar thead td:nth-child(2)').dataset.month) - 1);
+    calendar('calendar', document.querySelector('#calendar thead td:nth-child(2)').dataset.year, parseFloat(document.querySelector('#calendar thead td:nth-child(2)').dataset.month) - 1);
   };
   // переключатель плюс месяц
   document.querySelector('#table-arrow-right').onclick = function () {
-    calendar("calendar", document.querySelector('#calendar thead td:nth-child(2)').dataset.year, parseFloat(document.querySelector('#calendar thead td:nth-child(2)').dataset.month) + 1);
+    calendar('calendar', document.querySelector('#calendar thead td:nth-child(2)').dataset.year, parseFloat(document.querySelector('#calendar thead td:nth-child(2)').dataset.month) + 1);
   };
 }
 
@@ -399,7 +398,6 @@ if ($('#calendar').length !== 0) {
 var _getRecomendation = __webpack_require__(0);
 
 // index helpers scroll behavior
-// $('.time-piece.active').on('click', () => $('body').addClass('dimmed'));
 var timeLines = $('.meeting-ui__time-line');
 var lastScrollLeft = $('.meeting-ui').scrollLeft();
 var calendarElem = $('.calendar');
@@ -414,7 +412,6 @@ $(window).scroll(function () {
   timeLines.css({
     position: 'fixed',
     transform: 'translate(-' + lastScrollLeft + 'px, 0)'
-
   });
 });
 
@@ -428,9 +425,9 @@ $('.meeting-ui').scroll(function () {
     });
     lastScrollLeft = $('.meeting-ui').scrollLeft();
     if (lastScrollLeft > 250) {
-      $(".table-meeting-room__floor-name-swipe").removeClass('hidden').css('left', lastScrollLeft - 238 + 'px').css('opacity', '1');
+      $('.table-meeting-room__floor-name-swipe').removeClass('hidden').css('left', lastScrollLeft - 238 + 'px').css('opacity', '1');
     } else {
-      $(".table-meeting-room__floor-name-swipe").addClass('hidden');
+      $('.table-meeting-room__floor-name-swipe').addClass('hidden');
     }
   }
 });
@@ -471,7 +468,7 @@ $('.time-piece.placed').on('click', function (event) {
       $('.meeting-info__corner').css('left', meetingInfoWidth / 2 + 'px');
     }
   } else {
-    console.log("true");
+    console.log('true');
     $('.meeting-info').css('left', widthElem / 2 + 'px');
     $('.meeting-info__corner').css('left', meetingInfoWidth / 2 + 'px');
   }
@@ -487,11 +484,11 @@ $('.input-block__input_members').focusout(function () {
 });
 
 // stiles for firefox browser
-var regExp = /Firefox/ig;
+var regExp = /Firefox/gi;
 if (regExp.test(window.navigator.userAgent)) {
   $('.input-block__input_time').css('padding', '0');
   $('.input-block__icon_calendar').css('right', '40px');
-};
+}
 
 // функция замены числового месяца на слово
 function getLetterMonthRu(month) {
@@ -504,6 +501,7 @@ function getLetterMonthShortRu(month) {
 
 // обработчики клика для добавления людей
 $('.member-list__element').on('click', function (event) {
+  undisableButton('up');
   var target = $(event.target);
   // сврываем из списка эдемнтов
   target.addClass('hidden');
@@ -543,6 +541,7 @@ jQuery.expr[':'].Contains = function (a, i, m) {
 };
 
 $(document).ready(function () {
+  $('#input-title').keyup(undisableButton);
   // инициализация календаря для инпута с выборо даты
   var blockInputData = $('.input-block__input_data');
   if (blockInputData.length !== 0) {
@@ -584,7 +583,7 @@ $(document).ready(function () {
       var x = e.offsetX || e.pageX - $(e.target).offset().left;
       parseInt($(e.target).css('width'), 10);
       if (x >= 35 && x <= parseInt($(e.target).css('width'), 10) - 35) {
-        $(e.target).find('.button-add').css({ transform: "translateX(" + (x - 35) + "px)" });
+        $(e.target).find('.button-add').css({ transform: 'translateX(' + (x - 35) + 'px)' });
       }
     });
 
@@ -647,7 +646,11 @@ $(document).ready(function () {
     var lastFlexGrow = null;
     var flexGrowIncrise = true;
     setInterval(function () {
-      if (needDateTrigerStart < Date.now() < needDateTrigerEnd) {
+      if (needDateTrigerStart < Date.now() && Date.now() < needDateTrigerEnd) {
+        // удаление класса скрывающего указатель
+        if ($('.time-indicator__position-handler').hasClass('hidden')) {
+          $('.time-indicator__position-handler').removeClass('hidden');
+        }
         var flexGrow = Math.floor((Date.now() - needDateTrigerStart) / 1000 / 60);
         if (lastFlexGrow !== flexGrow) {
           lastFlexGrow = flexGrow;
@@ -655,7 +658,6 @@ $(document).ready(function () {
         }
         // disable statement
         if (flexGrowIncrise) {
-          flexGrowIncrise = false;
           _timeLines.each(function (i, timeline) {
             var helper = $(timeline).data().currentHelper;
             var dataTL = $(timeline).data();
@@ -667,6 +669,7 @@ $(document).ready(function () {
                 helper.data().disableBlock.css('flex-grow', helper.data().initialDiff);
                 var fg = parseInt(helper.css('flex-grow'));
                 helper.css('flex-grow', fg - helper.data().initialDiff);
+                flexGrowIncrise = false;
               } else {
                 var fgDB = parseInt(helper.data().disableBlock.css('flex-grow'));
                 helper.data().disableBlock.css('flex-grow', fgDB + 1);
@@ -675,6 +678,7 @@ $(document).ready(function () {
                 if (_fg === 1) {
                   helper.data().disabled = true;
                 }
+                flexGrowIncrise = false;
               }
             } else {
               dataTL.index++;
@@ -689,6 +693,10 @@ $(document).ready(function () {
         timeIndicatorHelper.css('flex-grow', '' + helperFlexGrow);
         var time = new Date(Date.now());
         timeIndicatorHandler.find('.time-indicator__time p').text((time.getHours() < 10 ? '0' : '') + time.getHours() + ':' + ((time.getMinutes() < 10 ? '0' : '') + time.getMinutes()));
+      } else {
+        if (!$('.time-indicator__position-handler').hasClass('hidden')) {
+          $('.time-indicator__position-handler').addClass('hidden');
+        }
       }
     }, 1000);
   }
@@ -698,8 +706,9 @@ $(document).ready(function () {
   $('#input-stop-time, #input-start-time').keyup(validationDateAndSendQuery);
   $('#datepickers-container .datepicker').on('click', validationDateAndSendQuery);
   $('.offer-meeting-room__element.active .button-delete').on('click', function (event) {
-    $(event.target).parents(".offer-meeting-room__element .active").remove();
+    $(event.target).parents('.offer-meeting-room__element .active').remove();
     validationDateAndSendQuery();
+    udisableButton();
   });
 });
 
@@ -740,10 +749,11 @@ function validationDateAndSendQuery() {
         start: timeStart,
         end: timeEnd
       };
-      var _regExp = /edit-event/ig;
+      var _regExp = /edit-event/gi;
       // запрос рекомендаций
       query(members, date).then(function (data) {
         $('#offer-rooms').html('');
+        undisableButton(_regExp);
         //добаление html на основе ответа
         var rooms = data[1].data.rooms;
         data[0].forEach(function (recommend) {
@@ -764,7 +774,7 @@ function validationDateAndSendQuery() {
           var blockRecommendation = $('<li class="offer-meeting-room__element"/>').append($('<div class="offer-meeting-room__time">').html((recommend.date.start.getHours() < 10 ? '0' : '') + recommend.date.start.getHours() + ':' + ((recommend.date.start.getMinutes() < 10 ? '0' : '') + recommend.date.start.getMinutes()) + '\u2014' + ((recommend.date.end.getHours() < 10 ? '0' : '') + recommend.date.end.getHours()) + ':' + ((recommend.date.end.getMinutes() < 10 ? '0' : '') + recommend.date.end.getMinutes())), $('<div class="offer-meeting-room__room">').html(roomData[0].title + '\xA0\u2022\xA0' + roomData[0].floor + ' \u044D\u0442\u0430\u0436'), $('<input class="member-list__checkbox" type="checkbox" name="room" value="' + roomData[0].id + '"/>'), $('<input type="hidden" name="swapEvent" value="' + recommend.swap[0].event + '">'), $('<input type="hidden" name="swapRoom" value="' + recommend.swap[0].room + '">'), $('<button class="button-delete" type="button">').append($('<img src="/dist/assets/close-white.svg", alt="close"/>')));
           $('#offer-rooms').append(blockRecommendation);
           $('#offer-rooms').parent().removeClass('hidden');
-          $('.offer-meeting-room__label').text("Рекомендованные переговорки");
+          $('.offer-meeting-room__label').text('Рекомендованные переговорки');
           // обработчик для выбора переговорки
           blockRecommendation.on('click', selectOffer);
         });
@@ -792,16 +802,36 @@ function validationTimeRule(time) {
 // отработвка выбора переговорки
 function selectOffer(event) {
   event.stopPropagation();
+  $('.add-meeting-ui__footer.footer_add-meeting').removeClass('on_checkroom');
   var targetElement = $(event.target);
   targetElement.addClass('active');
+  undisableButton('go');
   targetElement.find('.member-list__checkbox')[0].checked = true;
-  $('.offer-meeting-room__label').text("Ваша переговорка");
+  $('.offer-meeting-room__label').text('Ваша переговорка');
   targetElement.parent().find('.offer-meeting-room__element:not(.active)').remove();
   $('.offer-meeting-room__element.active .button-delete').on('click', function (event) {
+    $('.add-meeting-ui__footer.footer_add-meeting').addClass('on_checkroom');
     event.stopPropagation();
-    $(event.target).parents(".offer-meeting-room__element.active").remove();
+    $(event.target).parents('.offer-meeting-room__element.active').remove();
     validationDateAndSendQuery();
   });
+}
+
+function undisableButton(e) {
+  var inputDate = $('#input-date').val().length > 0;
+  var startTime = $('#input-start-time').val();
+  var stopTime = $('#input-stop-time').val();
+  var startTimeValid = validationTimeRule(startTime);
+  var stopTimeValid = validationTimeRule(stopTime);
+  var inputTitle = $('#input-title').val().length > 0;
+  var roomSelected = $('.offer-meeting-room__element.active').length !== 0;
+  var membersSelected = $('.add-member-list__element:not(.hidden)').length !== 0;
+  console.log(inputDate, startTimeValid, stopTimeValid, inputTitle, roomSelected, membersSelected);
+  if (inputDate && startTimeValid && stopTimeValid && inputTitle && roomSelected && membersSelected) {
+    $('.add-button').removeClass('disabled');
+  } else {
+    $('.add-button').addClass('disabled');
+  }
 }
 
 // запрос рекоменованных переговорок
@@ -860,9 +890,9 @@ function request(query) {
     xhr.ontimeout = function () {
       reject('timeout');
     };
-    xhr.open("POST", "/graphql");
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.setRequestHeader("Accept", "application/json");
+    xhr.open('POST', '/graphql');
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('Accept', 'application/json');
     xhr.send(JSON.stringify(query));
   });
 }
@@ -877,8 +907,6 @@ function getCorrectTimeFormat(date, time) {
   var numberMonth = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'].indexOf(dateParts[1].toLowerCase());
   return new Date(dateParts[2], numberMonth, dateParts[0], timeParts[0], timeParts[1]);
 }
-//TODO:[A.Ivankov] валидация времени
-// TODO:[A.Ivankov] сделать выбор с помощью стрелок и enter
 
 /***/ }),
 /* 3 */

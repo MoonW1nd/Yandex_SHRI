@@ -1,18 +1,18 @@
-@import "variables";
+@import 'variables';
 
 .add-member-list {
-	max-width: 420px;
-	width: 32.8vw;
-	min-width: 328px;
-	height: auto;
-	margin-top: 12px;
-	margin-left: -4px;
-	display: flex;
-	flex-wrap: wrap;
-	flex-direction: row;
+  max-width: 420px;
+  width: 32.8vw;
+  min-width: 328px;
+  height: auto;
+  margin-top: 12px;
+  margin-left: -4px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
 
-	&__element.hidden {
-		visibility: hidden;
-		display: none;
-	}
+  &__element.hidden {
+    visibility: hidden;
+    display: none;
+  }
 }
