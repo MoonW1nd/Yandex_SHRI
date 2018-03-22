@@ -1,4 +1,4 @@
-import { getRecommendation } from './getRecomendation';
+
 
 // index helpers scroll behavior
 let timeLines = $('.meeting-ui__time-line');
@@ -489,7 +489,7 @@ function validationDateAndSendQuery() {
                 : '') + recommend.date.end.getMinutes()}`
             ),
             $('<div class="offer-meeting-room__room">').html(
-              `${roomData[0].title} • ${roomData[0].floor} этаж`
+              `${roomData[0].title} • ${roomData[0].floor} этаж`
             ),
             $(
               `<input class="member-list__checkbox" type="checkbox" name="room" value="${
